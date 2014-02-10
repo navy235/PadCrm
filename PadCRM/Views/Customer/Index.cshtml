@@ -1,0 +1,58 @@
+﻿@model List<Customer>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-customer" data-id="@ViewBag.CompanyID" data-cssclass="customer" href="javascript:void(0);">添加客户人员</a>
+
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>类型</th>
+                <th>姓名</th>
+                <th>职位</th>
+                <th>录入者</th>
+                <th>生日类型</th>
+                <th>生日</th>
+                <th>电话</th>
+                <th>住址</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.JobCate.CateName</td>
+                    <td>@item.Name</td>
+                    <td>@item.Jobs</td>
+                    <td>@item.AddMember.NickName</td>
+                    @if (item.IsLeap)
+                    {
+                        <td>农历</td>
+                        <td>
+                            @(Utilities.ConvertToChineseYearStyle(item.BirthDay.Year) + item.BirthDay1)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>阳历</td>
+                        <td>
+                            @item.BirthDay.ToString("yyyy-MM-dd")</td>
+                    }
+                    <td>@item.Mobile</td>
+                    <td>@item.Address</td>
+                    <td style="width: 160px;">
+                        <a class="btn btn-primary btn-edit-customer"  href="javascript:void(0)" data-id="@item.ID">编辑</a>
+                        <a class="btn btn-primary btn-delete-customer" href="javascript:void(0)" data-id="@item.ID">删除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "customer")
+</div>

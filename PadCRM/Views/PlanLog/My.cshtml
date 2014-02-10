@@ -1,0 +1,69 @@
+﻿@model List<PlanLogGroupViewModel>
+@{
+    Layout = null;
+}
+
+<div class="tool-bar"></div>
+<div class="panel-group" id="accordion1">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i)">
+                        @item.Name
+                    </a>
+                    <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })" class="pull-right">详情</a>
+                </h4>
+            </div>
+            <div id="sec_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
+                <div class="panel-body">
+                    <div class="tool-bar">
+                        <a class="btn btn-primary btn-add-planlog" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">添加计划日志</a>
+                    </div>
+                    <div class="table table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>录入时间</th>
+                                    <th>录入者</th>
+                                    <th>内容</th>
+                                    <th>计划时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in item.PlanLogs)
+                                {
+                                    <tr>
+                                        <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
+                                        <td>@log.UserName</td>
+                                        <td>@log.Content</td>
+                                        <td>@log.PlanTime.ToString("yyyy-MM-dd")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@if (Model.Count == 0)
+{ 
+    <div class="alert alert-info">
+        暂无计划日志
+    </div>
+}
+else
+{
+
+    <div class="page-info">
+        @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "planlog")
+    </div>
+}
+

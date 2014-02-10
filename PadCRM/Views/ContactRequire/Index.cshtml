@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "合同请求";
+}
+
+<div id="tabstrip">
+    <ul>
+        <li class="k-state-active category0">未处理</li>
+        <li class="category1">已处理</li>
+    </ul>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var tabStrip = $("#tabstrip").kendoTabStrip({
+                animation: { open: { effects: "fadeIn" } },
+                contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+                contentUrls: [
+                   '@Url.Action("Data_Read", "contactrequire", new { Status = 0 })',
+                   '@Url.Action("Data_Read", "contactrequire", new { Status = 1 })'
+                ]
+            }).data('kendoTabStrip');
+
+            $('#tabstrip').on('click', 'a.btn-add-contactrequire', addContactrequire)
+            $('#tabstrip').on('click', 'a.btn-change-status', changeStatus)
+
+            $('#tabstrip').on('click', 'a.page-link', ajaxPage)
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    var refeshlink = $('#tabstrip').find('li.' + cssClass).find('.k-link')
+                    refeshlink.data('contentUrl', url);
+                    tabStrip.reload($('#tabstrip').find('li.' + cssClass));
+                }
+            }
+            function addContactrequire(e) {
+                var target = $(e.currentTarget);
+                var cssClass = target.data('cssclass');
+                var url = "@Url.Action("ajaxCreate", "contactrequire")"
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+
+            function changeStatus(e) {
+                var target = $(e.currentTarget);
+                var cssClass = target.data('cssclass');
+                var url = "@Url.Action("ChangStatus", "contactrequire")"
+                var data = {
+                    ID: target.data('id')
+                };
+                $.post(url, data, function (res) {
+                    Maitonn.JHelper.showMessage(res);
+                    if (res.Success) {
+                        var tabStrip = $("#tabstrip").data('kendoTabStrip');
+                        tabStrip.reload($('#tabstrip').find('li.' + cssClass));
+                    }
+                })
+
+            }
+        })
+
+        function getForm(url, data, cssClass) {
+            var kw = $('#kwindow').data('kendoWindow');
+            $.get(url, data, function (html) {
+                kw.content(html);
+                kw.title($('form').attr('formtitle')).center().open();
+                kw.currentFormcssClass = cssClass;
+                $.validator.unobtrusive.parse(document);
+            })
+        }
+
+
+        function ajaxFormSuccess(res) {
+            Maitonn.JHelper.showMessage(res);
+            if (res.Success) {
+                var tabStrip = $("#tabstrip").data('kendoTabStrip');
+                var kw = $('#kwindow').data('kendoWindow');
+                kw.close();
+                tabStrip.reload($('#tabstrip').find('li.' + kw.currentFormcssClass));
+            }
+        }
+    </script>
+}
+@(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))

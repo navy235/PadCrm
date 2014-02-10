@@ -1,0 +1,42 @@
+﻿@model List<PlanLog>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-planlog" data-id="@ViewBag.CompanyID" data-cssclass="planlog" href="javascript:void(0);">添加计划日志</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>录入时间</th>
+                <th>录入者</th>
+                <th>内容</th>
+                <th>计划时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxService", new { ID = item.AddUser })"></div>
+
+                    </td>
+
+                    <td>@item.Content</td>
+                    <td>@item.PlanTime.ToString("yyyy-MM-dd")</td>
+                    <td style="width: 180px;">
+                        <a class="btn btn-primary btn-edit-planlog"  href="javascript:void(0)" data-id="@item.ID">编辑</a>
+                        <a class="btn btn-primary btn-delete-planlog" href="javascript:void(0)" data-id="@item.ID">删除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "planlog")
+</div>

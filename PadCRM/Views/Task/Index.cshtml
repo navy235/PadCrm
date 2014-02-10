@@ -1,0 +1,161 @@
+﻿@model MonthTableViewModel
+@{
+    ViewBag.Title = ViewBag.NickName + "，您好！" + Model.Year + "年" + Model.Month + "月" + "工作安排";
+}
+<div class="tool-bar">
+
+    <div class="btn-group">
+        @if (Model.Month == 1)
+        {
+            <a class="btn btn-primary disabled" href="javascript:void(0);">&laquo;上个月</a>
+        }
+        else
+        {
+            <a class="btn btn-primary " href="@Url.Action("index", "task", new { ID = Model.MemberID, Month = Model.Month - 1 })">&laquo;上个月</a>
+        }
+
+        @if (Model.Month == 12)
+        {
+            <a class="btn btn-primary disabled" href="javascript:void(0);">&raquo;下个月</a>
+        }
+        else
+        {
+            <a class="btn btn-primary " href="@Url.Action("index", "task", new { ID = Model.MemberID, Month = Model.Month + 1 })">&raquo;下个月</a>
+        }
+    </div>
+
+</div>
+<div class="month-container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>星期日</th>
+                <th>星期一</th>
+                <th>星期二</th>
+                <th>星期三</th>
+                <th>星期四</th>
+                <th>星期五</th>
+                <th>星期六</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var dayNumber = 1;    
+            }
+            @for (var i = 0; i < Model.MaxRows; i++)
+            {
+                <tr>
+                    @for (var n = 0; n < 7; n++)
+                    {
+                        if (i == 0 && n < Model.FirstRowIndex)
+                        { 
+                        <td>
+                            <div class="task-empty"></div>
+                        </td>
+                        }
+                        else if (i * 7 + n + 1 - Model.FirstRowIndex > Model.DayCount)
+                        { 
+                        <td>
+                            <div class="task-empty"></div>
+                        </td>
+                        }
+                        else
+                        {
+                        <td data-date="@(new DateTime(Model.Year, Model.Month, dayNumber).ToString("yyyy-MM-dd"))" class="task-td">
+                            <div class="task-container">
+                                <div class="task-day">@dayNumber</div>
+                                <div class="task-add" title="添加任务"><i class="icon-maitonn icon-plus"></i></div>
+                            </div>
+                        </td>
+                            dayNumber++;
+                        }
+
+                    }
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</div>
+@section scripts{
+
+    <script type="text/x-kendo-template" id="template-task">
+    <div class="task-item" data-id="#=ID#" >
+    <div class="task-name" title="#=Title#">#=Title#</div>
+    <div class="task-edit" data-id="#=ID#"><i class="icon-maitonn icon-edit"></i></div>
+    <div class="task-delete" data-id="#=ID#"><i class="icon-maitonn icon-remove"></i></div>
+    </div>
+    </script>
+    <script type="text/javascript">
+
+        var MemberID=@Model.MemberID;
+        $(function () {
+            InitTask();
+            $('.month-container').on('click', '.task-add', addTask)
+            $('.month-container').on('click', '.task-edit', editTask)
+            $('.month-container').on('click', '.task-delete', deleteTask)
+        })
+
+        function InitTask() {
+            $.get("@Url.Action("bind", "task")", {id:MemberID,year:@Model.Year,month:@Model.Month},
+            function(res){
+                $.each(res,function(index,item){
+                    render(item);
+                })
+            })
+        }
+
+        function addTask(e) {
+            var target = $(e.currentTarget);
+            var date = target.parents('.task-td').data('date');
+            getForm("@Url.Action("ajaxcreate", "task")", {ID:MemberID, date: date })
+        }
+
+        function editTask(e) {
+            var target = $(e.currentTarget);
+            var id = target.data('id');
+            getForm("@Url.Action("ajaxedit", "task")", { ID: id })
+        }
+
+        function deleteTask(e){
+            var target = $(e.currentTarget);
+            var id = target.data('id');
+            if(confirm("确认删除该任务？")){
+                $.post("@Url.Action("delete", "task")",{ID:id},function(res){
+                    Maitonn.JHelper.showMessage(res);
+                    $('.task-item[data-id="'+id+'"]').remove();
+                })
+            }
+        }
+
+        function getForm(url, data) {
+            var kw = $('#kwindow').data('kendoWindow');
+            $.get(url, data, function (html) {
+                kw.content(html);
+                kw.title($('form').attr('formtitle')).center().open();
+                $.validator.unobtrusive.parse(document);
+            })
+        }
+
+
+        function ajaxFormSuccess(res) {
+            Maitonn.JHelper.showMessage(res);
+            if (res.Success) {
+                var kw = $('#kwindow').data('kendoWindow');
+                kw.close();
+                render(res.SuccessData);
+                console.log(res);
+            }
+        }
+
+        function render(data) {
+            var date = data.StartTimeZone;
+            var template = kendo.template($("#template-task").html());
+            var container = $('[data-date="' + date + '"]').find('.task-container');
+            container.append(template(data));
+        }
+
+    </script>
+}
+@(Html.Kendo().Window().Name("kwindow").Title("查看公告").Modal(true).Visible(false).Width(650))

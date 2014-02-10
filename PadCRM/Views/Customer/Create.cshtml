@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "添加人员信息";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <div class="form-field form-field-submit">
+        <button type="submit" class="btn btn-primary ">
+            <i class="icon-maitonn icon-save"></i>
+            &nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;</button>
+    </div>
+}

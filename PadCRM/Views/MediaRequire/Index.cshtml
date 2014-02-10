@@ -1,0 +1,46 @@
+﻿@model List<MediaRequireItemViewModel>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-mediarequire" data-id="@ViewBag.CompanyID" data-cssclass="mediarequire" href="javascript:void(0);">添加媒介策略请求</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>媒介人员</th>
+                <th>内容</th>
+                <th>合同附件</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = item.ResolveID })"></div>
+                    </td>
+                    <td>@item.Description</td>
+                    <th>@if (string.IsNullOrEmpty(item.AttachmentPath))
+                        { 
+                        <div>暂无</div>
+                        }
+                        else
+                        {
+                        <a href="@item.AttachmentPath">下载合同附件</a>
+                        }</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "mediarequire")
+</div>

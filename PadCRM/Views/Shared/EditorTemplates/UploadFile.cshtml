@@ -1,0 +1,30 @@
+@model  string
+
+@{
+    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+}
+
+<div class="field-uploadfile">
+    <div class="field-uploadfile-box">
+        <p id="@(name + "_file")">请上传文件！</p>
+    </div>
+    @Html.TextBoxFor(m => m, new { tabindex = -1, @class = "field-valid-text" })
+</div>
+<script type="text/javascript">
+    $(function () {
+        var upvalue;
+        @if (!string.IsNullOrEmpty(Model))
+        {
+            <text>
+        upvalue = '@Model';
+            </text>
+        }
+        jQuery("#@name").uploadFile({
+            default_url: '请上传文档',
+            save_url: '@Url.Action("UpLoadFile", "Upload")',
+            uploadId: 'attachments',
+            remove_url: '@Url.Action("UpLoadRemove", "Upload")',
+            value: upvalue
+        })
+    })
+</script>

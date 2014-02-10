@@ -1,0 +1,40 @@
+﻿@model List<TraceLog>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-tracelog" data-id="@ViewBag.CompanyID" data-cssclass="tracelog" href="javascript:void(0);">添加跟单日志</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>时间</th>
+                <th>录入者</th>
+                <th>内容</th>
+                <th>关系程度</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxService", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>@item.Content</td>
+                    <td>@item.RelationCate.CateName</td>
+                    <td style="width: 180px;">
+                        <a class="btn btn-primary btn-edit-tracelog"  href="javascript:void(0)" data-id="@item.ID">编辑</a>
+                        <a class="btn btn-primary btn-delete-tracelog" href="javascript:void(0)" data-id="@item.ID">删除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "tracelog")
+</div>

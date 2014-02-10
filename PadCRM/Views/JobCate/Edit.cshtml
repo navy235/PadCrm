@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "编辑客户类型信息";
+    
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorFor(m => Model)
+    <div class="form-submit">
+        <button class="btn btn-primary " type="submit">
+            <i class="icon-maitonn icon-save"></i>提交</button>
+    </div>
+}

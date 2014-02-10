@@ -1,0 +1,16 @@
+@model  string
+@{
+    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+}
+@Html.TextAreaFor(m => m)
+<link type="text/css" href="~/Scripts/ueditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/ueditor/umeditor.config.js"></script>
+<script type="text/javascript" src="~/Scripts/ueditor/umeditor.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var ue = UM.getEditor('@name', {
+            initialFrameWidth: 600,
+            initialFrameHeight: 400
+        })
+    })
+</script>

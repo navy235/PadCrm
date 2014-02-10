@@ -1,0 +1,52 @@
+﻿@model List<CustomerCompany>
+
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>客户ID</th>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>城市</th>
+                <th>行业</th>
+                <th>当前关系程度</th>
+                <th>传真</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>
+                    </td>
+                    <td>
+                        <div data-showcontent="@Url.Action("IndustryName", "ajaxService", new { value = item.IndustryValue })"></div>
+                    </td>
+                    <td>@item.CustomerCate.CateName</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+
+                    <td>
+                        <a class="btn btn-primary btn-delete-single" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">删除</a>
+                        <a class="btn btn-primary btn-edit-single" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">编辑</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "search")
+</div>

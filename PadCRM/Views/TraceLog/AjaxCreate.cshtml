@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+@using (Ajax.BeginForm("ajaxCreate", "tracelog", new AjaxOptions()
+{
+    OnSuccess = "ajaxFormSuccess",
+    OnFailure = "ajaxFormFailure"
+}, new { formtitle = "添加跟单日志" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <div class="form-field form-field-submit">
+        <button type="submit" class="btn btn-primary btn-submit ">
+            <i class="icon-maitonn icon-save"></i>
+            &nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;</button>
+        <button type="submit" class="btn btn-primary btn-submit-and-next " data-id="@ViewBag.Data_CompanyID" data-cssclass="planlog">
+            <i class="icon-maitonn icon-save"></i>
+            保存并添加下一步计划</button>
+    </div>
+}
+

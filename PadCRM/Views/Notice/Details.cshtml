@@ -1,0 +1,12 @@
+﻿@model Notice
+
+<div class="notice-container">
+    <h4>@Model.Name</h4>
+    <div class="notice-content">
+        @Html.Raw(Model.Content)
+    </div>
+    <div class="notice-footer">
+        <div class="notice-department">@Model.Department.Name</div>
+        <div class="notice-addtime">@Model.AddTime.ToString("yyyy-MM-dd")</div>
+    </div>
+</div>

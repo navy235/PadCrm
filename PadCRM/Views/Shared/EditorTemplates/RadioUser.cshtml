@@ -1,0 +1,45 @@
+﻿@model  int
+@{
+    var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+    var displayname = ViewData.ModelMetadata.DisplayName;
+}
+
+
+@Html.Kendo().Window().Name(name + "_window").Title("请选择" + displayname).Content(
+    @<text>
+<div class="selectUserTree" id="@(name + "_tree")"></div>
+<div class="k-window-footer">
+    <button type="button" id="@(name + "_select")" class="k-button" ><span class="icon-maitonn icon-save"></span>确认</button>
+</div>
+</text>
+).Width(600).Modal(true).Visible(false)
+
+<input type="text" disabled="disabled" class="k-textbox single-line text-box" id="@(name + "_text")" title="" />
+@Html.TextBoxFor(m => m, new { tabindex = -1, @class = "field-valid-text" })
+<button type="button" id="@(name + "_show")" class="k-button" ><span class="k-icon k-add"></span>选择</button>
+
+<script type="text/javascript">
+    $(function () {
+
+        $('#@(name + "_show")').on('click',function(){
+            selectUser.show();
+        })
+        var selectUser= $('#@name').selectUser({
+            checkboxes:null,
+            url: '@Url.Action("getUsers", "ajaxService")',
+            memberid:@CookieHelper.MemberID,
+            onSelected:function(e){
+                var target=$(e.target);
+                var value=selectUser.getValue();
+                if(value==null){
+                    alert('请选择需要共享的人员')
+                }else{
+                    $('#@name').val(value.id);
+                    $('#@(name)_text').val(value.text);
+                    $('#@name').parents('form:first').validate().element('#@name');
+                    selectUser.hide();
+                }
+            }
+        })
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿@model List<CustomerCompanyItemViewModel>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary" href="@Url.Action("Create", "CustomerCompany")">添加客户</a>
+    <a class="btn btn-primary" href="@Url.Action("index", "CustomerCompany")">查看更多</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>电话</th>
+                <th>传真</th>
+                <th>地址</th>
+                <th>录入者</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><a href="@Url.Action("details", "customercompany", new { ID = item.ID })">@item.Name</a></td>
+                    <td>@item.BrandName</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Address</td>
+                    <td>@item.UserName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

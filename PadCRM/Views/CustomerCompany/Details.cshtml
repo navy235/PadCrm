@@ -1,0 +1,365 @@
+﻿@model CustomerCompanyViewModel
+@{
+    ViewBag.Title = Model.Name;
+    var name = "selectUser";
+}
+<div class="display-container">
+    @Html.DisplayForModel()
+    <div class="display-item    ">
+        <div class="display-label">录入者</div>
+        <div class="display-field" data-showcontent="@Url.Action("MemberName", "ajaxService", new { ID = Model.MemberID })">长沙雨湖区</div>
+    </div>
+</div>
+
+<div id="tabstrip">
+    <ul>
+        @if (ViewBag.hasPermission)
+        {
+            <li class="k-state-active customer">人员信息</li>
+            <li class="share">信息共享</li>
+            <li class="mediarequire">媒介策略</li>
+            <li class="tracelog">跟单日志</li>
+        }
+        else
+        {
+            <li class=" k-state-active tracelog">跟单日志</li>
+        }
+
+        <li class="planlog">计划日志</li>
+
+
+    </ul>
+</div>
+
+<div class="selectUser" id="@name">
+    @Html.Kendo().Window().Name(name + "_window").Title("请选择共享人员").Content(
+    @<text>
+    <div class="selectUserTree" id="@(name + "_tree")"></div>
+    <div class="k-window-footer">
+        <button type="button" id="@(name + "_select")" class="k-button" ><span class="icon-maitonn icon-save"></span>确认</button>
+    </div>
+    </text>
+    ).Draggable(true).Width(400).Scrollable(true).Modal(true).Visible(false)
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var nextForm=null;
+        $(function () {
+            var companyId=@Model.ID;
+            var selectUser=$('#@name').selectUser({
+                url: '@Url.Action("getUsers", "ajaxService")',
+                memberid:@CookieHelper.MemberID,
+                onSelected:function(e){
+                    var target=$(e.target);
+                    addSpinner(target);
+                    var value=selectUser.getValue();
+                    if(value==''){
+                        alert('请选择需要共享的人员')
+                    }else{
+                        $.post('@Url.Action("share", "customershare")',{
+                            ids:value,
+                            companyId:companyId
+                        },function(res){
+                            Maitonn.JHelper.showMessage(res);
+                            if(res.Success){
+                                removeSpinner(target);
+                                selectUser.hide();
+                                tabStrip.reload($('#tabstrip').find('li.share'));
+                            }
+                        })
+                    }
+                }
+            });
+
+            window.selectUser=selectUser;
+
+            var tabStrip = $("#tabstrip").kendoTabStrip({
+                animation: { open: { effects: "fadeIn" } },
+                contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+                contentUrls: [
+                @if (ViewBag.hasPermission)
+                {<text>
+                '@Url.Action("Index", "customer", new { ID = Model.ID })',
+                '@Url.Action("Index", "customershare", new { ID = Model.ID })',
+                '@Url.Action("Index", "mediarequire", new { ID = Model.ID })',
+                </text>
+                }
+                '@Url.Action("Index", "TraceLog", new { ID = Model.ID })',
+                '@Url.Action("Index", "planlog", new { ID = Model.ID })'
+               
+                ]
+            }).data('kendoTabStrip');
+
+            $('#tabstrip').on('click', 'a.btn-edit-customer', editCustomer)
+            $('#tabstrip').on('click', 'a.btn-delete-customer', deleteCustomer)
+            $('#tabstrip').on('click', 'a.btn-edit-tracelog', editTraceLog)
+            $('#tabstrip').on('click', 'a.btn-delete-tracelog', deleteTraceLog)
+            $('#tabstrip').on('click', 'a.btn-edit-planlog', editPlanLog)
+            $('#tabstrip').on('click', 'a.btn-delete-planlog', deletePlanLog)
+            $('#tabstrip').on('click', 'a.btn-add-share', addShare)
+            $('#tabstrip').on('click', 'a.btn-delete-share', deleteShare)
+            $('#tabstrip').on('click', 'a.btn-add-tracelog', addTracelog)
+            $('#tabstrip').on('click', 'a.btn-add-planlog', addPlanlog)
+            $('#tabstrip').on('click', 'a.btn-add-customer', addCustomer)
+            $('#tabstrip').on('click', 'a.btn-add-mediarequire', addMediarequire)
+            $('#tabstrip').on('click', 'a.page-link', ajaxPage)
+
+
+
+            function ajaxPage(e){
+                e.preventDefault();
+                var target=$(e.currentTarget);
+                var parent=target.parent();
+                if(parent.hasClass('disabled')||parent.hasClass('active')){
+                    return false;
+                }else{
+                    var url=target.attr('href');
+                    var cssClass=target.data('cssclass');
+                    var refeshlink=$('#tabstrip').find('li.'+cssClass).find('.k-link')
+                    refeshlink.data('contentUrl',url);
+                    tabStrip.reload($('#tabstrip').find('li.'+cssClass));
+                }
+            }
+
+            function addTracelog(e) {
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "tracelog")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+            function addPlanlog(e) {
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "planlog")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+            function addCustomer(e) {
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "Customer")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+
+            function addMediarequire(e){
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "Mediarequire")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+
+            function addShare(){
+                selectUser.show();
+            }
+
+            function deleteShare(e){
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("delete", "customershare")';
+                excute(target, url, id, 'share');
+            }
+
+            //编辑客户人员信息
+            function editCustomer(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("ajaxedit", "Customer")';
+                isCustomerEditable(id).done(function (res) {
+                    if (res) {
+                        getForm(url,{ID:id},'customer');
+                    } else {
+                        alert("当前信息不能被编辑");
+                    }
+                })
+            }
+            //删除客户人员信息
+            function deleteCustomer(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("delete", "Customer")';
+                isCustomerEditable(id).done(function (res) {
+                    if (res) {
+                        excute(target, url, id, 'customer');
+                    } else {
+                        alert("当前信息不能被编辑");
+                        removeSpinner(target);
+                    }
+                })
+            }
+            //编辑跟单日志
+            function editTraceLog(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("ajaxedit", "tracelog")';
+                isTraceLogEditable(id).done(function (res) {
+                    if (res) {
+                        getForm(url,{ID:id},'tracelog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                    }
+                })
+            }
+            //删除跟单日志
+            function deleteTraceLog(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("delete", "tracelog")';
+                isTraceLogEditable(id).done(function (res) {
+                    if (res) {
+                        excute(target, url, id, 'tracelog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                        removeSpinner(target);
+                    }
+                })
+            }
+
+            //编辑计划日志
+            function editPlanLog(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("ajaxedit", "planlog")';
+                isPlanLogEditable(id).done(function (res) {
+                    if (res) {
+                        getForm(url,{ID:id},'planlog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                    }
+                })
+            }
+            //删除计划日志
+            function deletePlanLog(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("delete", "PlanLog")';
+                isTraceLogEditable(id).done(function (res) {
+                    if (res) {
+                        excute(target, url, id, 'planlog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                        removeSpinner(target);
+                    }
+                })
+            }
+
+
+            function excute(element, url, Id, cssClass) {
+                if ($(element).hasClass('disabled'))
+                    return false;
+                if (Id) {
+                    addSpinner(element);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: { ID: Id },
+                        success: function (res) {
+                            if (res.Success) {
+                                Maitonn.JHelper.showMessage(res);
+                                tabStrip.reload($('#tabstrip').find('li.'+cssClass));
+                            }
+                        },
+                        complete: function () {
+                            removeSpinner(element);
+                        }
+                    })
+                } else {
+                    alert('请选择要处理的信息');
+                    return false;
+                }
+            }
+            //监测人员信息是否能被编辑
+            function isCustomerEditable(id) {
+                var url = '@Url.Action("isEditable", "Customer")';
+                var d = $.Deferred()
+                $.get(url, { ID: id }, function (res) {
+                    d.resolve(res);
+                })
+                return d.promise();
+            }
+            //监测跟单日志是否能被编辑
+            function isTraceLogEditable(id) {
+                var url = '@Url.Action("isEditable", "TraceLog")';
+                var d = $.Deferred()
+                $.get(url, { ID: id }, function (res) {
+                    d.resolve(res);
+                })
+                return d.promise();
+            }
+            //监测计划日志是否能被编辑
+            function isPlanLogEditable(id) {
+                var url = '@Url.Action("isEditable", "PlanLog")';
+                var d = $.Deferred()
+                $.get(url, { ID: id }, function (res) {
+                    d.resolve(res);
+                })
+                return d.promise();
+            }
+
+            function addSpinner(element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            }
+            function removeSpinner(element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            }
+
+            $('#kwindow').on('click','.btn-submit-and-next',setnext);
+
+            function setnext(e){
+                var target=$(e.currentTarget);
+                var url = "@Url.Action("ajaxCreate", "planlog")";
+                var ID=target.data('id');
+                var cssclass=target.data('cssclass');
+                nextForm={
+                    url:url,
+                    ID:ID,
+                    cssclass:cssclass
+                };
+            }
+        })
+
+        function getForm(url, data, cssClass) {
+            var kw = $('#kwindow').data('kendoWindow');
+            $.get(url, data, function (html) {
+                kw.content(html);
+                kw.title($('form').attr('formtitle')).center().open();
+                kw.currentFormcssClass = cssClass;
+                $.validator.unobtrusive.parse(document);
+            })
+        }
+
+
+        function ajaxFormSuccess(res) {
+            Maitonn.JHelper.showMessage(res);
+            if (res.Success) {
+                var tabStrip = $("#tabstrip").data('kendoTabStrip');
+                var kw = $('#kwindow').data('kendoWindow');
+                kw.close();
+                tabStrip.reload($('#tabstrip').find('li.' + kw.currentFormcssClass));
+                if(nextForm){
+                    getForm(nextForm.url,{ID:nextForm.ID},nextForm.cssclass);
+                    nextForm=null;
+                }
+            } 
+        }
+    </script>
+}
+
+@(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))

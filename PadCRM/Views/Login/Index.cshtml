@@ -1,0 +1,44 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "平衡点CRM用户登录";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<div class="container" id="login-block">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+            <div class="login-box clearfix animated flipInY">
+                <div class="page-icon animated bounceInDown">
+                    <img class="img-responsive rotate-icon" src="@Url.Content("~/Content/images/login-key-icon.png")" alt="Key icon">
+                </div>
+                <div class="login-logo">
+
+                    @* <img src="@Url.Content("~/Content/images/login-logo.png")" alt="Company Logo">*@
+
+                    <h3>平衡点CRM</h3>
+                </div>
+                <hr>
+                <div class="login-form">
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-error ">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <h4><i class="icon-maitonn icon-exclamation-sign"></i></h4>
+                            <span style="color: #f60">@ViewBag.Message</span>
+                        </div>
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.TextBoxFor(x => x.UserName, new { placeholder = "姓名", required = true, @class = "input-field" })
+                        @Html.ValidationMessageFor(x => x.UserName)
+                        @Html.PasswordFor(x => x.Password, new { placeholder = "密码", required = true, @class = "input-field" })
+                        @Html.ValidationMessageFor(x => x.Password)
+                        <button type="submit" class="btn btn-login">登 录</button>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

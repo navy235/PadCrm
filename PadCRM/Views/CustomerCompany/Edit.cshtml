@@ -1,0 +1,64 @@
+﻿@model CustomerCompanyViewModel
+@{
+    ViewBag.Title = "编辑客户信息";
+}
+
+@section styles{
+    <style type="text/css">
+        .form-field #Name {
+            width: 200px;
+        }
+    </style>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <div class="form-field form-field-submit">
+        <button type="submit" class="btn btn-primary">
+            <i class="icon-maitonn icon-save"></i>
+            &nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;</button>
+    </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var canReplace = true;
+
+            $("#Name").kendoAutoComplete({
+                dataTextField: "Name",
+                filter: "contains",
+                minLength: 2,
+                dataSource: {
+                    transport: {
+                        read: "@Url.Action("customerName", "ajaxservice", new { ID = Model.ID })"
+                    }
+                },
+                select: onSelectName
+            });
+            $("#Name").on('keydown', function (e) {
+                if (e.ctrlKey && e.keyCode == 86) {
+                    return false;
+                }
+            })
+            function onSelectName(e) {
+                var dataItem = this.dataItem(e.item.index());
+                console.log(dataItem);
+
+                $.get("@Url.Action("CheckReplaceable", "AjaxService")",
+                    { ID: dataItem.ID }
+                    , function (res) {
+                        if (res) {
+                            window.location.href = "@Url.Action("Edit")/" + dataItem.ID;
+                        } else {
+                            alert("当前信息不能替换")
+                            setTimeout(function () {
+                                $("#Name").val('');
+                            }, 200)
+                        }
+                    });
+                }
+        })
+    </script>
+}

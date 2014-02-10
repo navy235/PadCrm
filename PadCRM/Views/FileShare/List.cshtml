@@ -1,0 +1,40 @@
+﻿@model List<PadCRM.Models.FileShare>
+@{
+    Layout = null;
+    var cssClass = "category" + (string)ViewBag.CategoryID;
+}
+<div class="tool-bar">
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>描述</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxService", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td style="width: 90px;">
+                        <a class="btn btn-primary "  href="@item.FilePath" data-id="@item.ID">下载</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, cssClass)
+</div>
+

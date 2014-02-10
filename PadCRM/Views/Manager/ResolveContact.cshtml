@@ -1,0 +1,77 @@
+﻿@model List<ContactRequireGroupViewModel>
+@{
+    var cssClass = (string)ViewBag.Status;
+}
+
+<div class="tool-bar"></div>
+<div class="panel-group" id="accordion1">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i)">
+                        @item.Name
+                    </a>
+                </h4>
+            </div>
+            <div id="sec_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
+                <div class="panel-body">
+                    <div class="tool-bar">
+                        <a class="btn btn-primary btn-add-contactrequire" data-id="@item.ID" data-cssclass="category0" href="javascript:void(0);">处理请求</a>
+                    </div>
+                    <div class="table table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>录入者</th>
+                                    <th>录入时间</th>
+                                    <th>内容</th>
+                                    <th>合同附件</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in item.ContactRequires)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = log.AddUser })"></div>
+                                        </td>
+                                        <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
+                                        <td>@log.Description</td>
+                                        <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
+                                            { 
+                                            <div>暂无</div>
+                                            }
+                                            else
+                                            {
+                                            <a href="@log.AttachmentPath">下载合同附件</a>
+                                            }</th>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@if (Model.Count == 0)
+{ 
+    <div class="alert alert-info">
+        暂无合同请求
+    </div>
+}
+else
+{
+
+    <div class="page-info">
+        @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, cssClass)
+    </div>
+}
+
+
+

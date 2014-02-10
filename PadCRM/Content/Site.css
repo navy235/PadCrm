@@ -1,0 +1,179 @@
+﻿html {
+    color: #333;
+    background: #fff;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    margin: 0;
+    padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+audio, canvas, video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+
+body {
+    font: 12px/1.5 tahoma,arial,\5b8b\4f53;
+}
+
+html, body {
+    _height: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+.main {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.icon-maitonn {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.btn-primary {
+    margin-right: 5px;
+}
+
+.btn-group .btn-primary {
+    margin-right: 0;
+}
+
+
+.k-treeview .k-sprite {
+    background-image: url(images/glyphicons-halflings.png);
+}
+
+.k-sprite.depart {
+    background-position: -215px 0;
+}
+
+.k-sprite.user {
+    background-position: -167px 0;
+}
+
+
+.k-upload-button {
+    background: url(images/uploadbtn.png) no-repeat !important;
+    border: none !important;
+    height: 27px;
+}
+
+.field-uploadfile .k-upload-button {
+    background: url(images/uploadbtn-file.png) no-repeat !important;
+    border: none !important;
+    height: 27px;
+}
+
+.k-upload-button span {
+    visibility: hidden;
+}
+
+.field-uploadimg-box img {
+    border: 1px solid #ccc;
+    padding: 2px;
+}
+
+.notice-container {
+}
+
+    .notice-container h4 {
+        text-align: center;
+    }
+
+.notice-content {
+    padding: 5px;
+}
+
+.notice-footer {
+    overflow: hidden;
+}
+
+.notice-department {
+    color: #999;
+    float: left;
+}
+
+.notice-addtime {
+    color: #999;
+    float: right;
+}
+
+.task-container {
+    min-height: 60px;
+    position: relative;
+    padding-top: 20px;
+    width: 160px;
+}
+
+.task-td:hover {
+    background: #f5f5f5;
+}
+
+.task-container .task-day {
+    position: absolute;
+    left: -2px;
+    top: 0px;
+    color: #999;
+}
+
+.task-container .task-add {
+    position: absolute;
+    right: -2px;
+    top: 0px;
+    cursor: pointer;
+    color: #f60;
+}
+
+.task-item {
+    background: rgb(81, 160, 237);
+    border-radius: 3px;
+    padding: 3px;
+    border: 1px solid rgb(81, 160, 237);
+    position: relative;
+    margin-bottom: 5px;
+    color: #fff;
+    overflow: hidden;
+}
+
+    .task-item .task-delete {
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        cursor: pointer;
+    }
+
+    .task-item .task-edit {
+        position: absolute;
+        right: 23px;
+        top: 3px;
+        cursor: pointer;
+    }
+
+    .task-item .task-name {
+        width: 100px;
+        overflow: hidden;
+        float: left;
+    }
+
+.selectUserTree {
+    height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

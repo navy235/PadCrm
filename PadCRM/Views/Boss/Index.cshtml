@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "客户信息查询";
+}
+@using (Ajax.BeginForm(actionName: "search", controllerName: "boss", routeValues: new { }, ajaxOptions: new AjaxOptions()
+{
+    OnSuccess = "ajaxFormSuccess",
+    OnFailure = "ajaxFormFailure",
+    HttpMethod = "Get"
+
+}, htmlAttributes: new { formtitle = "客户信息查询" }))
+{
+    <div class="search-area">
+        @Html.EditorForModel()
+        <div class="form-field form-field-submit">
+            <button type="submit" class="btn btn-primary btn-submit ">
+                <i class="icon-maitonn icon-search"></i>
+                &nbsp;&nbsp;查&nbsp;&nbsp;询&nbsp;&nbsp;</button>
+        </div>
+    </div>
+}
+<div class="search-result">
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('.search-result').on('click', 'a.btn-export-all', exportAll)
+            $('.search-result').on('click', 'a.btn-export-currentpage', exportCurrentpage)
+            $('.search-result').on('click', 'a.page-link', ajaxPage)
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    $.get(url, {}, function (res) {
+                        $('.search-result').html(res);
+                        Maitonn.JHelper.onDataBoundShowContent();
+                    })
+                }
+            }
+
+            function exportAll(e) {
+                var target = $(e.currentTarget);
+                var link = $('.pagination').find('.active').find('.page-link');
+                var url = link.attr('href');
+                url = url.substr(url.indexOf('?'));
+                url = "@Url.Action("exportall", "boss")" + url;
+                window.location.href = url;
+            }
+
+            function exportCurrentpage(e) {
+                var target = $(e.currentTarget);
+                var link = $('.pagination').find('.active').find('.page-link');
+                var url = link.attr('href');
+                url = url.substr(url.indexOf('?'));
+                url = "@Url.Action("exportcurrentpage", "boss")" + url;
+                window.location.href = url;
+            }
+        })
+        function ajaxFormSuccess(res) {
+            $('.search-result').html(res);
+            Maitonn.JHelper.onDataBoundShowContent();
+        }
+    </script>
+}

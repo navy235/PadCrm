@@ -1,0 +1,35 @@
+﻿@model List<FileCate>
+@{
+    ViewBag.Title = "文件共享";
+}
+
+<div id="tabstrip">
+    <ul>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            <li class="@(i == 0 ? "k-state-active" : "") category@(item.ID)">@item.CateName</li>
+        }
+    </ul>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            var tabStrip = $("#tabstrip").kendoTabStrip({
+                animation: { open: { effects: "fadeIn" } },
+                contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+                contentUrls: [
+                  @for (var i = 0; i < Model.Count; i++)
+                  {
+                      var item = Model[i];
+
+                        <text>
+                        '@Url.Action("list", "fileshare", new { ID = item.ID })'@(i < Model.Count - 1 ? "," : "")
+                      </text>
+                  }
+                ]
+            }).data('kendoTabStrip');
+        })
+    </script>
+}

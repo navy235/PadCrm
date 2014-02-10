@@ -1,0 +1,47 @@
+﻿@model List<Member>
+@{
+    Layout = null;
+}
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>部门</th>
+                <th>姓名</th>
+                <th>类型</th>
+                <th>生日</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div data-showcontent="@Url.Action("departmentName", "ajaxservice", new { ID = item.DepartmentID })"></div>
+                    </td>
+                    <td>@item.NickName</td>
+                    @if (item.IsLeap)
+                    {
+                        <td>农历</td>
+                        <td>
+                            @(Utilities.ConvertToChineseYearStyle(item.BirthDay.Year) + item.BirthDay1)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>阳历</td>
+                        <td>
+                            @item.BirthDay.ToString("yyyy-MM-dd")</td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.Count == 0)
+{ 
+    <div class="alert alert-info">
+        最近5天没有员工生日
+    </div>
+}

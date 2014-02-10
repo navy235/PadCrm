@@ -1,0 +1,56 @@
+﻿@model List<Notice>
+@{
+    Layout = null;
+}
+
+<div class="tool-bar"></div>
+
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>发布时间</th>
+                <th>部门</th>
+                <th>发布人</th>
+                <th>查看</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                var item = Model[i];
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("departmentName", "ajaxservice", new { ID = item.DepartmentID })"></div>
+                    </td>
+                    <td>
+                        <div data-showcontent="@Url.Action("memberName", "ajaxservice", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-view-notice" data-id="@item.ID" data-cssclass="notice" href="javascript:void(0);">查看</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+@if (Model.Count == 0)
+{ 
+    <div class="alert alert-info">
+        暂无部门公告
+    </div>
+}
+else
+{
+
+    <div class="page-info">
+        @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "notice")
+    </div>
+}
+

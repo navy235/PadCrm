@@ -1,0 +1,56 @@
+﻿.tab-content {
+    padding: 10px 0;
+}
+
+
+.tool-bar {
+    margin: 10px;
+}
+
+.panel-body .tool-bar {
+    margin: 0;
+}
+
+.k-header.k-datepicker {
+    background: none!important;
+}
+
+
+input.k-input {
+    border: 1px solid #c6c6c6!important;
+    height: 28px!important;
+    line-height: 28px!important;
+    padding: 4px!important;
+    outline: none!important;
+    vertical-align: middle!important;
+}
+
+.window-titlebar .k-window-action {
+    padding: 0!important;
+}
+
+.k-window-titlebar .k-state-hover {
+    padding: 0!important;
+}
+
+.search-area {
+    overflow: hidden;
+}
+
+    .search-area .form-field {
+        width: 300px;
+        float: left;
+        height: 40px;
+    }
+
+    .search-area .field-validation-error {
+        display: none;
+    }
+
+.search-result {
+    margin: 10px auto;
+}
+
+.search-form {
+    margin: 20px 10px;
+}

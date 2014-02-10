@@ -1,0 +1,105 @@
+﻿@model List<CustomerCompany>
+
+<div class="tool-bar">
+    <a class="btn btn-primary btn-export-all" href="javascript:void(0);">导出所有查询数据</a>
+    <a class="btn btn-primary btn-export-currentpage" href="javascript:void(0);">导出当前页查询数据</a>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>客户ID</th>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>城市</th>
+                <th>行业</th>
+                <th>当前关系程度</th>
+                <th>传真</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td @(item.Customer.Count > 0 ? "rowspan=3" : "")>@item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>
+                    </td>
+                    <td>
+                        <div data-showcontent="@Url.Action("IndustryName", "ajaxService", new { value = item.IndustryValue })"></div>
+                    </td>
+                    <td>@item.CustomerCate.CateName</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                </tr>
+                if (item.Customer.Count > 0)
+                { 
+                <tr>
+                    <td colspan="10">客户人员信息</td>
+                </tr>
+                <tr>
+                    <td colspan="10">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>姓名</th>
+                                    <th>职位</th>
+                                    <th>录入者</th>
+                                    <th>生日类型</th>
+                                    <th>生日</th>
+                                    <th>电话</th>
+                                    <th>手机1</th>
+                                    <th>手机2</th>
+                                    <th>地址</th>
+                                    <th>QQ</th>
+                                    <th>爱好</th>
+                                    <th>邮箱</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var customer in item.Customer)
+                                {
+                                    <tr>
+                                        <td>@customer.JobCate.CateName</td>
+                                        <td>@customer.Name</td>
+                                        <td>@customer.Jobs</td>
+                                        <td>
+                                            <div data-showcontent="@Url.Action("MemberName", "ajaxService", new { ID = customer.AddUser })"></div>
+                                        </td>
+                                        <td>@(customer.IsLeap ? "农历" : "阳历")</td>
+                                        <td>@(customer.IsLeap
+                                    ? (Utilities.ConvertToChineseYearStyle(customer.BirthDay.Year) + customer.BirthDay1) :
+                                    customer.BirthDay.ToString("yyyy-MM-dd"))
+                                        </td>
+                                        <td>@customer.Phone</td>
+                                        <td>@customer.Mobile</td>
+                                        <td>@customer.Mobile1</td>
+                                        <td>@customer.Address</td>
+                                        <td>@customer.QQ</td>
+                                        <td>@customer.Favorite</td>
+                                        <td>@customer.Email</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+               
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "search")
+</div>

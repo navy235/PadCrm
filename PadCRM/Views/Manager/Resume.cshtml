@@ -1,0 +1,109 @@
+﻿@model Member
+@{
+    ViewBag.Title = Model.NickName + "简历";
+    Layout = "~/Views/Shared/_LayoutPrint.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" href="http://www.@(ConfigSetting.DomainUrl)/Content/css/bootstrap.min.css" />
+     <style type="text/css">
+        .container {
+            width: 860px;
+        }
+
+        .table-label {
+            font-weight: bold;
+        }
+
+        .tool-btn {
+            float: right;
+        }
+
+        .page-header {
+            width: 860px;
+        }
+
+        @@media print {
+            .tool-btn {
+                display: none;
+            }
+        }
+    </style>
+}
+<div class="page-header" style="text-align: center">
+    <div class="tool-btn">
+        <button class="btn btn-primary" type="button" style="margin-right: 10px;" onclick="window.print();"><i class="icon-maitonn icon-print"></i>&nbsp;&nbsp;打印</button>
+        <a class="btn btn-primary" href="@Url.Action("download", "manager", new { ID = Model.MemberID })"><i class="icon-maitonn icon-save"></i>&nbsp;&nbsp;下载</a>
+    </div>
+    <h4>@ViewBag.Title</h4>
+</div>
+<table class="table  table-bordered">
+    <tbody>
+        <tr>
+            <td rowspan="6" colspan="2" width="220">
+                <img src="http://www.@(ConfigSetting.DomainUrl)@Model.AvtarUrl"  style="width:200px"/></td>
+            <td class="table-label" width="80">姓名</td>
+            <td width="240">@Model.NickName</td>
+            <td class="table-label" width="80">性别</td>
+            <td width="240">@(Model.Sex ? "女" : "男")</td>
+        </tr>
+
+        <tr>
+            <td class="table-label" width="80">部门</td>
+            <td width="240">@Model.Department.Name</td>
+            <td class="table-label" width="80">负责人</td>
+            <td width="240">@(Model.IsLeader ? "是" : "否")</td>
+        </tr>
+
+        <tr>
+            <td class="table-label" width="80">手机1</td>
+            <td width="240">@Model.Mobile</td>
+            <td class="table-label" width="80">手机2</td>
+            <td width="240">@Model.Mobile1</td>
+        </tr>
+        <tr>
+            <td class="table-label" width="80">邮箱</td>
+            <td width="240">@Model.Email</td>
+            <td class="table-label" width="80">QQ</td>
+            <td width="240">@Model.QQ</td>
+        </tr>
+        <tr>
+            @if (Model.IsLeap)
+            {
+                 
+                <td class="table-label" width="80">生日类型</td>
+                <td width="240">农历</td>
+                <td class="table-label" width="80">生日</td>
+                <td width="240">@(Utilities.ConvertToChineseYearStyle(Model.BirthDay.Year) + Model.BirthDay1)</td>
+                  
+            }
+            else
+            {
+                <td class="table-label" width="80">生日类型</td>
+                <td width="240">阳历</td>
+                <td class="table-label" width="80">生日</td>
+                <td width="240">
+                    @Model.BirthDay.ToString("yyyy-MM-dd")</td>
+            }
+        </tr>
+        <tr>
+            <td class="table-label" width="80">身份证</td>
+            <td colspan="3">@Model.IDNumber</td>
+        </tr>
+        <tr>
+            <td width="100" class="table-label">家庭状况</td>
+            <td colspan="5">@Model.FamilySituation</td>
+        </tr>
+        <tr>
+            <td width="100" class="table-label">学习经历</td>
+            <td colspan="5">@Model.StudyExp</td>
+        </tr>
+        <tr>
+            <td width="100" class="table-label">工作经历</td>
+            <td colspan="5">@Model.JobExp</td>
+        </tr>
+        <tr>
+            <td width="100" class="table-label">补充说明</td>
+            <td colspan="5">@Model.JobExp</td>
+        </tr>
+    </tbody>
+</table>

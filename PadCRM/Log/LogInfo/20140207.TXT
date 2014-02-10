@@ -1,0 +1,5 @@
+
+ ExLogTime :2014-02-07 16:32:49,966 [24] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+asd 

@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "文件共享管理";
+}
+
+<!-- Tab panes -->
+<div class="tab-content">
+    @(Html.Kendo().Grid<PadCRM.Models.FileShare>()
+        .Name("Grid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.ID)
+                     .Sortable(false)
+                     .Filterable(false)
+                     .ClientTemplate("<input type='checkbox' name='ID_check' id='#=ID#_check'  class='chkbx' value='#=ID#' />")
+                     .HeaderTemplate("<div style='text-align:center'><input type='checkbox' id='checkAll' onclick='Grid.checkAll(this)' title='全选'/></div>")
+                     .Width(40).HtmlAttributes(new { style = "text-align:center" });
+
+            columns.Bound(c => c.Name).Title("文件名称");
+            columns.ForeignKey(c => c.FileCateID, (List<SelectListItem>)ViewBag.FileCateID, "Value", "Text").Title("文件类型");
+
+            columns.Bound(c => c.AddTime).Format("{0:yyyy-MM-dd}").Title("录入时间");
+            columns.Template(@<text></text>)
+    .ClientTemplate("<div data-showcontent='" + Url.Action("membername", "ajaxservice") + "/#=AddUser#' ></div>").Title("录入者");
+
+            columns.Template(@<text></text>)
+         .ClientTemplate(@"<a class='btn btn-primary  ' href='"
+         + Url.Action("edit", "FileShare") + "/#=ID#'><span class='icon-maitonn icon-edit'></span>编辑</a>"
+         + "<a class='btn btn-primary  ' href='javascript:void(0);' onclick='Grid.deleteSingle(this,\"#=ID#\");' ><span class='icon-maitonn icon-remove'></span>删除</a>"
+         )
+         .Title("操作")
+         .Width(300);
+        })
+                .ToolBar(toolbar =>
+                {
+                    toolbar.Custom().Text("添加文件").Action("Create", "FileShare");
+                })
+                .Pageable()
+                .Sortable()
+                .Scrollable()
+                .Filterable()
+                .Events(e => e.DataBound("Maitonn.JHelper.onDataBoundShowContent"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Model(model => model.Id(c => c.ID))
+                    .Sort(sort => sort.Add(x => x.AddTime).Descending())
+                    .Read(read => read.Action("Data_Read", "FileShare"))
+                    )
+                    .HtmlAttributes(new { style = "height:500px;" })
+                )
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var Grid = {
+            id: 'Grid',
+            checkAll: function (element) {
+                var self = Grid;
+                var state = $(element).is(':checked');
+                $('[name="ID_check"]').attr('checked', state);
+            },
+            getCheckIds: function () {
+                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val() }).join(',');
+            },
+            addSpinner: function (element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            },
+            removeSpinner: function (element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            },
+            excute: function (element, url, Ids) {
+                if ($(element).hasClass('disabled'))
+                    return false;
+                var self = Grid;
+                if (Ids) {
+                    self.addSpinner(element);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: { ids: Ids },
+                        success: function (res) {
+                            if (res.Success) {
+                                Maitonn.JHelper.showMessage(res);
+                                var grid = $("#Grid").data("kendoGrid");
+                                grid.dataSource.read();
+                                grid.refresh();
+                            }
+                        },
+                        complete: function () {
+                            self.removeSpinner(element);
+                        }
+                    })
+                } else {
+                    alert('请选择要处理的信息');
+                    return false;
+                }
+            },
+            deleteSingle: function (element, id) {
+                var self = Grid;
+                var url = '@Url.Action("SetDelete", "FileShare")';
+                var Ids = id;
+                self.excute(element, url, Ids);
+            },
+            showSingle: function (element, id) {
+                var self = Grid;
+                var url = '@Url.Action("Details", "FileShare")';
+                var Ids = id;
+                $.get(url, { ID: id }, function (res) {
+                    var kwindow = $('#kwindow').data('kendoWindow');
+                    kwindow.content(res).center().open();
+                })
+            }
+        }
+    </script>
+}
+
+@(Html.Kendo().Window().Name("kwindow").Title("查看公告").Modal(true).Visible(false).Width(650))

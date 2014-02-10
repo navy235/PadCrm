@@ -1,0 +1,68 @@
+﻿@model List<TraceLogGroupViewModel>
+@{
+    Layout = null;
+}
+
+<div class="tool-bar"></div>
+<div class="panel-group" id="accordion">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        var item = Model[i];
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse"  data-parent="#accordion" href="#collapse@(i)">
+                        @item.Name
+                    </a>
+                    <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })" class="pull-right">详情</a>
+                </h4>
+            </div>
+            <div id="collapse@(i)" class="panel-collapse collapse @(i == 0 ? "in" : "")">
+
+                <div class="panel-body">
+                    <div class="tool-bar">
+                        @* <a class="btn btn-primary btn-add-tracelog" data-id="@item.ID" data-cssclass="tracelog" href="javascript:void(0);">添加跟单日志</a>*@
+                    </div>
+                    <div class="table table-responsive">
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>录入时间</th>
+                                    <th>录入者</th>
+                                    <th>内容</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in item.TraceLogs)
+                                {
+                                    <tr>
+                                        <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
+                                        <td>@log.UserName</td>
+                                        <td>@log.Content</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (Model.Count == 0)
+{ 
+    <div class="alert alert-info">
+        暂无跟单日志
+    </div>
+}
+else
+{
+
+    <div class="page-info">
+        @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "tracelog")
+    </div>
+}
+

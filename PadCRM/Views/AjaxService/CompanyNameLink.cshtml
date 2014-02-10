@@ -1,0 +1,6 @@
+﻿@model CustomerCompany
+@{
+    Layout = null;
+}
+
+<a href="@Url.Action("details", "customercompany", new { ID = Model.ID })">@Model.Name</a>

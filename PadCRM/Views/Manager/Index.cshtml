@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "部门人员列表";
+}
+
+<!-- Tab panes -->
+<div class="tab-content">
+
+    @(Html.Kendo().Grid<Member>()
+    .Name("MembersList")
+    .Columns(columns =>
+    {
+
+        columns.ForeignKey(p => p.DepartmentID, new SelectList((List<SelectListItem>)ViewBag.Data_DepartmentID, "value", "text")).Width(80);
+        columns.Bound(c => c.NickName).Width(120);
+        columns.Bound(c => c.Mobile).Width(110);
+        columns.Bound(c => c.Mobile1).Width(110);
+        columns.Bound(c => c.Email).Width(170);
+        columns.Bound(c => c.QQ);
+        columns.Bound(c => c.Address);
+        columns.Template(@<text></text>)
+            .ClientTemplate(@"<a class='btn btn-primary '"
+            + " href='javascript:void(0);' onclick='Grid.shwoTracelog(this,\"#=MemberID#\");' >跟单情况</a>"
+            + "<a class='btn btn-primary ' href='"
+            + Url.Action("Resume", "Manager") + "/#=MemberID#' target='_blank'>查看简历</a>"
+            ).Title("操作").Width(260);
+    })
+      .ToolBar(toolbar =>
+    {
+        toolbar.Custom().Text("新开帐号").Action("Create", "Manager");
+        toolbar.Custom()
+            .Text("导出到Excel")
+            .HtmlAttributes(new { id = "export" })
+            .Url(Url.Action("Export", "Manager"));
+
+    })
+    .Pageable()
+    .Sortable()
+    .Groupable()
+    .Scrollable()
+    .Filterable()
+    .HtmlAttributes(new { style = "height:500px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(120)
+        .Model(model => model.Id(c => c.MemberID))
+        .Sort(sort => sort.Add(x => x.DepartmentID).Ascending())
+        .Read("Editing_Read", "Manager")
+
+    )
+)
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var Grid = {
+            id: 'MembersList',
+
+            addSpinner: function (element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            },
+            removeSpinner: function (element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            },
+            checkAll: function (ele) {
+                var self = Grid;
+                var state = $(ele).is(':checked');
+                $('[name="ID_check"]').attr('checked', state);
+            },
+            getCheckIds: function () {
+                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val(); }).join(',');
+            },
+            shwoTracelog: function (element, id) {
+                var self = Grid;
+                var Ids = id;
+                $.get('@Url.Action("viewtrace", "tracelog")', { ID: id }, function (res) {
+                    $('#logwindow').data('kendoWindow')
+                        .content(res)
+                        .center().open();
+                })
+            }
+        }
+        $(function () {
+            $('#logwindow').on('click', 'a.page-link', showpage);
+            function showpage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    $.get(url, {}, function (res) {
+                        $('#logwindow').data('kendoWindow').content(res);
+                    })
+                }
+            }
+        })
+    </script>
+}
+
+@(Html.Kendo().Window().Name("logwindow").Title("跟单详情").Modal(true).Visible(false).Width(800))

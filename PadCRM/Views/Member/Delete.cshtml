@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "员工信息管理";
+}
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li><a href="@Url.Action("index")" >员工列表</a></li>
+    <li class="active"><a href="@Url.Action("delete")" >已禁用的员工列表</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+
+    @(Html.Kendo().Grid<Member>()
+    .Name("MembersList")
+    .Columns(columns =>
+    {
+
+        columns.ForeignKey(p => p.DepartmentID, new SelectList((List<SelectListItem>)ViewBag.Data_DepartmentID, "value", "text")).Width(80);
+        columns.Template(@<text></text>).ClientTemplate("#=IsLeader ? \"是\" : \"否\"#").Width(60).Title("负责人");
+        columns.Bound(c => c.NickName).Width(80);
+        columns.Bound(c => c.Mobile).Width(110);
+        columns.Bound(c => c.Mobile1).Width(110);
+        columns.Bound(c => c.Email).Width(170);
+        columns.Bound(c => c.QQ);
+        columns.Bound(c => c.Address);
+        columns.ForeignKey(p => p.GroupID, new SelectList((List<SelectListItem>)ViewBag.Data_GroupID, "value", "text")).Width(90);
+
+        columns.Template(@<text></text>)
+            .ClientTemplate(@"<a class='btn btn-primary' href='javascript:void(0);'"
+                + "onclick='Grid.refreshSingle(this,\"#=MemberID#\");' ><span class='icon-maitonn icon-refresh'></span>恢复</a>"
+            ).Title("编辑").Width(110);
+    })
+    .Pageable()
+    .Sortable()
+    .Groupable()
+    .Scrollable()
+    .Filterable()
+    .HtmlAttributes(new { style = "height:500px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(120)
+        .Model(model => model.Id(c => c.MemberID))
+         .Sort(sort => sort.Add(x => x.DepartmentID).Ascending())
+        .Read("DeleteEditing_Read", "Member")
+
+    )
+)
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        var Grid = {
+            id: 'MembersList',
+            refreshUrl: '@Url.Action("setrefresh", "Member")',
+            addSpinner: function (element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            },
+            removeSpinner: function (element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            },
+            checkAll: function (ele) {
+                var self = Grid;
+                var state = $(ele).is(':checked');
+                $('[name="ID_check"]').attr('checked', state);
+            },
+            getCheckIds: function () {
+                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val(); }).join(',');
+            },
+            refreshSingle: function (element, id) {
+                var self = Grid;
+                var Ids = id;
+                self.excute(element, Grid.refreshUrl, Ids, true);
+            },
+            excute: function (element, url, Ids, isDelete) {
+                if ($(element).hasClass('disabled'))
+                    return false;
+                var self = Grid;
+                if (Ids) {
+                    if (isDelete) {
+                        if (!confirm("确认恢复该用户?")) {
+                            return false;
+                        }
+                    }
+                    self.addSpinner(element);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: { ids: Ids },
+                        success: function (res) {
+                            Maitonn.JHelper.showMessage(res);
+                            if (res) {
+                                var grid = $("#" + self.id).data("kendoGrid");
+                                grid.dataSource.read();
+                                grid.refresh();
+                            }
+                        },
+                        complete: function () {
+                            self.removeSpinner(element);
+                        }
+                    })
+                } else {
+                    alert('请选择要处理的信息');
+                    return false;
+                }
+            }
+        }
+    </script>
+}

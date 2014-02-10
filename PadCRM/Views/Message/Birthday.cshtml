@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "生日提醒";
+}
+<div id="tabstrip">
+    <ul>
+        <li class="k-state-active">员工生日</li>
+        <li>客户生日</li>
+    </ul>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tabStrip = $("#tabstrip").kendoTabStrip({
+            animation: { open: { effects: "fadeIn" } },
+            contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+            contentUrls: [
+                '@Url.Action("memberbirth", "message")',
+                '@Url.Action("customerbirth", "message")'
+            ]
+        }).data('kendoTabStrip');
+
+    </script>
+}

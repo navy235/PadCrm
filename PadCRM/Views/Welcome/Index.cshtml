@@ -1,0 +1,176 @@
+﻿@{
+    ViewBag.Title = CookieHelper.NickName + ",欢迎！";
+}
+
+<div class="alert alert-warning shouce ">
+    <button type="button" class="close notshowagain" data-dismiss="alert">×</button>
+    <h2 style="text-align: center">员工使用手册</h2>
+    <div id="endText">
+        <p>
+            <span style="white-space: nowrap;">1、既定客户在30天之内要写跟单日志，否则为公有信息可随时替换。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">2、重要潜在客户在35天之内要写跟单日志，否则为公有信息可随时替换。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">3、一般潜在客户在7天之内要写跟单日志，否则为公有信息可随时替换。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">4、重要潜在客户限定为40个，既定客户限定为15个。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">5、任何一条信息在30天之内没有完成两个执行者的完善，此信息为公有信息。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">6、跟单日志与计划日志分别需达到15个字以上才可保存。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">7、必填项必须要填写完整，否则无法进行保存。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">8、信息录入时一旦显示有同样公司名称及品牌名，后者依然不顾录进去，给与警告一次，再次出现给予罚款50元，三次出现给予开除。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">9、信息在输入时，无法输入的情况下，如遇到以下情况可直接与总经理反应，由总经理进行处理：</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">A: 后来者找到了决策者而是在前者未找到决策者的前提下，决策者同时非常认可你，则此信息归后者所有</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">B: 后来者找到了决策者，并且马上签约合同。前者此时一无所知则归后者。以上两点都必须由总经理核实。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">C: 否则其它所有的现象都归前者所有</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">10、如出现前者已跟决策者沟通而恶意抢单者给予警告一次，第二次开除。所以要避免同情况出现的话就要先问对方。我司是否有人与他接触。</span>
+        </p>
+        <p>
+            <span style="white-space: nowrap;">11、外来人员发生撞单，先保护公司内部人员利益，除非在高于我司规定价格之上签进来就归属于外部人员</span>
+        </p>
+        <p>
+            <br />
+        </p>
+    </div>
+</div>
+
+<div id="tabstrip">
+    <ul>
+        <li class="k-state-active customer">部门公告</li>
+        <li class="customer">我的客户</li>
+        <li class="tracelog">我的跟单</li>
+        <li class="planlog">我的计划</li>
+        <li class="birthday">客户生日</li>
+    </ul>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $('.notshowagain').on('click', function () {
+                Maitonn.Cookies.Set('notshowagain', 1);
+            })
+            var notshowagein = Maitonn.Cookies.Get('notshowagain')
+            if (notshowagein) {
+                $('.shouce').hide();
+            }
+
+            var tabStrip = $("#tabstrip").kendoTabStrip({
+                animation: { open: { effects: "fadeIn" } },
+                contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+                contentUrls: [
+                '@Url.Action("index", "message")',
+                '@Url.Action("my", "customercompany")',
+                '@Url.Action("my", "TraceLog")',
+                '@Url.Action("my", "planlog")',
+                '@Url.Action("CustomerBirth", "message")'
+                ]
+            }).data('kendoTabStrip');
+
+            $('#tabstrip').on('click', 'a.btn-add-tracelog', addTracelog)
+
+            $('#tabstrip').on('click', 'a.btn-add-planlog', addPlanlog)
+
+            $('#tabstrip').on('click', 'a.page-link', ajaxPage)
+            $('#tabstrip').on('click', 'a.btn-view-notice', viewNotice)
+
+
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    var refeshlink = $('#tabstrip').find('li.' + cssClass).find('.k-link')
+                    refeshlink.data('contentUrl', url);
+                    tabStrip.reload($('#tabstrip').find('li.' + cssClass));
+                }
+            }
+
+            function addTracelog(e) {
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "tracelog")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+            function addPlanlog(e) {
+                e.preventDefault();
+                var url = "@Url.Action("ajaxCreate", "planlog")";
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                getForm(url, data, cssClass);
+            }
+
+            function getForm(url, data, cssClass) {
+                var kw = $('#kwindow').data('kendoWindow');
+                $.get(url, data, function (html) {
+                    kw.content(html);
+                    kw.title($('form').attr('formtitle')).center().open();
+                    kw.currentFormcssClass = cssClass;
+                    $.validator.unobtrusive.parse(document);
+                })
+            }
+
+            function viewNotice(e) {
+                e.preventDefault();
+                var url = '@Url.Action("Details", "Notice")';;
+                var target = $(e.target);
+                var cssClass = target.data('cssclass');
+                var data = {
+                    ID: target.data('id')
+                };
+                $.get(url, data, function (res) {
+                    var kwindow = $('#viewwindow').data('kendoWindow');
+                    kwindow.content(res).center().open();
+                })
+            }
+        })
+
+        function ajaxFormSuccess(res) {
+            Maitonn.JHelper.showMessage(res);
+            if (res.Success) {
+                var tabStrip = $("#tabstrip").data('kendoTabStrip');
+                var kw = $('#kwindow').data('kendoWindow');
+                kw.close();
+                tabStrip.reload($('#tabstrip').find('li.' + kw.currentFormcssClass));
+            }
+        }
+
+        function ajaxFormFailure() {
+            console.log('success');
+        }
+    </script>
+}
+@(Html.Kendo().Window().Name("viewwindow").Title("查看公告").Modal(true).Visible(false).Width(650))
+@(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))

@@ -1,0 +1,15 @@
+﻿@using (Ajax.BeginForm("ajaxCreate", "task", new AjaxOptions()
+{
+    OnSuccess = "ajaxFormSuccess",
+    OnFailure = "ajaxFormFailure"
+}, new { formtitle = "添加任务安排" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <div class="form-field form-field-submit">
+        <button type="submit" class="btn btn-primary btn-submit ">
+            <i class="icon-maitonn icon-save"></i>
+            &nbsp;&nbsp;保&nbsp;&nbsp;存&nbsp;&nbsp;</button>
+    </div>
+}
+

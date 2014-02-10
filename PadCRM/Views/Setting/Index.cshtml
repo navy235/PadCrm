@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BackupItem>
+@{
+    ViewBag.Title = "系统管理";
+}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="@Url.Action("index")" >数据库备份与恢复</a></li>
+</ul>
+
+<div class="tool-bar">
+    <a class="btn btn-primary"   href="@Url.Action("create")">新增备份</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>文件名</th>
+                <th>备份时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd:HH mm ss")</td>
+                    <td><a class="btn btn-primary" href="@Url.Action("refresh", new { Name = item.Name })">还原备份</a>
+
+                        <a class="btn btn-primary" href="@Url.Action("delete", new { Name = item.Name })">删除备份</a>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

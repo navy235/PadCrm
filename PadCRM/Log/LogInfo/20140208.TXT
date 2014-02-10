@@ -1,0 +1,285 @@
+
+ ExLogTime :2014-02-08 10:08:11,299 [6] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+asd 
+
+ ExLogTime :2014-02-08 13:42:56,193 [12] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+更改媒介请求状态成功 
+
+ ExLogTime :2014-02-08 13:44:42,796 [11] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+更改媒介请求状态成功 
+
+ ExLogTime :2014-02-08 14:12:44,526 [8] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加会员信息成功 
+
+ ExLogTime :2014-02-08 14:13:23,813 [10] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-08 14:19:42,574 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:08:02,987 [34] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:09:39,910 [25] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除权限成功 
+
+ ExLogTime :2014-02-08 15:14:54,686 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:15:41,678 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:15:57,716 [20] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:16:39,186 [20] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:16:56,873 [30] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:18:58,735 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:19:28,114 [31] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:20:17,877 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:20:35,584 [24] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:22:22,041 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:23:06,140 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:23:39,313 [9] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:24:06,180 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:24:31,566 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:24:53,681 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:25:32,395 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:25:55,855 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:26:22,656 [12] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:26:49,910 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:27:12,668 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:27:35,394 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:28:02,460 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:28:27,143 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:29:00,684 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:29:16,097 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:29:30,944 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:29:59,839 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:30:11,390 [23] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-08 15:30:39,582 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:30:52,902 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:31:28,321 [23] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-08 15:31:39,470 [23] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:31:49,622 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:32:00,024 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-08 15:32:15,015 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:32:53,036 [33] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:33:08,029 [33] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:33:30,923 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:33:40,433 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:33:47,884 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 15:34:01,371 [23] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-08 17:17:03,055 [13] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+备份成功！ 
+
+ ExLogTime :2014-02-08 17:18:45,117 [14] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+备份成功！ 
+
+ ExLogTime :2014-02-08 17:25:51,529 [20] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+备份成功！ 
+
+ ExLogTime :2014-02-08 17:39:11,072 [16] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除备份成功！ 
+
+ ExLogTime :2014-02-08 17:39:15,937 [30] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除备份成功！ 
+
+ ExLogTime :2014-02-08 17:41:59,018 [16] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除备份成功！ 
+
+ ExLogTime :2014-02-08 17:41:59,974 [25] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除备份成功！ 
+
+ ExLogTime :2014-02-08 17:47:01,703 [27] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除备份成功！ 

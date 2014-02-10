@@ -1,0 +1,35 @@
+﻿@model List<CustomerShareItemViewModel>
+@{
+    Layout = null;
+}
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-share"
+        href="javascript:void(0);">添加人员共享</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>部门</th>
+                <th>姓名</th>
+                <th>添加时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div data-showcontent="@Url.Action("departmentName", "ajaxservice", new { ID = item.DepartmentID })"></div>
+                    </td>
+                    <td>@item.UserName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td style="width: 80px;">
+                        <a class="btn btn-primary btn-delete-share" href="javascript:void(0)" data-id="@item.ID">删除</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
