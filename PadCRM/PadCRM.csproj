@@ -177,6 +177,7 @@
     <Compile Include="Controllers\Admin\SettingController.cs" />
     <Compile Include="Controllers\Ajax\AjaxServiceController.cs" />
     <Compile Include="Controllers\Ajax\UploadController.cs" />
+    <Compile Include="Controllers\Biz\AnalysisController.cs" />
     <Compile Include="Controllers\Biz\ChangePwdController.cs" />
     <Compile Include="Controllers\Biz\ContactRequireController.cs" />
     <Compile Include="Controllers\Biz\CustomerCompanyController.cs" />
@@ -976,6 +977,7 @@
     <Content Include="Views\ChangePwd\Index.cshtml" />
     <Content Include="Views\Setting\Index.cshtml" />
     <Content Include="Views\CustomerCompany\Search.cshtml" />
+    <Content Include="Views\Analysis\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

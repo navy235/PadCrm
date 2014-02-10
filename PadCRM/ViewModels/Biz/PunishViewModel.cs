@@ -27,12 +27,13 @@ namespace PadCRM.ViewModels
         [UIHint("DropDownList")]
         public int RuleID { get; set; }
 
-        [Required(ErrorMessage = "请填写奖惩分数")]
-        [Display(Name = "奖惩分数")]
+        [Display(Name = "其他分数")]
         [UIHint("Integer")]
+        [HintLabel("如果需要特定分数请填写这个")]
         public int Score { get; set; }
 
         [Display(Name = "奖惩描述")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
     }
@@ -55,13 +56,12 @@ namespace PadCRM.ViewModels
         [UIHint("DropDownList")]
         public int RuleID { get; set; }
 
-
-        [Required(ErrorMessage = "请填写奖惩分数")]
-        [Display(Name = "奖惩分数")]
+        [Display(Name = "当前分数")]
         [UIHint("Integer")]
         public int Score { get; set; }
 
         [Display(Name = "奖惩描述")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
     }

@@ -72,15 +72,15 @@ namespace PadCRM.Controllers
                     entity.OrderIndex = model.OrderIndex;
                     entity.Code = model.Code;
                     RuleService.Create(entity);
-                    result.Message = "添加城市信息成功！";
-                    LogHelper.WriteLog("添加城市信息成功");
+                    result.Message = "添加行政奖惩规则成功！";
+                    LogHelper.WriteLog("添加行政奖惩规则成功");
                     return RedirectToAction("index");
                 }
                 catch (DbEntityValidationException ex)
                 {
                     result.Message = Utilities.GetInnerMostException(ex);
                     result.AddServiceError(result.Message);
-                    LogHelper.WriteLog("添加城市信息错误", ex);
+                    LogHelper.WriteLog("添加行政奖惩规则错误", ex);
                     return View(model);
                 }
             }
@@ -131,15 +131,15 @@ namespace PadCRM.Controllers
 
                     entity.Code = model.Code;
                     RuleService.Update(entity);
-                    result.Message = "编辑城市信息成功！";
-                    LogHelper.WriteLog("编辑城市信息成功");
+                    result.Message = "编辑行政奖惩规则成功！";
+                    LogHelper.WriteLog("编辑行政奖惩规则成功");
                     return RedirectToAction("index");
                 }
                 catch (DbEntityValidationException ex)
                 {
                     result.Message = Utilities.GetInnerMostException(ex);
                     result.AddServiceError(result.Message);
-                    LogHelper.WriteLog("添加城市信息错误", ex);
+                    LogHelper.WriteLog("添加行政奖惩规则错误", ex);
                     return View(model);
                 }
             }
@@ -165,14 +165,14 @@ namespace PadCRM.Controllers
                     var model = RuleService.Find(IdArr[i]);
                     RuleService.Delete(model);
                 }
-                LogHelper.WriteLog("删除城市信息成功");
-                result.Message = "删除城市信息成功！";
+                LogHelper.WriteLog("删除行政奖惩规则成功");
+                result.Message = "删除行政奖惩规则成功！";
             }
             catch (DbEntityValidationException ex)
             {
-                result.Message = "删除城市信息错误！";
-                result.AddServiceError("删除城市信息错误!");
-                LogHelper.WriteLog("删除城市信息错误", ex);
+                result.Message = "删除行政奖惩规则错误！";
+                result.AddServiceError("删除行政奖惩规则错误!");
+                LogHelper.WriteLog("删除行政奖惩规则错误", ex);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }

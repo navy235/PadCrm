@@ -126,7 +126,7 @@ namespace PadCRM.Controllers
                 }
                 catch (Exception ex)
                 {
-                    result.Message = "添加任务安排失败!";
+                    result.Message = ex.Message;
                     result.AddServiceError(Utilities.GetInnerMostException(ex));
                     LogHelper.WriteLog("用户:" + CookieHelper.MemberID + "添加任务安排失败!", ex);
                 }

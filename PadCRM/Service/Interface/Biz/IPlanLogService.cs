@@ -25,5 +25,7 @@ namespace PadCRM.Service.Interface
         void Delete(PlanLog model);
 
         PlanLog Find(int ID);
+
+        int DayCount(DateTime time);
     }
 }

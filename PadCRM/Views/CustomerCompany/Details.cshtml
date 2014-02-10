@@ -103,7 +103,10 @@
             $('#tabstrip').on('click', 'a.btn-add-planlog', addPlanlog)
             $('#tabstrip').on('click', 'a.btn-add-customer', addCustomer)
             $('#tabstrip').on('click', 'a.btn-add-mediarequire', addMediarequire)
+
+       
             $('#tabstrip').on('click', 'a.page-link', ajaxPage)
+
 
 
 
@@ -248,7 +251,7 @@
                 var target = $(e.target);
                 var id = target.data('id');
                 var url = '@Url.Action("delete", "PlanLog")';
-                isTraceLogEditable(id).done(function (res) {
+                isPlanLogEditable(id).done(function (res) {
                     if (res) {
                         excute(target, url, id, 'planlog');
                     } else {
@@ -339,9 +342,26 @@
             var kw = $('#kwindow').data('kendoWindow');
             $.get(url, data, function (html) {
                 kw.content(html);
-                kw.title($('form').attr('formtitle')).center().open();
+                kw.title($('form').attr('formtitle'));
                 kw.currentFormcssClass = cssClass;
                 $.validator.unobtrusive.parse(document);
+                if($('#PlanTime')[0]){
+                    var PlanTime=$('#PlanTime').val();
+                    var countvalidateUrl='@Url.Action("countvalidate", "planlog")';
+                    $.get(countvalidateUrl,{date:PlanTime},function(res){
+                        if(!res.Success){
+                            if(confirm(res.Message)){
+                                setTimeout(function(){
+                                    kw.center().open();
+                                },200) 
+                            }
+                        }
+                    })
+                }else{
+                    setTimeout(function(){
+                        kw.center().open();
+                    },200) 
+                }
             })
         }
 
@@ -359,6 +379,9 @@
                 }
             } 
         }
+
+        
+
     </script>
 }
 

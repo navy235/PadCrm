@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using PadCRM.Models;
 using PadCRM.Service.Interface;
+using System.Data.Objects;
+using System.Data.Objects.SqlClient;
 using Maitonn.Core;
 
 namespace PadCRM.Service
@@ -77,6 +79,12 @@ namespace PadCRM.Service
             entity.RelationID = model.RelationID;
             db.Commit();
             return entity;
+        }
+
+        private int ToadyCount()
+        {
+            var count = GetALL().Count(x => SqlFunctions.DateDiff("day", x.AddTime, DateTime.Now) == 0);
+            return count;
         }
     }
 }

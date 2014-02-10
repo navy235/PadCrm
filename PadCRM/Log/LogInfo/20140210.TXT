@@ -1,0 +1,30 @@
+
+ ExLogTime :2014-02-10 15:12:56,691 [37] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除任务安排成功 
+
+ ExLogTime :2014-02-10 16:24:00,918 [33] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加行政奖惩告成功 
+
+ ExLogTime :2014-02-10 16:24:11,906 [15] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑城市信息成功 
+
+ ExLogTime :2014-02-10 16:24:17,192 [10] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑城市信息成功 
+
+ ExLogTime :2014-02-10 16:24:25,628 [33] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑行政奖惩成功 
+
+ ExLogTime :2014-02-10 16:24:38,935 [15] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加行政奖惩告成功 

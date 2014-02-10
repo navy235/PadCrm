@@ -61,7 +61,8 @@
                         }
                         else
                         {
-                        <td data-date="@(new DateTime(Model.Year, Model.Month, dayNumber).ToString("yyyy-MM-dd"))" class="task-td">
+                        <td data-date="@(new DateTime(Model.Year, Model.Month, dayNumber).ToString("yyyy-MM-dd"))"
+                             class="task-td @(new DateTime(Model.Year, Model.Month, dayNumber).ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd")) ? "task-td-today" : "")">
                             <div class="task-container">
                                 <div class="task-day">@dayNumber</div>
                                 <div class="task-add" title="添加任务"><i class="icon-maitonn icon-plus"></i></div>

@@ -288,10 +288,12 @@ select {
 
 .action-info {
     position: fixed;
-    right: 10px;
-    top: 60px;
+    top: 100px;
     padding: 10px 10px 10px 40px;
-    z-index: 9999;
+    z-index: 99999;
+    width: 250px;
+    left: 50%;
+    margin-left: -125px;
 }
 
     .action-info .icon-maitonn {
@@ -559,4 +561,3 @@ select {
         filter: Alpha(opacity=100)!important;
         text-decoration: none;
     }
-

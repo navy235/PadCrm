@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_LayoutPrint.cshtml";
 }
 @section styles{
-    <link rel="stylesheet" href="http://www.@(ConfigSetting.DomainUrl)/Content/css/bootstrap.min.css" />
-     <style type="text/css">
+    <link rel="stylesheet" href="http://@(ConfigSetting.AllDomainUrl)/Content/css/bootstrap.min.css" />
+    <style type="text/css">
         .container {
             width: 860px;
         }

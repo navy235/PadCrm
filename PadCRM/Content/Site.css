@@ -126,6 +126,10 @@ ol, ul {
     background: #f5f5f5;
 }
 
+.task-td-today {
+    background: #F3E2E2;
+}
+
 .task-container .task-day {
     position: absolute;
     left: -2px;
@@ -177,3 +181,35 @@ ol, ul {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+
+.table-td {
+    padding: 0!important;
+}
+
+.table-child {
+    margin-bottom: 0!important;
+    border: 0!important;
+}
+
+    .table-child > thead > tr > th {
+        border-left: 0!important;
+        border-bottom: 0!important;
+    }
+
+        .table-child > thead > tr > th:last-child {
+            border-right: 0!important;
+        }
+
+    .table-child > tbody > tr > td {
+        border-left: 0!important;
+        border-bottom: 0!important;
+    }
+
+        .table-child > tbody > tr > td:last-child {
+            border-right: 0!important;
+        }
+
+    .table-child > tbody > tr:first-child > td:first-child {
+        border-top: 0!important;
+    }

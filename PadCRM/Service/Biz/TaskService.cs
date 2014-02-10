@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using PadCRM.Models;
 using PadCRM.Service.Interface;
+using System.Data.Objects;
+using System.Data.Objects.SqlClient;
 using Maitonn.Core;
 
 namespace PadCRM.Service
@@ -63,24 +65,32 @@ namespace PadCRM.Service
 
         public Task Create(ViewModels.TaskViewModel model)
         {
-            Task entity = new Task();
-            entity.Start = model.Start;
-            entity.End = model.End;
-            entity.EndTimeZone = model.End.ToString("yyyy-MM-dd");
-            entity.StartTimeZone = model.Start.ToString("yyyy-MM-dd");
 
-            entity.Title = model.Title;
-            entity.Description = model.Description;
-            entity.MemberID = model.MemberID;
-            entity.AddUser = CookieHelper.MemberID;
-            entity.AddTime = DateTime.Now;
-            if (model.MemberID != CookieHelper.MemberID)
+            if (ToadyCount() < 5)
             {
-                entity.IsOtherAdd = true;
+                Task entity = new Task();
+                entity.Start = model.Start;
+                entity.End = model.End;
+                entity.EndTimeZone = model.End.ToString("yyyy-MM-dd");
+                entity.StartTimeZone = model.Start.ToString("yyyy-MM-dd");
+
+                entity.Title = model.Title;
+                entity.Description = model.Description;
+                entity.MemberID = model.MemberID;
+                entity.AddUser = CookieHelper.MemberID;
+                entity.AddTime = DateTime.Now;
+                if (model.MemberID != CookieHelper.MemberID)
+                {
+                    entity.IsOtherAdd = true;
+                }
+                db.Add<Task>(entity);
+                db.Commit();
+                return entity;
             }
-            db.Add<Task>(entity);
-            db.Commit();
-            return entity;
+            else
+            {
+                throw new Exception("当天任务安排不能超过5条");
+            }
         }
 
         public Task Update(ViewModels.TaskViewModel model)
@@ -99,6 +109,12 @@ namespace PadCRM.Service
             }
             db.Commit();
             return entity;
+        }
+
+        private int ToadyCount()
+        {
+            var count = GetALL().Count(x => SqlFunctions.DateDiff("day", x.AddTime, DateTime.Now) == 0);
+            return count;
         }
     }
 }

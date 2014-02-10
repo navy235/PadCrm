@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using PadCRM.Models;
 using PadCRM.Service.Interface;
+using System.Data.Objects;
 using System.Data.Objects.SqlClient;
 using Maitonn.Core;
 
@@ -89,6 +90,12 @@ namespace PadCRM.Service
             entity.Content = model.Content;
             db.Commit();
             return entity;
+        }
+
+        public int DayCount(DateTime time)
+        {
+            var count = GetALL().Count(x => SqlFunctions.DateDiff("day", x.AddTime, time) == 0);
+            return count;
         }
     }
 }

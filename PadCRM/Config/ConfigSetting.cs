@@ -14,6 +14,8 @@ namespace PadCRM.Setting
 
         public static string DomainUrl { get; set; }
 
+        public static string AllDomainUrl { get; set; }
+
         public static string BankupPath { get; set; }
 
         public static string DataBaseName { get; set; }
@@ -24,6 +26,8 @@ namespace PadCRM.Setting
             Default_AvtarUrl = ConfigurationManager.AppSettings["Default_AvtarUrl"];
 
             DomainUrl = ConfigurationManager.AppSettings["LocalDomain"];
+
+            AllDomainUrl = ConfigurationManager.AppSettings["AllDomain"];
 
             BankupPath = ConfigurationManager.AppSettings["BankupPath"];
 

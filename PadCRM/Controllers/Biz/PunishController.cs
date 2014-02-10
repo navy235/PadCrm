@@ -29,6 +29,7 @@ namespace PadCRM.Controllers
         private IJobTitleCateService JobTitleCateService;
         private IRuleCateService RuleCateService;
         private IPunishService PunishService;
+
         public PunishController(
           IMemberService MemberService
             , IGroupService GroupService
@@ -77,6 +78,11 @@ namespace PadCRM.Controllers
             {
                 try
                 {
+                    if (model.Score == 0)
+                    {
+                        var rule = RuleCateService.Find(model.RuleID);
+                        model.Score = rule.OrderIndex;
+                    }
                     PunishService.Create(model);
                     result.Message = "添加行政奖惩成功！";
                     LogHelper.WriteLog("添加行政奖惩告成功");

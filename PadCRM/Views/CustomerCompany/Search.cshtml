@@ -22,8 +22,10 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.ID</td>
-                    <td>@item.Name</td>
+                    <td>
+
+                        @item.ID</td>
+                    <td><a href="@Url.Action("details", new { ID = item.ID })">@item.Name</a></td>
                     <td>@item.BrandName</td>
                     <td>
                         <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>

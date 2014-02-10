@@ -209,6 +209,20 @@ namespace PadCRM.Controllers
         #endregion
 
         #region ajaxform
+
+
+        public ActionResult countvalidate(string date)
+        {
+            var time = Convert.ToDateTime(date);
+            ServiceResult result = new ServiceResult();
+            if (PlanLogService.DayCount(time) >= 8)
+            {
+                result.Message = "当天计划日志已有8条,是否继续添加?";
+                result.AddServiceError("当天计划日志已有8条,是否继续添加?");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult AjaxCreate(int ID)
         {
             var model = new PlanLogViewModel()
@@ -238,7 +252,7 @@ namespace PadCRM.Controllers
                 }
                 catch (Exception ex)
                 {
-                    result.Message = "添加计划日志失败!";
+                    result.Message = ex.Message;
                     result.AddServiceError(Utilities.GetInnerMostException(ex));
                     LogHelper.WriteLog("用户:" + CookieHelper.MemberID + "添加计划日志失败!", ex);
                 }
