@@ -5,13 +5,13 @@ namespace PadCRM.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class mediarequire : IMigrationMetadata
+    public sealed partial class addfileshare : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(mediarequire));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addfileshare));
         
         string IMigrationMetadata.Id
         {
-            get { return "201401270557169_mediarequire"; }
+            get { return "201402110845379_addfileshare"; }
         }
         
         string IMigrationMetadata.Source

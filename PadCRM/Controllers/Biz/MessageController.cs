@@ -32,6 +32,8 @@ namespace PadCRM.Controllers
         private IGroupService GroupService;
         private IRolesService RolesService;
         private INoticeService NoticeService;
+        private IRuleCateService RuleCateService;
+        private IPunishService PunishService;
         public MessageController(
             ICustomerCompanyService CustomerCompanyService
             , IRelationCateService RelationCateService
@@ -46,6 +48,8 @@ namespace PadCRM.Controllers
             , IGroupService GroupService
             , IRolesService RolesService
             , INoticeService NoticeService
+            , IRuleCateService RuleCateService
+            , IPunishService PunishService
             )
         {
             this.CustomerCompanyService = CustomerCompanyService;
@@ -61,6 +65,8 @@ namespace PadCRM.Controllers
             this.GroupService = GroupService;
             this.RolesService = RolesService;
             this.NoticeService = NoticeService;
+            this.RuleCateService = RuleCateService;
+            this.PunishService = PunishService;
         }
 
         public ActionResult Index(int page = 1)
@@ -106,7 +112,79 @@ namespace PadCRM.Controllers
             {
                 return View(new List<Customer>());
             }
+        }
 
+        public ActionResult MyPunish()
+        {
+
+            PunishSearchViewModel model = new PunishSearchViewModel();
+
+            var Rewardlist = new List<SelectListItem>(){
+              new SelectListItem(){
+                  Value="0",
+                  Text="请选择"
+                 },
+              new SelectListItem(){
+              Value="1",
+              Text="惩罚"
+             },
+              new SelectListItem(){
+              Value="2",
+              Text="奖励"
+             }
+            };
+            ViewBag.Data_Reward = Rewardlist;
+            ViewBag.Data_RuleID = Utilities.GetSelectListData(RuleCateService.GetALL(),
+                x => x.ID,
+                x => x.CateName,
+                true, true);
+
+
+            return View(model);
+
+        }
+
+        public ActionResult PunishSearch(PunishSearchViewModel model, int page = 1)
+        {
+
+            ViewBag.Data_RuleID = Utilities.GetSelectListData(RuleCateService.GetALL(),
+             x => x.ID,
+             x => x.CateName,
+             true, true);
+
+            const int pageSize = 20;
+
+            var query = PunishService.GetALL().Where(x => x.MemberID == CookieHelper.MemberID);
+
+            if (model.Reward == 1)
+            {
+                query = query.Where(x => x.Score < 0);
+            }
+            else if (model.Reward == 2)
+            {
+                query = query.Where(x => x.Score > 0);
+            }
+
+            if (model.RuleID != 0)
+            {
+                query = query.Where(x => x.RuleID == model.RuleID);
+            }
+
+            query = query.Where(x => x.AddTime < model.EndTime
+                && x.AddTime > model.StartTime);
+
+
+            var totalCount = query.Count();
+
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return PartialView(data);
         }
 
     }

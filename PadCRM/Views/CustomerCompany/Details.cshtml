@@ -17,7 +17,7 @@
         {
             <li class="k-state-active customer">人员信息</li>
             <li class="share">信息共享</li>
-            <li class="mediarequire">媒介策略</li>
+            <li class="mediarequire">策略单</li>
             <li class="tracelog">跟单日志</li>
         }
         else
@@ -102,13 +102,26 @@
             $('#tabstrip').on('click', 'a.btn-add-tracelog', addTracelog)
             $('#tabstrip').on('click', 'a.btn-add-planlog', addPlanlog)
             $('#tabstrip').on('click', 'a.btn-add-customer', addCustomer)
-            $('#tabstrip').on('click', 'a.btn-add-mediarequire', addMediarequire)
 
+            $('#tabstrip').on('click', 'a.btn-add-mediarequire', addMediarequire)
+            $('#tabstrip').on('click', 'a.btn-view-customer', viewCustomer)
        
             $('#tabstrip').on('click', 'a.page-link', ajaxPage)
 
 
-
+            function viewCustomer(e){
+                e.preventDefault();
+                var url = "@Url.Action("Show", "Customer")";
+                var target = $(e.target);
+            
+                var data = {
+                    ID: target.data('id')
+                };
+                $.get(url,data,function(res){
+                    var viewwindow=$('#viewwindow').data('kendoWindow');
+                    viewwindow.content(res).center().open();
+                })
+            }
 
             function ajaxPage(e){
                 e.preventDefault();
@@ -352,15 +365,19 @@
                         if(!res.Success){
                             if(confirm(res.Message)){
                                 setTimeout(function(){
-                                    kw.center().open();
-                                },200) 
+                                    $('#kwindow').data('kendoWindow').center().open()
+                                },500) 
                             }
+                        }else{
+                            setTimeout(function(){
+                                $('#kwindow').data('kendoWindow').center().open()
+                            },500) 
                         }
                     })
                 }else{
                     setTimeout(function(){
                         kw.center().open();
-                    },200) 
+                    },500) 
                 }
             })
         }
@@ -386,3 +403,6 @@
 }
 
 @(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))
+
+
+@(Html.Kendo().Window().Name("viewwindow").Title("客户人员查看").Modal(true).Visible(false).Width(650))

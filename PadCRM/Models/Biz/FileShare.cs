@@ -18,6 +18,8 @@ namespace PadCRM.Models
 
         public DateTime AddTime { get; set; }
 
+        public int DepartmentID { get; set; }
+
         [MaxLength(500)]
         public string FilePath { get; set; }
 

@@ -7,6 +7,7 @@ using PadCRM.Service.Interface;
 using System.Data.Objects;
 using System.Data.Objects.SqlClient;
 using Maitonn.Core;
+using PadCRM.Utils;
 
 namespace PadCRM.Service
 {
@@ -88,6 +89,7 @@ namespace PadCRM.Service
             PlanLog entity = Find(model.ID);
             db.Attach<PlanLog>(entity);
             entity.Content = model.Content;
+            entity.PlanTime = model.PlanTime;
             db.Commit();
             return entity;
         }

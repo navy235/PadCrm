@@ -31,6 +31,7 @@ namespace PadCRM.Controllers
         private IRuleCateService RuleCateService;
         private IFileShareService FileShareService;
         private IFileCateService FileCateService;
+        private IPermissionsService PermissionsService;
         public FileShareController(
           IMemberService MemberService
             , IGroupService GroupService
@@ -39,6 +40,7 @@ namespace PadCRM.Controllers
             , IRuleCateService RuleCateService
             , IFileShareService FileShareService
             , IFileCateService FileCateService
+            , IPermissionsService PermissionsService
             )
         {
             this.MemberService = MemberService;
@@ -48,6 +50,7 @@ namespace PadCRM.Controllers
             this.RuleCateService = RuleCateService;
             this.FileShareService = FileShareService;
             this.FileCateService = FileCateService;
+            this.PermissionsService = PermissionsService;
         }
 
         public ActionResult Index()
@@ -55,6 +58,11 @@ namespace PadCRM.Controllers
             ViewBag.FileCateID = Utilities.GetSelectListData(
               FileCateService.GetALL().Where(x => x.PID.Equals(null))
               , x => x.ID, x => x.CateName, true);
+
+            ViewBag.DepartmentID = Utilities.GetSelectListData(
+             DepartmentService.GetALL().Where(x => x.PID.Equals(null))
+             , x => x.ID, x => x.Name, true);
+
             return View();
         }
         public ActionResult Data_Read([DataSourceRequest] DataSourceRequest request)
@@ -68,6 +76,27 @@ namespace PadCRM.Controllers
             ViewBag.Data_FileCateID = Utilities.GetSelectListData(
               FileCateService.GetALL().Where(x => x.PID.Equals(null))
               , x => x.ID, x => x.CateName, true);
+
+            var departlist = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
+
+            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            if (!hasPermission)
+            {
+                var member = MemberService.Find(CookieHelper.MemberID);
+                var depart = DepartmentService.Find(member.DepartmentID);
+                if (depart.Level == 0)
+                {
+                    departlist = departlist.Where(x => x.ID == depart.ID);
+                }
+                else
+                {
+                    var rootCode = Utilities.GetRootCode(depart.Code, depart.Level);
+                    departlist = departlist.Where(x => x.Code == rootCode);
+                }
+            }
+            ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
+             departlist
+           , x => x.ID, x => x.Name, true);
             return View(new FileShareViewModel());
         }
 
@@ -188,6 +217,52 @@ namespace PadCRM.Controllers
         {
             var fileCate = FileCateService.GetALL().ToList();
             return View(fileCate);
+        }
+
+
+        public ActionResult process(int page = 1)
+        {
+            const int pageSize = 20;
+            var member = MemberService.Find(CookieHelper.MemberID);
+            var rootDepart = DepartmentService.GetRoot(member.DepartmentID);
+            var list = FileShareService.GetALL()
+                .Where(x => (x.DepartmentID == rootDepart.ID || x.DepartmentID == 0) && x.FileCateID == 1)
+                .OrderBy(x => x.ID)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToList();
+
+            var totalCount = FileShareService.GetALL()
+                .Count(x => (x.DepartmentID == rootDepart.ID || x.DepartmentID == 0) && x.FileCateID == 1);
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return View(list);
+
+        }
+
+        public ActionResult responsibilities(int page = 1)
+        {
+            const int pageSize = 20;
+            var member = MemberService.Find(CookieHelper.MemberID);
+            var rootDepart = DepartmentService.GetRoot(member.DepartmentID);
+            var list = FileShareService.GetALL()
+                .Where(x => (x.DepartmentID == rootDepart.ID || x.DepartmentID == 0) && x.FileCateID == 2)
+                .OrderBy(x => x.ID)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToList();
+
+            var totalCount = FileShareService.GetALL()
+                .Count(x => (x.DepartmentID == rootDepart.ID || x.DepartmentID == 0) && x.FileCateID == 2);
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return View(list);
         }
 
         public ActionResult List(int ID, int page = 1)

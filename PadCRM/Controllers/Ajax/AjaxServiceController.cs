@@ -28,6 +28,8 @@ namespace PadCRM.Controllers.Ajax
         private IMemberService MemberService;
         private IDepartmentService DepartmentService;
         private IPermissionsService PermissionsService;
+        private IJobTitleCateService JobTitleCateService;
+        private IJobCateService JobCateService;
         public AjaxServiceController(
             IIndustryCateService IndustryCateService
             , ICityCateService CityCateService
@@ -37,6 +39,8 @@ namespace PadCRM.Controllers.Ajax
             , IMemberService MemberService
             , IDepartmentService DepartmentService
             , IPermissionsService PermissionsService
+            , IJobTitleCateService JobTitleCateService
+            , IJobCateService JobCateService
             )
         {
             this.IndustryCateService = IndustryCateService;
@@ -47,14 +51,16 @@ namespace PadCRM.Controllers.Ajax
             this.MemberService = MemberService;
             this.DepartmentService = DepartmentService;
             this.PermissionsService = PermissionsService;
+            this.JobTitleCateService = JobTitleCateService;
+            this.JobCateService = JobCateService;
         }
 
 
         public ActionResult Permission()
         {
-            ViewBag.managerPermission = PermissionsService.CheckPermission("manager", "controller", CookieHelper.MemberID);
-            ViewBag.punishPermission = PermissionsService.CheckPermission("punish", "controller", CookieHelper.MemberID);
-            ViewBag.bossPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            ViewBag.managerPermission = CookieHelper.CheckPermission("manager");
+            ViewBag.punishPermission = CookieHelper.CheckPermission("punish");
+            ViewBag.bossPermission = CookieHelper.CheckPermission("boss");
             return PartialView();
         }
 
@@ -131,6 +137,11 @@ namespace PadCRM.Controllers.Ajax
         public ActionResult RelationIDName(int key)
         {
             return Content(RelationCateService.Find(key).CateName);
+        }
+
+        public ActionResult JobIDName(int key)
+        {
+            return Content(JobCateService.Find(key).CateName);
         }
 
         public ActionResult CustomerCateIDName(int key)
@@ -215,6 +226,7 @@ namespace PadCRM.Controllers.Ajax
         private void GenerateTree(int? ID, List<TreeViewItemViewModel> tree)
         {
             var query = DepartmentService.GetALL();
+            var jobTitleList = JobTitleCateService.GetALL().ToList();
             if (ID.HasValue)
             {
                 query = query.Where(x => x.PID == ID.Value);
@@ -242,7 +254,7 @@ namespace PadCRM.Controllers.Ajax
                     var treechilditem = new TreeViewItemViewModel()
                     {
                         id = mb.MemberID.ToString(),
-                        text = mb.NickName,
+                        text = mb.NickName + " (" + jobTitleList.Single(x => x.ID == mb.JobTitleID).CateName + ")",
                         items = null,
                         spriteCssClass = "user",
                     };
@@ -280,6 +292,6 @@ namespace PadCRM.Controllers.Ajax
             return Json(status, JsonRequestBehavior.AllowGet);
         }
 
-      
+
     }
 }

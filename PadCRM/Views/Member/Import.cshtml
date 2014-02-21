@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "导入员工信息";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li><a href="@Url.Action("index")" >员工列表</a></li>
+    <li><a href="@Url.Action("delete")" >已禁用的员工列表</a></li>
+    <li class="active"><a href="@Url.Action("import")" >用户数据导入</a></li>
+</ul>
+
+<div class="tab-content">
+
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.EditorFor(m => Model)
+        <div class="form-submit">
+            <button class="btn btn-primary " type="submit">
+                <i class="icon-maitonn icon-save"></i>提交</button>
+        </div>
+    }
+</div>

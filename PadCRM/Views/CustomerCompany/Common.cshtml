@@ -1,41 +1,118 @@
-﻿@{
-    ViewBag.Title = "我的客户信息";
+﻿@model List<CustomerCompany>
+@{
+    ViewBag.Title = "公有的客户信息";
 }
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
     <li><a href="@Url.Action("index")" >我的客户信息</a></li>
     <li><a href="@Url.Action("share")" >共享的客户信息</a></li>
-    <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    @if (CookieHelper.CheckPermission("manager"))
+    {
+        <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    }
     <li class="active"><a href="@Url.Action("common")" >公有的客户信息</a></li>
+       <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
 </ul>
-
-<!-- Tab panes -->
-<div class="tab-content">
-    @(Html.Kendo().Grid<CustomerCompany>()
-        .Name("Grid")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.Name).ClientTemplate("<a target='_blank' href='/CustomerCompany/Details/#=ID#' >#=Name#</a>").Title("公司名称");
-            columns.Bound(c => c.BrandName).Title("品牌名称");
-            columns.Bound(c => c.Phone).Title("电话");
-            columns.Bound(c => c.Fax).Title("传真");
-            columns.Bound(c => c.Address).Title("地址");
-            columns.ForeignKey(c => c.CustomerCateID, (List<SelectListItem>)ViewBag.CustomerCateID, "Value", "Text").Title("客户类型");
-            columns.ForeignKey(c => c.RelationID, (List<SelectListItem>)ViewBag.RelationID, "Value", "Text").Title("关系程度");
-        })
-        .Pageable()
-        .Sortable()
-        .Scrollable()
-        .Filterable()
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(20)
-            .Model(model => model.Id(c => c.ID))
-            .Sort(sort => sort.Add(x => x.AddTime).Descending())
-            .Read(read => read.Action("Datashare_Read", "CustomerCompany"))
-
-            )
-            .HtmlAttributes(new { style = "height:500px;" })
-        )
+<div class="tool-bar"></div>
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>客户ID</th>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>城市</th>
+                <th>客户分类</th>
+                <th>传真</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="customercolor@(item.CustomerCateID)" id="tr@(item.ID)">
+                    <td>
+                        @item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>
+                    </td>
+                    <td>@item.CustomerCate.CateName</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a class="btn btn-primary btn-replace" data-id="@item.ID" href="javascript:void(0);">替换</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "common")
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('.btn-replace').on('click', replaceSingle)
+
+            function excute(element, url, Ids) {
+                if ($(element).hasClass('disabled'))
+                    return false;
+                if (Ids) {
+                    addSpinner(element);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: { ids: Ids },
+                        success: function (res) {
+                            removeSpinner(element);
+                            if (res.Success) {
+                                Maitonn.JHelper.showMessage(res);
+                                $('#tr' + Ids).remove();
+                            }
+                        },
+                        complete: function () {
+                            removeSpinner(element);
+                        }
+                    })
+                } else {
+                    alert('请选择要处理的信息');
+                    return false;
+                }
+            }
+
+            function addSpinner(element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            }
+
+            function removeSpinner(element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            }
+
+            function replaceSingle(e) {
+                var url = '@Url.Action("Setreplace", "CustomerCompany")';
+                var element = $(e.currentTarget);
+                var id = element.data('id');
+                excute(element, url, id);
+            }
+        })
+
+
+    </script>
+
+}

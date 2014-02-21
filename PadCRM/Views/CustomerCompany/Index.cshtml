@@ -6,8 +6,13 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="@Url.Action("index")" >我的客户信息</a></li>
     <li><a href="@Url.Action("share")" >共享的客户信息</a></li>
-    <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    @if (CookieHelper.CheckPermission("manager"))
+    {
+        <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    }
     <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+    <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
 </ul>
 
 <div class="search-form">
@@ -41,7 +46,7 @@
                 $('.btn-submit').click();
             }
 
-            getSearch();
+            //getSearch();
 
             $('.search-result').on('click', 'a.page-link', ajaxPage)
 

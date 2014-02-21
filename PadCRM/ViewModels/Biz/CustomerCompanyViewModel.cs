@@ -13,8 +13,17 @@ namespace PadCRM.ViewModels
 {
     public class CustomerCompanyViewModel
     {
+
+        public CustomerCompanyViewModel()
+        {
+            RelationID = 1;
+        }
+
         [HiddenInput(DisplayValue = false)]
         public int ID { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public int RelationID { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public int MemberID { get; set; }
@@ -27,8 +36,17 @@ namespace PadCRM.ViewModels
         [Display(Name = "品牌名称")]
         public string BrandName { get; set; }
 
+        [Required(ErrorMessage = "请填写联系电话")]
+        [Display(Name = "联系电话")]
+        public string Phone { get; set; }
+
+        [Required(ErrorMessage = "请填写传真号码")]
         [Display(Name = "传真号码")]
         public string Fax { get; set; }
+
+        [Required(ErrorMessage = "请填写公司地址")]
+        [Display(Name = "公司地址")]
+        public string Address { get; set; }
 
         [Required(ErrorMessage = "请选择行业类别")]
         [Display(Name = "行业类别")]
@@ -40,39 +58,24 @@ namespace PadCRM.ViewModels
         [UIHint("Cascading")]
         public string CityCode { get; set; }
 
-        [Required(ErrorMessage = "请选择关系程度")]
-        [Display(Name = "关系程度")]
-        [UIHint("DropDownList")]
-        public int RelationID { get; set; }
+
 
         [Required(ErrorMessage = "请选择客户类别")]
-        [Display(Name = "客户类别")]
+        [Display(Name = "客户分类")]
         [UIHint("DropDownList")]
         public int CustomerCateID { get; set; }
-
-        [Display(Name = "电话")]
-        public string Phone { get; set; }
-
-        [Display(Name = "公司地址")]
-        public string Address { get; set; }
-
-        [Display(Name = "财务联系人")]
-        public string Finance { get; set; }
-
-
-        [Display(Name = "财务电话")]
-        public string FinancePhone { get; set; }
 
         [Display(Name = "代理公司")]
         public string ProxyName { get; set; }
 
-        [Display(Name = "代理公司地址")]
-        public string ProxyAddress { get; set; }
-
         [Display(Name = "代理公司电话")]
         public string ProxyPhone { get; set; }
 
-        [Display(Name = "其他信息")]
+        [Display(Name = "代理公司地址")]
+        public string ProxyAddress { get; set; }
+
+        [Display(Name = "备注")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
     }
 }

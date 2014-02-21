@@ -34,6 +34,7 @@ namespace PadCRM.Controllers
         private IMemberService MemberService;
         private IPermissionsService PermissionsService;
         private IContactRequireService ContactRequireService;
+        private IPlanLogService PlanLogService;
         public CustomerCompanyController(
             ICustomerCompanyService CustomerCompanyService
             , IRelationCateService RelationCateService
@@ -46,6 +47,7 @@ namespace PadCRM.Controllers
             , IMemberService MemberService
             , IPermissionsService PermissionsService
             , IContactRequireService ContactRequireService
+            , IPlanLogService PlanLogService
             )
         {
             this.CustomerCompanyService = CustomerCompanyService;
@@ -59,8 +61,8 @@ namespace PadCRM.Controllers
             this.MemberService = MemberService;
             this.PermissionsService = PermissionsService;
             this.ContactRequireService = ContactRequireService;
+            this.PlanLogService = PlanLogService;
         }
-
 
         #region baseRead
         public ActionResult Index()
@@ -72,21 +74,50 @@ namespace PadCRM.Controllers
                 true, true);
             return View(model);
         }
-        public ActionResult Delete()
+
+        public ActionResult Delete(int page = 1)
         {
-            SetCommonData();
-            return View();
+            if (!CookieHelper.CheckPermission("manager"))
+            {
+                return RedirectToAction("index");
+            }
+            const int pageSize = 20;
+            var query = CustomerCompanyService.GetALL()
+                .Where(x => x.AddUser == CookieHelper.MemberID
+                && x.Status == (int)CustomerCompanyStatus.Delete);
+
+            var totalCount = query.Count();
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return View(data);
         }
 
         public ActionResult Share()
         {
-            SetCommonData();
             return View();
         }
-        public ActionResult Common()
+
+        public ActionResult Common(int page = 1)
         {
-            SetCommonData();
-            return View();
+            const int pageSize = 20;
+            var query = CustomerCompanyService.GetALL()
+                .Where(x => x.Status > (int)CustomerCompanyStatus.Delete
+                && x.IsCommon == true);
+
+            var totalCount = query.Count();
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return View(data);
         }
 
         public ActionResult Export()
@@ -268,27 +299,32 @@ namespace PadCRM.Controllers
             return View(model);
         }
 
-        public ActionResult Data_Read([DataSourceRequest] DataSourceRequest request)
+        public ActionResult DataShare_Read(int status = 0, int page = 1)
         {
-            var model = CustomerCompanyService.GetKendoALL()
-                        .Where(x => x.AddUser == CookieHelper.MemberID && x.Status > (int)CustomerCompanyStatus.Delete);
-            return Json(model.ToDataSourceResult(request));
-        }
-
-        public ActionResult DataDelete_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            var model = CustomerCompanyService.GetKendoALL()
-                        .Where(x => x.AddUser == CookieHelper.MemberID && x.Status == (int)CustomerCompanyStatus.Delete);
-            return Json(model.ToDataSourceResult(request));
-        }
-
-        public ActionResult DataShare_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            var model = CustomerShareService.GetALL()
-                .Include(x => x.CustomerCompany)
-                .Where(x => x.MemberID == CookieHelper.MemberID && x.CustomerCompany.Status > (int)CustomerCompanyStatus.Delete)
-                .Select(x => x.CustomerCompany);
-            return Json(model.ToDataSourceResult(request));
+            const int pageSize = 20;
+            var query = CustomerShareService.GetALL()
+                 .Include(x => x.CustomerCompany)
+                 .Where(x => x.CustomerCompany.Status > (int)CustomerCompanyStatus.Delete);
+            if (status == 0)
+            {
+                query = query.Where(x => x.MemberID == CookieHelper.MemberID);
+            }
+            else
+            {
+                query = query.Where(x => x.AddUser == CookieHelper.MemberID);
+            }
+            var temp = query.Select(x => x.CustomerCompany);
+            var model = temp.OrderByDescending(x => x.AddTime);
+            var totalCount = model.Count();
+            var data = model.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            ViewBag.Category = "category" + status.ToString();
+            return PartialView(data);
         }
 
         public ActionResult DataCommon_Read([DataSourceRequest] DataSourceRequest request)
@@ -310,7 +346,6 @@ namespace PadCRM.Controllers
              true);
         }
         #endregion
-
 
 
         #region createEdit
@@ -430,7 +465,7 @@ namespace PadCRM.Controllers
         public ActionResult isEditable(int ID)
         {
             var entity = CustomerCompanyService.Find(ID);
-            return Json((DateTime.Now - entity.AddTime).Days < 15, JsonRequestBehavior.AllowGet);
+            return Json((DateTime.Now - entity.AddTime).Days < 20, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -469,6 +504,28 @@ namespace PadCRM.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public ActionResult SetReplace(string ids)
+        {
+            ServiceResult result = new ServiceResult();
+            try
+            {
+                var idslist = Utilities.GetIdList(ids);
+                foreach (var id in idslist)
+                {
+                    CustomerCompanyService.Replace(id, CookieHelper.MemberID);
+                }
+                result.Message = "客户信息替换成功！";
+            }
+            catch (Exception ex)
+            {
+                result.Message = "客户信息替换失败!";
+                result.AddServiceError(Utilities.GetInnerMostException(ex));
+                LogHelper.WriteLog("用户:" + CookieHelper.MemberID + "客户信息替换失败!", ex);
+            }
+            return Json(result);
+        }
+
         #region details
         public ActionResult Details(int ID)
         {
@@ -503,6 +560,112 @@ namespace PadCRM.Controllers
         }
         #endregion
 
+        public ActionResult BaseSearch()
+        {
+            SearchCompanyViewModel model = new SearchCompanyViewModel();
+            ViewBag.Data_CustomerCateID = Utilities.GetSelectListData(CustomerCateService.GetALL(),
+                x => x.ID,
+                x => x.CateName,
+                true, true);
+            return PartialView(model);
+        }
+        public ActionResult PlanSearch()
+        {
+            PlanSearchViewModel model = new PlanSearchViewModel();
+            return View(model);
+        }
+
+        public ActionResult TraceSearch()
+        {
+            TraceSearchViewModel model = new TraceSearchViewModel();
+            return View(model);
+        }
+
+        public ActionResult PlanSearching(PlanSearchViewModel model, int page = 1)
+        {
+            const int pageSize = 20;
+            var query = PlanLogService.GetALL().Include(x => x.AddMember)
+                .Include(x => x.CustomerCompany);
+            if (CookieHelper.CheckPermission("boss"))
+            {
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    query = query.Where(x => x.AddMember.NickName.Contains(model.UserName));
+                }
+            }
+            else if (CookieHelper.CheckPermission("manager"))
+            {
+                var memberIds = MemberService.GetMemberIDs(CookieHelper.GetDepartmentID());
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    query = query.Where(x => x.AddMember.NickName.Contains(model.UserName)
+                        && memberIds.Contains(x.AddUser));
+                }
+                else
+                {
+                    query = query.Where(x => memberIds.Contains(x.AddUser));
+                }
+            }
+            else
+            {
+                query = query.Where(x => x.AddUser == CookieHelper.MemberID);
+            }
+
+            var totalCount = query.Count();
+
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return PartialView(data);
+        }
+
+        public ActionResult TraceSearching(TraceSearchViewModel model, int page = 1)
+        {
+            const int pageSize = 20;
+            var query = TraceLogService.GetALL().Include(x => x.AddMember)
+                .Include(x => x.CustomerCompany);
+            if (CookieHelper.CheckPermission("boss"))
+            {
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    query = query.Where(x => x.AddMember.NickName.Contains(model.UserName));
+                }
+            }
+            else if (CookieHelper.CheckPermission("manager"))
+            {
+                var memberIds = MemberService.GetMemberIDs(CookieHelper.GetDepartmentID());
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    query = query.Where(x => x.AddMember.NickName.Contains(model.UserName)
+                        && memberIds.Contains(x.AddUser));
+                }
+                else
+                {
+                    query = query.Where(x => memberIds.Contains(x.AddUser));
+                }
+            }
+            else
+            {
+                query = query.Where(x => x.AddUser == CookieHelper.MemberID);
+            }
+
+            var totalCount = query.Count();
+
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return PartialView(data);
+        }
 
         public ActionResult Search(SearchCompanyViewModel model, int page = 1)
         {
@@ -587,10 +750,22 @@ namespace PadCRM.Controllers
                 query = query.Where(x => x.Fax.Contains(model.Fax));
             }
 
+            if (CookieHelper.CheckPermission("boss"))
+            {
+
+            }
+            else if (CookieHelper.CheckPermission("manager"))
+            {
+                var memberIds = MemberService.GetMemberIDs(CookieHelper.GetDepartmentID());
+                query = query.Where(x => memberIds.Contains(x.AddUser));
+            }
+            else
+            {
+                query = query.Where(x => x.AddUser == CookieHelper.MemberID);
+            }
             query = query.Where(x => x.AddTime < model.EndTime
                 && x.AddTime > model.StartTime
-                && x.Status > (int)CustomerCompanyStatus.Delete
-                && x.AddUser == CookieHelper.MemberID).OrderByDescending(x => x.AddTime);
+                && x.Status > (int)CustomerCompanyStatus.Delete).OrderByDescending(x => x.AddTime);
             return query;
         }
 

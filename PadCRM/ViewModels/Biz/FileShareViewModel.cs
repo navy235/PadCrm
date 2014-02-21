@@ -31,7 +31,16 @@ namespace PadCRM.ViewModels
         [UIHint("DropDownList")]
         public int FileCateID { get; set; }
 
+
+        [Display(Name = "所属部门")]
+        [UIHint("DropDownList")]
+        [HintLabel("不选择默认全公司")]
+        public int DepartmentID { get; set; }
+
+
+
         [Display(Name = "文件描述")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
     }

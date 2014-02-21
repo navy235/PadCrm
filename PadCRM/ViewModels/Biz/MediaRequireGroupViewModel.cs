@@ -30,6 +30,8 @@ namespace PadCRM.ViewModels
 
         public int IsRoot { get; set; }
 
+        public string AttachmentPath { get; set; }
+
         public DateTime AddTime { get; set; }
 
         public List<MediaRequireItemViewModel> MediaRequires { get; set; }

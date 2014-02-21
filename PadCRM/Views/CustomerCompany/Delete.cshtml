@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "我的客户信息";
+﻿@model List<CustomerCompany>
+@{
+    ViewBag.Title = "已删除的客户信息";
 }
 
 <!-- Nav tabs -->
@@ -8,109 +9,115 @@
     <li><a href="@Url.Action("share")" >共享的客户信息</a></li>
     <li class="active"><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
     <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+       <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
 </ul>
-
-<!-- Tab panes -->
-<div class="tab-content">
-    @(Html.Kendo().Grid<CustomerCompany>()
-        .Name("Grid")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.Name).ClientTemplate("<a target='_blank' href='/CustomerCompany/Details/#=ID#' >#=Name#</a>").Title("公司名称");
-            columns.Bound(c => c.BrandName).Title("品牌名称");
-            columns.Template(@<text></text>).ClientTemplate("<div data-showcontent='"
-                + Url.Action("memberName", "ajaxservice") + "/#=AddUser#' ></div>").Title("录入者");
-            columns.Bound(c => c.Phone).Title("电话");
-            columns.Bound(c => c.Fax).Title("传真");
-            columns.Bound(c => c.Address).Title("地址");
-            columns.ForeignKey(c => c.CustomerCateID, (List<SelectListItem>)ViewBag.CustomerCateID, "Value", "Text").Title("客户类型");
-            columns.ForeignKey(c => c.RelationID, (List<SelectListItem>)ViewBag.RelationID, "Value", "Text").Title("关系程度");
-            columns.Template(@<text></text>)
-         .ClientTemplate(@"<a class='btn btn-primary  ' href='javascript:void(0);'" +
-         "onclick='Grid.refreshSingle(this,\"#=ID#\");' ><span class='icon-maitonn icon-refresh'></span>恢复</a>")
-         .Title("操作")
-         .Width(100);
-        })
-
-                .Pageable()
-                .Sortable()
-                .Scrollable()
-                .Filterable()
-                .DataSource(dataSource => dataSource
-                    .Ajax()
-                    .PageSize(20)
-                    .Model(model => model.Id(c => c.ID))
-                    .Sort(sort => sort.Add(x => x.AddTime).Descending())
-                    .Read(read => read.Action("DataDelete_Read", "CustomerCompany"))
-
-                    )
-                    .HtmlAttributes(new { style = "height:500px;" })
-                )
+<div class="tool-bar"></div>
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>客户ID</th>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>城市</th>
+                <th>客户分类</th>
+                <th>传真</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="customercolor@(item.CustomerCateID)" id="tr@(item.ID)">
+                    <td>
+                        @item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>
+                    </td>
+                    <td>@item.CustomerCate.CateName</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a class="btn btn-primary btn-refresh" data-id="@item.ID" href="javascript:void(0);">恢复</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "delete")
+</div>
+
 
 @section scripts{
     <script type="text/javascript">
-        var Grid = {
-            id: 'Grid',
-            checkAll: function (element) {
-                var self = Grid;
-                var state = $(element).is(':checked');
-                $('[name="ID_check"]').attr('checked', state);
-            },
-            getCheckIds: function () {
-                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val() }).join(',');
-            },
-            addSpinner: function (element) {
-                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
-                $(element).addClass('disabled');
-            },
-            removeSpinner: function (element) {
-                $(element).find('.ajax-working').remove();
-                $(element).removeClass('disabled');
-            },
-            excute: function (element, url, Ids) {
+        $(function () {
+            $('.btn-refresh').on('click', refreshSingle)
+
+            function excute(element, url, Ids) {
                 if ($(element).hasClass('disabled'))
                     return false;
-                var self = Grid;
                 if (Ids) {
-                    self.addSpinner(element);
+                    addSpinner(element);
                     $.ajax({
                         type: 'POST',
                         url: url,
                         data: { ids: Ids },
                         success: function (res) {
+                            removeSpinner(element);
                             if (res.Success) {
                                 Maitonn.JHelper.showMessage(res);
-                                var grid = $("#Grid").data("kendoGrid");
-                                grid.dataSource.read();
-                                grid.refresh();
+                                $('#tr' + Ids).remove();
                             }
                         },
                         complete: function () {
-                            self.removeSpinner(element);
+                            removeSpinner(element);
                         }
                     })
                 } else {
                     alert('请选择要处理的信息');
                     return false;
                 }
-            },
-            refreshSingle: function (element, id) {
-                var self = Grid;
+            }
+
+
+            function addSpinner(element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            }
+
+            function removeSpinner(element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            }
+
+            function refreshSingle(e) {
                 var url = '@Url.Action("Setrefresh", "CustomerCompany")';
-                var Ids = id;
-                self.isEditable(id).done(function (res) {
-                    self.removeSpinner(element);
+                var element = $(e.currentTarget);
+                var id = element.data('id');
+                isEditable(id).done(function (res) {
                     if (res) {
-                        self.excute(element, url, Ids);
+                        excute(element, url, id);
                     } else {
-                        alert('该信息不能被恢复')
+                        alert('该信息不能被删除')
                     }
                 })
-            },
+            }
 
-            isEditable: function (id) {
-                var self = Grid;
+
+            function isEditable(id) {
                 var url = '@Url.Action("isEditable", "CustomerCompany")';
                 var d = $.Deferred()
                 $.get(url, { ID: id }, function (res) {
@@ -118,7 +125,9 @@
                 })
                 return d.promise();
             }
-        }
+
+        })
+
 
     </script>
 

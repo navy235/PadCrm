@@ -41,7 +41,7 @@ namespace PadCRM.Controllers
         public ActionResult Index()
         {
             ViewBag.DepartmentID = Utilities.GetSelectListData(
-                DepartmentService.GetALL().Where(x => x.PID.Equals(null))
+                DepartmentService.GetALL()
                 , x => x.ID, x => x.Name, true);
             return View();
         }
@@ -60,7 +60,7 @@ namespace PadCRM.Controllers
 
         public ActionResult Create()
         {
-            var list = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
+            var list = DepartmentService.GetALL();
             var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
             if (!hasPermission)
             {

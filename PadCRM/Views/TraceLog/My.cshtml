@@ -15,7 +15,7 @@
                     <a data-toggle="collapse"  data-parent="#accordion" href="#collapse@(i)">
                         @item.Name
                     </a>
-                    <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })" class="pull-right">详情</a>
+                    <span class="pull-right">当前只显示最近10条 <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })">查看更多</a></span>
                 </h4>
             </div>
             <div id="collapse@(i)" class="panel-collapse collapse @(i == 0 ? "in" : "")">

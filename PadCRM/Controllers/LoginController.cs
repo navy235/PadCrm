@@ -20,14 +20,17 @@ namespace PadCRM.Controllers
         private IMemberService MemberService;
         private IGroupService GroupService;
         private IDepartmentService DepartmentService;
+        private IPermissionsService PermissionsService;
         public LoginController(
           IMemberService MemberService
             , IGroupService GroupService
-            , IDepartmentService DepartmentService)
+            , IDepartmentService DepartmentService
+            , IPermissionsService PermissionsService)
         {
             this.MemberService = MemberService;
             this.GroupService = GroupService;
             this.DepartmentService = DepartmentService;
+            this.PermissionsService = PermissionsService;
         }
 
         public ActionResult Index()

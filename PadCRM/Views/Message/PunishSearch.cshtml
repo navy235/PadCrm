@@ -1,0 +1,38 @@
+﻿@model List<Punish>
+@{
+    var rulelist = (List<SelectListItem>)ViewBag.Data_RuleID;
+}
+
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>惩奖规则</th>
+                <th>分数</th>
+                <th>录入时间</th>
+                <th>录入者</th>
+                <th>描述</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @rulelist.Single(x => x.Value == item.RuleID.ToString()).Text
+                    </td>
+                    <td>@item.Score</td>
+
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxService", new { value = item.AddUser })"></div>
+                    </td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "search")
+</div>

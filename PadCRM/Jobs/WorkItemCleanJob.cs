@@ -26,7 +26,7 @@ namespace PadCRM.Jobs
 
         private void UpdateStats()
         {
-            const string sql = @"DELETE WorkItems WHERE Completed <  DATEADD(month, -1, getutcdate())";
+            const string sql = @"DELETE WorkItem WHERE Completed <  DATEADD(month, -1, getutcdate())";
             using (var context = _contextThunk())
             {
                 context.Database.ExecuteSqlCommand(sql);

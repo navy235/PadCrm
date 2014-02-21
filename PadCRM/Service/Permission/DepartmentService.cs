@@ -5,6 +5,7 @@ using System.Web;
 using PadCRM.Models;
 using PadCRM.Service.Interface;
 using Maitonn.Core;
+using PadCRM.Utils;
 namespace PadCRM.Service
 {
     public class DepartmentService : IDepartmentService
@@ -42,7 +43,7 @@ namespace PadCRM.Service
             target.Code = model.Code;
             target.Level = model.Level;
             target.PID = model.PID;
-           
+
             db.Commit();
         }
 
@@ -56,6 +57,15 @@ namespace PadCRM.Service
         public Department Find(int ID)
         {
             return db.Set<Department>().Single(x => x.ID == ID);
+        }
+
+
+        public Department GetRoot(int ID)
+        {
+            var depart = Find(ID);
+            var rootCode = Utilities.GetRootCode(depart.Code, depart.Level);
+            var root = GetALL().Single(x => x.Code == rootCode);
+            return root;
         }
     }
 }

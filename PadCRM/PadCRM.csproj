@@ -70,6 +70,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -210,25 +211,9 @@
     </Compile>
     <Compile Include="Jobs\CustomerCompanySetCommonJob.cs" />
     <Compile Include="Jobs\WorkItemCleanJob.cs" />
-    <Compile Include="Migrations\201401240651443_taskEdit.cs" />
-    <Compile Include="Migrations\201401240651443_taskEdit.Designer.cs">
-      <DependentUpon>201401240651443_taskEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401260740400_fileshar.cs" />
-    <Compile Include="Migrations\201401260740400_fileshar.Designer.cs">
-      <DependentUpon>201401260740400_fileshar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401270557169_mediarequire.cs" />
-    <Compile Include="Migrations\201401270557169_mediarequire.Designer.cs">
-      <DependentUpon>201401270557169_mediarequire.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401270746340_mediarequire2.cs" />
-    <Compile Include="Migrations\201401270746340_mediarequire2.Designer.cs">
-      <DependentUpon>201401270746340_mediarequire2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401270755293_mediarequire3.cs" />
-    <Compile Include="Migrations\201401270755293_mediarequire3.Designer.cs">
-      <DependentUpon>201401270755293_mediarequire3.cs</DependentUpon>
+    <Compile Include="Migrations\201402110845379_addfileshare.cs" />
+    <Compile Include="Migrations\201402110845379_addfileshare.Designer.cs">
+      <DependentUpon>201402110845379_addfileshare.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Base\Department.cs" />
@@ -315,12 +300,14 @@
     <Compile Include="Utils\BizEnum.cs" />
     <Compile Include="Utils\ChineseCalendarInfo.cs" />
     <Compile Include="Utils\CommonEqualityComparer.cs" />
+    <Compile Include="Utils\CookieHelper.cs" />
     <Compile Include="Utils\FileUploader.cs" />
     <Compile Include="Utils\ServiceResult.cs" />
     <Compile Include="ViewModels\Base\BackupItem.cs" />
     <Compile Include="ViewModels\Biz\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Biz\ContactRequireGroupViewModel.cs" />
     <Compile Include="ViewModels\Biz\MonthTableViewModel.cs" />
+    <Compile Include="ViewModels\Biz\PunishSearchViewModel.cs" />
     <Compile Include="ViewModels\Biz\SearchCompanyViewModel.cs" />
     <Compile Include="ViewModels\Biz\NoticeViewModel.cs" />
     <Compile Include="ViewModels\Biz\PunishViewModel.cs" />
@@ -332,6 +319,7 @@
     <Compile Include="ViewModels\Category\JobTitleCateViewModel.cs" />
     <Compile Include="ViewModels\Category\RuleCateViewModel.cs" />
     <Compile Include="ViewModels\Category\FileCateViewModel.cs" />
+    <Compile Include="ViewModels\Member\ImportViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Utils\Utilities.cs" />
     <Compile Include="ViewModels\Admin\DashBoardViewModel.cs" />
@@ -404,6 +392,7 @@
     <Content Include="Content\images\slider\1.jpg" />
     <Content Include="Content\images\slider\2.jpg" />
     <Content Include="Content\images\slider\3.jpg" />
+    <Content Include="Content\images\uploadbtn-file.png" />
     <Content Include="Content\images\uploadbtn.png" />
     <Content Include="Content\images\warning_16X16.png" />
     <Content Include="Content\images\zh-db.jpg" />
@@ -978,6 +967,18 @@
     <Content Include="Views\Setting\Index.cshtml" />
     <Content Include="Views\CustomerCompany\Search.cshtml" />
     <Content Include="Views\Analysis\Index.cshtml" />
+    <Content Include="Views\Member\Import.cshtml" />
+    <Content Include="Views\FileShare\process.cshtml" />
+    <Content Include="Views\FileShare\responsibilities.cshtml" />
+    <Content Include="Views\Message\MyPunish.cshtml" />
+    <Content Include="Views\Message\PunishSearch.cshtml" />
+    <Content Include="Views\CustomerCompany\DataShare_Read.cshtml" />
+    <Content Include="Views\Customer\Show.cshtml" />
+    <Content Include="Views\CustomerCompany\BaseSearch.cshtml" />
+    <Content Include="Views\CustomerCompany\PlanSearch.cshtml" />
+    <Content Include="Views\CustomerCompany\TraceSearch.cshtml" />
+    <Content Include="Views\CustomerCompany\PlanSearching.cshtml" />
+    <Content Include="Views\CustomerCompany\TraceSearching.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -994,25 +995,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201401240651443_taskEdit.resx">
-      <DependentUpon>201401240651443_taskEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401260740400_fileshar.resx">
-      <DependentUpon>201401260740400_fileshar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401270557169_mediarequire.resx">
-      <DependentUpon>201401270557169_mediarequire.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401270746340_mediarequire2.resx">
-      <DependentUpon>201401270746340_mediarequire2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401270755293_mediarequire3.resx">
-      <DependentUpon>201401270755293_mediarequire3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201402110845379_addfileshare.resx">
+      <DependentUpon>201402110845379_addfileshare.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

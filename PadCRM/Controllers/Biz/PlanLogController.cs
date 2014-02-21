@@ -48,7 +48,7 @@ namespace PadCRM.Controllers
 
         public ActionResult Index(int ID, int page = 1)
         {
-            const int pageSize = 20;
+            const int pageSize = 10;
             var logs = PlanLogService.GetALL().Where(x => x.CompanyID == ID
                )
                 .OrderByDescending(x => x.AddTime)
@@ -69,7 +69,7 @@ namespace PadCRM.Controllers
 
         public ActionResult My(int page = 1)
         {
-            const int pageSize = 1;
+            const int pageSize = 10;
             var model = CustomerCompanyService.GetALL().Include(x => x.AddMember)
                 .Include(x => x.PlanLog)
                 .Where(x => x.AddUser == CookieHelper.MemberID)
@@ -109,7 +109,7 @@ namespace PadCRM.Controllers
                         AddTime = o.AddTime,
                         UserName = o.AddMember.NickName
 
-                    }).OrderByDescending(o => o.AddTime).ToList();
+                    }).OrderByDescending(o => o.AddTime).Take(10).ToList();
 
                 item.PlanLogs = planlogs;
             }
@@ -266,7 +266,7 @@ namespace PadCRM.Controllers
             var model = new PlanLogEditViewModel()
             {
                 CompanyID = entity.CompanyID,
-
+                PlanTime = entity.PlanTime,
                 ID = entity.ID,
                 Content = entity.Content
             };

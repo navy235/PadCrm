@@ -1,0 +1,10 @@
+
+ ExLogTime :2014-02-20 15:43:36,559 [8] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+删除客户类别信息成功 
+
+ ExLogTime :2014-02-20 16:47:36,186 [18] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+更改媒介请求状态成功 

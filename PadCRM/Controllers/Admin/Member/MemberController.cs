@@ -17,6 +17,9 @@ using System.IO;
 using System.Text;
 using NPOI.HSSF.UserModel;
 using PadCRM.Filters;
+using System.Data.OleDb;
+using System.Data;
+using System.Transactions;
 
 namespace PadCRM.Controllers
 {
@@ -43,36 +46,70 @@ namespace PadCRM.Controllers
         }
 
         #region KendoGrid Action
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
             ViewBag.Data_GroupID = Utilities.GetSelectListData(GroupService.GetALL()
               , x => x.ID, x => x.Name, true);
             ViewBag.Data_DepartmentID = Utilities.GetSelectListData(DepartmentService.GetALL()
-                , x => x.ID, x => x.Name, true);
-            return View();
+              , x => x.ID, x => x.Name, true);
+
+            const int pageSize = 20;
+
+            var user = MemberService.Find(CookieHelper.MemberID);
+
+            var members = MemberService.GetKendoALL()
+                .Where(x => x.Status > (int)MemberCurrentStatus.Delete && x.MemberID != CookieHelper.MemberID);
+
+            var totalCount = MemberService.GetKendoALL()
+            .Count(x => x.Status > (int)MemberCurrentStatus.Delete && x.MemberID != CookieHelper.MemberID);
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+
+            var models = members.OrderBy(x => x.DepartmentID)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize).ToList();
+            return View(models);
+
         }
 
-        public ActionResult Editing_Read([DataSourceRequest] DataSourceRequest request)
-        {
 
-            var members = MemberService.GetKendoALL().Where(x => x.Status > (int)MemberCurrentStatus.Delete);
-            return Json(members.ToDataSourceResult(request));
-        }
 
-        public ActionResult Delete()
+        public ActionResult Delete(int page = 1)
         {
             ViewBag.Data_GroupID = Utilities.GetSelectListData(GroupService.GetALL()
-              , x => x.ID, x => x.Name, true);
+             , x => x.ID, x => x.Name, true);
             ViewBag.Data_DepartmentID = Utilities.GetSelectListData(DepartmentService.GetALL()
-                , x => x.ID, x => x.Name, true);
-            return View();
+              , x => x.ID, x => x.Name, true);
+
+            const int pageSize = 20;
+
+            var user = MemberService.Find(CookieHelper.MemberID);
+
+            var members = MemberService.GetKendoALL()
+                .Where(x => x.Status == (int)MemberCurrentStatus.Delete);
+
+            var totalCount = MemberService.GetKendoALL()
+            .Count(x => x.Status == (int)MemberCurrentStatus.Delete);
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+
+            var models = members.OrderBy(x => x.DepartmentID)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize).ToList();
+            return View(models);
         }
 
-        public ActionResult DeleteEditing_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            var members = MemberService.GetKendoALL().Where(x => x.Status == (int)MemberCurrentStatus.Delete);
-            return Json(members.ToDataSourceResult(request));
-        }
+
 
         #endregion
 
@@ -327,6 +364,109 @@ namespace PadCRM.Controllers
                 "人员信息.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
         }
 
+
+        public ActionResult Import()
+        {
+            return View(new ImportViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Import(ImportViewModel model)
+        {
+            ServiceResult result = new ServiceResult();
+            TempData["Service_Result"] = result;
+            var savePath = Server.MapPath("~/" + model.FilePath);
+            string strConn;
+            strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + savePath + ";" + "Extended Properties=Excel 8.0";
+            OleDbConnection conn = new OleDbConnection(strConn);
+            conn.Open();
+            OleDbDataAdapter myCommand = new OleDbDataAdapter("select * from [Sheet1$]", strConn);
+            DataSet myDataSet = new DataSet();
+            try
+            {
+                myCommand.Fill(myDataSet, "ExcelInfo");
+            }
+            catch (Exception ex)
+            {
+                result.Message = Utilities.GetInnerMostException(ex);
+                result.AddServiceError(result.Message);
+                LogHelper.WriteLog("上传会员信息错误", ex);
+                return View();
+            }
+            DataTable table = myDataSet.Tables["ExcelInfo"].DefaultView.ToTable();
+
+            var departlist = DepartmentService.GetALL().ToList();
+            var jobtitlelist = JobTitleCateService.GetALL().ToList();
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var row = table.Rows[i];
+                    var member = new MemberViewModel();
+                    if (string.IsNullOrEmpty(row[1].ToString())
+                        || string.IsNullOrEmpty(row[2].ToString())
+                          || string.IsNullOrEmpty(row[3].ToString())
+                          || string.IsNullOrEmpty(row[4].ToString())
+                          || string.IsNullOrEmpty(row[6].ToString())
+                          || string.IsNullOrEmpty(row[7].ToString())
+                        )
+                    {
+
+                        continue;
+                    }
+
+                    if (departlist.Count(x => x.Name == row[2].ToString()) == 0)
+                    {
+                        result.Message = "上传数据部门格式错误";
+                        result.AddServiceError(result.Message);
+                    }
+                    else
+                    {
+                        member.DepartmentID = departlist.Single(x => x.Name == row[2].ToString()).ID;
+                    }
+                    if (jobtitlelist.Count(x => x.CateName == row[3].ToString()) == 0)
+                    {
+                        result.Message = "上传数据职称类别格式错误";
+                        result.AddServiceError(result.Message);
+                    }
+                    else
+                    {
+                        member.JobTitleID = jobtitlelist.Single(x => x.CateName == row[3].ToString()).ID;
+                    }
+                    member.NickName = row[1].ToString().Replace(" ", "");
+                    member.Mobile = row[4].ToString();
+                    member.QQ = row[5].ToString();
+                    member.Email = row[6].ToString();
+                    member.Password = "888888";
+                    member.GroupID = 6;
+                    if (row[7].ToString() == "是")
+                    {
+                        member.IsLeader = true;
+                    }
+                    else
+                    {
+                        member.IsLeader = false;
+                    }
+                    if (row[8].ToString() == "男")
+                    {
+                        member.Sex = false;
+                    }
+                    else
+                    {
+                        member.Sex = true;
+                    }
+
+                    MemberService.Create(member);
+                }
+                transaction.Complete();
+            }
+            System.Threading.Thread.Sleep(2000);
+            result.Message = "批量导入用户数据成功！";
+            LogHelper.WriteLog("批量导入用户数据成功！");
+            return RedirectToAction("Index");
+
+        }
     }
 }
 

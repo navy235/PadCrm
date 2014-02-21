@@ -23,6 +23,8 @@ namespace PadCRM.Service.Interface
 
         void Delete(CustomerCompany model);
 
+        void Replace(int CompanyID, int MemberID);
+
         CustomerCompany Find(int ID);
 
         List<int> GetMemberCompanyIDs(int MemberID);

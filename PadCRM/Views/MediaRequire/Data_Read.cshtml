@@ -12,12 +12,12 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i)">
+                    <a data-toggle="collapse"  data-parent="#accordion1" href="#@(cssClass)_collapse@(i)">
                         @item.Name
                     </a>
                 </h4>
             </div>
-            <div id="sec_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
+            <div id="@(cssClass)_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
                 <div class="panel-body">
                     <div class="tool-bar">
                         @if (cssClass != "category1")

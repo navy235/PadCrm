@@ -1,43 +1,56 @@
 ﻿@{
-    ViewBag.Title = "我的客户信息";
+    ViewBag.Title = "共享的客户信息";
 }
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
     <li><a href="@Url.Action("index")" >我的客户信息</a></li>
+
     <li class="active"><a href="@Url.Action("share")" >共享的客户信息</a></li>
-    <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    @if (CookieHelper.CheckPermission("manager"))
+    {
+        <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    }
     <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+    <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
 </ul>
 
-<!-- Tab panes -->
-<div class="tab-content">
-    @(Html.Kendo().Grid<CustomerCompany>()
-        .Name("Grid")
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.Name).ClientTemplate("<a target='_blank' href='/CustomerCompany/Details/#=ID#' >#=Name#</a>").Title("公司名称");
-            columns.Bound(c => c.BrandName).Title("品牌名称");
-            columns.Template(@<text></text>).ClientTemplate("<div data-showcontent='"
-                 + Url.Action("memberName", "ajaxservice") + "/#=AddUser#' />").Title("录入者");
-            columns.Bound(c => c.Phone).Title("电话");
-            columns.Bound(c => c.Fax).Title("传真");
-            columns.Bound(c => c.Address).Title("地址");
-            columns.ForeignKey(c => c.CustomerCateID, (List<SelectListItem>)ViewBag.CustomerCateID, "Value", "Text").Title("客户类型");
-            columns.ForeignKey(c => c.RelationID, (List<SelectListItem>)ViewBag.RelationID, "Value", "Text").Title("关系程度");
-        })
-        .Pageable()
-        .Sortable()
-        .Scrollable()
-        .Filterable()
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(20)
-            .Model(model => model.Id(c => c.ID))
-            .Sort(sort => sort.Add(x => x.AddTime).Descending())
-            .Read(read => read.Action("Datashare_Read", "CustomerCompany"))
-
-            )
-            .HtmlAttributes(new { style = "height:500px;" })
-        )
+<div id="tabstrip" style="margin-top: 10px;">
+    <ul>
+        <li class="k-state-active category0">共享给我的</li>
+        <li class="category1">我共享的</li>
+    </ul>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            var tabStrip = $("#tabstrip").kendoTabStrip({
+                animation: { open: { effects: "fadeIn" } },
+                contentLoad: Maitonn.JHelper.onDataBoundShowContent,
+                contentUrls: [
+                '@Url.Action("DataShare_Read", "customercompany", new { status = 0 })',
+                '@Url.Action("DataShare_Read", "customercompany", new { status = 1 })'
+                ]
+            }).data('kendoTabStrip');
+            $('#tabstrip').on('click', 'a.page-link', ajaxPage);
+
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    var refeshlink = $('#tabstrip').find('li.' + cssClass).find('.k-link')
+                    refeshlink.data('contentUrl', url);
+                    tabStrip.reload($('#tabstrip').find('li.' + cssClass));
+                }
+            }
+        });
+    </script>
+}

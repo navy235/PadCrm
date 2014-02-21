@@ -21,8 +21,8 @@ namespace PadCRM.ViewModels
             this.EndTime = DateTime.Now.AddDays(1);
         }
 
-        [Display(Name = "客户ID")]
-        [UIHint("Integer")]
+
+        [HiddenInput(DisplayValue = false)]
         public int ID { get; set; }
 
         [Display(Name = "公司名称")]
@@ -64,5 +64,47 @@ namespace PadCRM.ViewModels
         [UIHint("Date")]
         public DateTime EndTime { get; set; }
 
+    }
+
+
+    public class PlanSearchViewModel
+    {
+        public PlanSearchViewModel()
+        {
+            this.StartTime = DateTime.Now.AddMonths(-1);
+            this.EndTime = DateTime.Now.AddDays(1);
+        }
+
+        [Display(Name = "姓名")]
+        public string UserName { get; set; }
+
+        [Display(Name = "之后录入")]
+        [UIHint("Date")]
+        public DateTime StartTime { get; set; }
+
+        [Display(Name = "之前录入")]
+        [UIHint("Date")]
+        public DateTime EndTime { get; set; }
+    }
+
+    public class TraceSearchViewModel
+    {
+
+        public TraceSearchViewModel()
+        {
+            this.StartTime = DateTime.Now.AddMonths(-1);
+            this.EndTime = DateTime.Now.AddDays(1);
+        }
+
+        [Display(Name = "姓名")]
+        public string UserName { get; set; }
+
+        [Display(Name = "之后录入")]
+        [UIHint("Date")]
+        public DateTime StartTime { get; set; }
+
+        [Display(Name = "之前录入")]
+        [UIHint("Date")]
+        public DateTime EndTime { get; set; }
     }
 }

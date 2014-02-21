@@ -59,7 +59,9 @@ namespace PadCRM.Controllers
                     Status = x.Status,
                     Name = x.Name,
                     AddUser = x.AddUser,
-                    SenderID = x.SenderID
+                    SenderID = x.SenderID,
+                    ResolveID = x.ResolveID,
+                    AttachmentPath = x.AttachmentPath
                 }).OrderByDescending(x => x.AddTime)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToList();
@@ -98,8 +100,8 @@ namespace PadCRM.Controllers
                     Name = x.Name,
                     AddUser = x.AddUser,
                     SenderID = x.SenderID,
-                    ResolveID = x.ResolveID
-
+                    ResolveID = x.ResolveID,
+                    AttachmentPath = x.AttachmentPath
                 }).OrderByDescending(x => x.AddTime)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToList();
@@ -125,7 +127,9 @@ namespace PadCRM.Controllers
                     Name = item.Name,
                     SenderID = item.SenderID,
                     AddUser = item.AddUser,
-                    ResolveID = item.ResolveID
+                    ResolveID = item.ResolveID,
+                    AttachmentPath = item.AttachmentPath
+
                 };
                 item.MediaRequires.Add(selfItem);
                 var MediaRequires = MediaRequireService.GetALL()
@@ -161,6 +165,7 @@ namespace PadCRM.Controllers
                 SenderID = CookieHelper.MemberID,
                 Name = "媒介策略请求:" + entity.Name,
                 IsRoot = 1
+
             };
             return PartialView(model);
         }

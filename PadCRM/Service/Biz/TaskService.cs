@@ -7,6 +7,7 @@ using PadCRM.Service.Interface;
 using System.Data.Objects;
 using System.Data.Objects.SqlClient;
 using Maitonn.Core;
+using PadCRM.Utils;
 
 namespace PadCRM.Service
 {

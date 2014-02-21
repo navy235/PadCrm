@@ -109,6 +109,22 @@ namespace PadCRM.Utils
             }
             return Convert.ToInt32(codeStr);
         }
+        public static int GetRootCode(int code, int level)
+        {
+            var codeStr = code.ToString();
+            var maxLength = codeStr.Length;
+            codeStr = codeStr.Substring(0, 2);
+            var needLength = maxLength - codeStr.Length;
+            if (needLength > 0)
+            {
+                for (var i = 0; i < needLength; i++)
+                {
+                    codeStr += "0";
+                }
+            }
+            return Convert.ToInt32(codeStr);
+        }
+
 
         public static int GetMaxCode(int code)
         {

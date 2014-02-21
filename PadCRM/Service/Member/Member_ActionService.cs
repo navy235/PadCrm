@@ -6,6 +6,7 @@ using PadCRM.Models;
 using PadCRM.Service.Interface;
 using System.Data.Entity;
 using Maitonn.Core;
+using PadCRM.Utils;
 
 namespace PadCRM.Service
 {

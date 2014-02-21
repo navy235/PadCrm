@@ -21,6 +21,7 @@ namespace PadCRM.Service
         public MemberService(IUnitOfWork db
             , IMessageService MessageService
             , IDepartmentService DepartmentService
+
             )
         {
             this.db = db;
@@ -65,16 +66,29 @@ namespace PadCRM.Service
 
         public void SetLoginCookie(Member member)
         {
+            var permissionStr = string.Empty;
+            var listCheckstr = new string[]{
+            "manager",
+            "punish",
+            "boss"
+            };
+            foreach (var s in listCheckstr)
+            {
+                var result = CheckPermission(s, "controller", member.MemberID);
+                permissionStr += (s + "|" + result.ToString());
+                permissionStr += ",";
+            }
+            permissionStr = permissionStr.Substring(0, permissionStr.Length - 1);
             CookieHelper.LoginCookieSave(member.MemberID.ToString(),
               member.Email,
               member.NickName,
               member.AvtarUrl,
               member.GroupID.ToString(),
               member.Status.ToString(),
-              "mt",
+              permissionStr,
               member.Password,
               "1",
-              "0"
+              "DepartmentID|" + member.DepartmentID.ToString()
              );
         }
 
@@ -115,6 +129,23 @@ namespace PadCRM.Service
 
         #endregion
 
+
+        private bool CheckPermission(string controller, string action, int MemberID)
+        {
+            int groupID = Find(MemberID).GroupID;
+            var hasPermission = false;
+            var query = db.Set<Group>()
+                .Include(x => x.Roles)
+                .Where(g =>
+                    (g.Roles.Any(r =>
+                        r.Permissions.Count(p =>
+                            p.Controller.Equals(controller, StringComparison.OrdinalIgnoreCase)
+                            &&
+                            (p.Action.Equals(action, StringComparison.OrdinalIgnoreCase) || p.Action.Equals("controller", StringComparison.OrdinalIgnoreCase))) > 0))
+                    && g.ID == groupID);
+            hasPermission = query.Any();
+            return hasPermission;
+        }
         #region validate
 
         public bool ValidatePassword(int MemberID, string Password)

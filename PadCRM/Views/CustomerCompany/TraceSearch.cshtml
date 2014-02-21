@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "跟单日志查询";
+}
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li><a href="@Url.Action("index")" >我的客户信息</a></li>
+    <li><a href="@Url.Action("share")" >共享的客户信息</a></li>
+    @if (CookieHelper.CheckPermission("manager"))
+    {
+        <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    }
+    <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+    <li class="active"><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("Plansearch")" >计划日志查询</a></li>
+</ul>
+<div class="search-form">
+    @using (Ajax.BeginForm(actionName: "tracesearching", controllerName: "CustomerCompany", routeValues: new { }, ajaxOptions: new AjaxOptions()
+{
+    OnSuccess = "ajaxFormSuccess",
+    OnFailure = "ajaxFormFailure",
+    HttpMethod = "Get"
+}, htmlAttributes: new { formtitle = "跟单日志查询" }))
+    {
+        <div class="search-area">
+            @Html.EditorForModel()
+            <div class="form-field form-field-submit">
+                <button type="submit" class="btn btn-primary btn-submit ">
+                    <i class="icon-maitonn icon-search"></i>
+                    &nbsp;&nbsp;查&nbsp;&nbsp;询&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    }
+</div>
+<div class="search-result">
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            function getSearch() {
+                $('.btn-submit').click();
+            }
+
+            //getSearch();
+
+            $('.search-result').on('click', 'a.page-link', ajaxPage)
+
+            $('.search-result').on('click', 'a.btn-delete-single', deleteSingle)
+
+            $('.search-result').on('click', 'a.btn-edit-single', editSingle)
+
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    $.get(url, {}, function (res) {
+                        $('.search-result').html(res);
+                        Maitonn.JHelper.onDataBoundShowContent();
+                    })
+                }
+            }
+
+            function excute(element, url, id) {
+                if ($(element).hasClass('disabled'))
+                    return false;
+                if (id) {
+                    addSpinner(element);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: { ID: id },
+                        success: function (res) {
+                            removeSpinner(element);
+                            if (res.Success) {
+                                Maitonn.JHelper.showMessage(res);
+                                getSearch();
+                            }
+                        },
+                        complete: function () {
+                            removeSpinner(element);
+                        }
+                    })
+                } else {
+                    alert('请选择要处理的信息');
+                    return false;
+                }
+            }
+
+            function addSpinner(element) {
+                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
+                $(element).addClass('disabled');
+            }
+
+            function removeSpinner(element) {
+                $(element).find('.ajax-working').remove();
+                $(element).removeClass('disabled');
+            }
+            //删除跟单日志
+            function deleteSingle(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("delete", "traceLog")';
+                isEditable(id).done(function (res) {
+                    if (res) {
+                        excute(target, url, id, 'traceLog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                        removeSpinner(target);
+                    }
+                })
+            }
+
+            function editSingle(e) {
+                var target = $(e.target);
+                var id = target.data('id');
+                var url = '@Url.Action("ajaxedit", "traceLog")';
+                isEditable(id).done(function (res) {
+                    if (res) {
+                        getForm(url, { ID: id, Status: 1 }, 'traceLog');
+                    } else {
+                        alert("当前信息不能被编辑");
+                    }
+                })
+            }
+
+            function isEditable(id) {
+                var url = '@Url.Action("isEditable", "traceLog")';
+                var d = $.Deferred()
+                $.get(url, { ID: id }, function (res) {
+                    d.resolve(res);
+                })
+                return d.promise();
+            }
+        })
+
+            function getForm(url, data, cssClass) {
+                var kw = $('#kwindow').data('kendoWindow');
+                $.get(url, data, function (html) {
+                    kw.content(html);
+                    kw.title($('form').attr('formtitle'));
+                    kw.currentFormcssClass = cssClass;
+                    $.validator.unobtrusive.parse(document);
+                    setTimeout(function () {
+                        kw.center().open();
+                    }, 500)
+
+                })
+            }
+            function ajaxFormSuccess(res) {
+                $('.search-result').html(res);
+                Maitonn.JHelper.onDataBoundShowContent();
+            }
+
+    </script>
+}
+@(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))
+

@@ -3,7 +3,7 @@
     Layout = null;
 }
 <div class="tool-bar">
-    <a class="btn btn-primary btn-add-mediarequire" data-id="@ViewBag.CompanyID" data-cssclass="mediarequire" href="javascript:void(0);">添加媒介策略请求</a>
+    <a class="btn btn-primary btn-add-mediarequire" data-id="@ViewBag.CompanyID" data-cssclass="mediarequire" href="javascript:void(0);">策略单请求</a>
 </div>
 <div class="table table-responsive">
     <table class="table table-hover">
@@ -13,7 +13,7 @@
                 <th>录入时间</th>
                 <th>媒介人员</th>
                 <th>内容</th>
-                <th>合同附件</th>
+                <th>相关附件</th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
                         }
                         else
                         {
-                        <a href="@item.AttachmentPath">下载合同附件</a>
+                        <a href="@item.AttachmentPath">下载附件</a>
                         }</th>
                 </tr>
             }

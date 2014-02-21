@@ -1,87 +1,76 @@
-﻿@{
+﻿@model List<Member>
+@{
     ViewBag.Title = "部门人员列表";
+
+    var departlist = (List<SelectListItem>)ViewBag.Data_DepartmentID;
 }
 
-<!-- Tab panes -->
-<div class="tab-content">
+<div class="tool-bar">
+    <a class="btn btn-primary "  href="@Url.Action("create")">新开帐号</a>
 
-    @(Html.Kendo().Grid<Member>()
-    .Name("MembersList")
-    .Columns(columns =>
-    {
-
-        columns.ForeignKey(p => p.DepartmentID, new SelectList((List<SelectListItem>)ViewBag.Data_DepartmentID, "value", "text")).Width(80);
-        columns.Bound(c => c.NickName).Width(120);
-        columns.Bound(c => c.Mobile).Width(110);
-        columns.Bound(c => c.Mobile1).Width(110);
-        columns.Bound(c => c.Email).Width(170);
-        columns.Bound(c => c.QQ);
-        columns.Bound(c => c.Address);
-        columns.Template(@<text></text>)
-            .ClientTemplate(@"<a class='btn btn-primary '"
-            + " href='javascript:void(0);' onclick='Grid.shwoTracelog(this,\"#=MemberID#\");' >跟单情况</a>"
-            + "<a class='btn btn-primary ' href='"
-            + Url.Action("Resume", "Manager") + "/#=MemberID#' target='_blank'>查看简历</a>"
-            ).Title("操作").Width(260);
-    })
-      .ToolBar(toolbar =>
-    {
-        toolbar.Custom().Text("新开帐号").Action("Create", "Manager");
-        toolbar.Custom()
-            .Text("导出到Excel")
-            .HtmlAttributes(new { id = "export" })
-            .Url(Url.Action("Export", "Manager"));
-
-    })
-    .Pageable()
-    .Sortable()
-    .Groupable()
-    .Scrollable()
-    .Filterable()
-    .HtmlAttributes(new { style = "height:500px;" })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(120)
-        .Model(model => model.Id(c => c.MemberID))
-        .Sort(sort => sort.Add(x => x.DepartmentID).Ascending())
-        .Read("Editing_Read", "Manager")
-
-    )
-)
+    <a class="btn btn-primary "  href="@Url.Action("Export")">导出数据</a>
 </div>
+
+<div class="table-responsive " id="tabcontainer">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>部门</th>
+                <th>姓名</th>
+                <th>手机1</th>
+                <th>手机2</th>
+                <th>Email</th>
+                <th>QQ</th>
+                <th>地址</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@departlist.Single(x => x.Value == item.DepartmentID.ToString()).Text
+                    </td>
+                    <td>@item.NickName</td>
+                    <td>@item.Mobile</td>
+                    <td>@item.Mobile1</td>
+
+                    <td>@item.Email</td>
+                    <td>@item.QQ</td>
+
+                    <td>@item.Address</td>
+
+                    <td>
+                        <a class="btn btn-primary btn-show-tracelog" data-id="@item.MemberID" data-cssclass="tracelog" href="javascript:void(0);">跟单情况</a>
+                        <a class="btn btn-primary btn-show-resume" data-id="@item.MemberID" data-cssclass="resume" href="@Url.Action("resume", "manager", new { ID = item.MemberID })" target="_blank">查看简历</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "manager")
+</div>
+
+
 @section scripts{
     <script type="text/javascript">
-        var Grid = {
-            id: 'MembersList',
+        $(function () {
 
-            addSpinner: function (element) {
-                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
-                $(element).addClass('disabled');
-            },
-            removeSpinner: function (element) {
-                $(element).find('.ajax-working').remove();
-                $(element).removeClass('disabled');
-            },
-            checkAll: function (ele) {
-                var self = Grid;
-                var state = $(ele).is(':checked');
-                $('[name="ID_check"]').attr('checked', state);
-            },
-            getCheckIds: function () {
-                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val(); }).join(',');
-            },
-            shwoTracelog: function (element, id) {
-                var self = Grid;
-                var Ids = id;
+            $('#logwindow').on('click', 'a.page-link', showpage);
+
+            $('#tabcontainer').on('click', 'a.btn-show-tracelog', shwoTracelog);
+
+            function shwoTracelog(e) {
+                var id = $(e.currentTarget).data('id');
                 $.get('@Url.Action("viewtrace", "tracelog")', { ID: id }, function (res) {
                     $('#logwindow').data('kendoWindow')
                         .content(res)
                         .center().open();
                 })
             }
-        }
-        $(function () {
-            $('#logwindow').on('click', 'a.page-link', showpage);
             function showpage(e) {
                 e.preventDefault();
                 var target = $(e.currentTarget);

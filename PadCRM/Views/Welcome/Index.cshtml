@@ -4,51 +4,51 @@
 
 <div class="alert alert-warning shouce ">
     <button type="button" class="close notshowagain" data-dismiss="alert">×</button>
-    <h2 style="text-align: center">员工使用手册</h2>
+    <h2 style="text-align: center">客户系统管理规范</h2>
     <div id="endText">
         <p>
-            <span >1、既定客户在30天之内要写跟单日志，否则为公有信息可随时替换。</span>
+            <span>1、既定客户在30天之内要写跟单日志，否则为公有信息可随时替换。</span>
         </p>
         <p>
-            <span >2、重要潜在客户在35天之内要写跟单日志，否则为公有信息可随时替换。</span>
+            <span>2、重要潜在客户在35天之内要写跟单日志，否则为公有信息可随时替换。</span>
         </p>
         <p>
-            <span >3、一般潜在客户在7天之内要写跟单日志，否则为公有信息可随时替换。</span>
+            <span>3、一般潜在客户在7天之内要写跟单日志，否则为公有信息可随时替换。</span>
         </p>
         <p>
-            <span >4、重要潜在客户限定为40个，既定客户限定为15个。</span>
+            <span>4、重要潜在客户限定为40个，既定客户限定为15个。</span>
         </p>
         <p>
-            <span >5、任何一条信息在30天之内没有完成两个执行者的完善，此信息为公有信息。</span>
+            <span>5、任何一条信息在30天之内没有完成两个执行者的完善，此信息为公有信息。</span>
         </p>
         <p>
-            <span >6、跟单日志与计划日志分别需达到15个字以上才可保存。</span>
+            <span>6、跟单日志与计划日志分别需达到15个字以上才可保存。</span>
         </p>
         <p>
-            <span >7、必填项必须要填写完整，否则无法进行保存。</span>
+            <span>7、必填项必须要填写完整，否则无法进行保存。</span>
         </p>
         <p>
-            <span >8、信息录入时一旦显示有同样公司名称及品牌名，后者依然不顾录进去，给与警告一次，再次出现给予罚款50元，三次出现给予开除。</span>
+            <span>8、信息录入时一旦显示有同样公司名称及品牌名，后者依然不顾录进去，给与警告一次，再次出现给予罚款50元，三次出现给予开除。</span>
         </p>
         <p>
-            <span >9、信息在输入时，无法输入的情况下，如遇到以下情况可直接与总经理反应，由总经理进行处理：</span>
+            <span>9、信息在输入时，无法输入的情况下，如遇到以下情况可直接与总经理反应，由总经理进行处理：</span>
         </p>
         <p>
-            <span >A: 后来者找到了决策者而是在前者未找到决策者的前提下，决策者同时非常认可你，则此信息归后者所有</span>
+            <span>A: 后来者找到了决策者而是在前者未找到决策者的前提下，决策者同时非常认可你，则此信息归后者所有</span>
         </p>
         <p>
-            <span >B: 后来者找到了决策者，并且马上签约合同。前者此时一无所知则归后者。以上两点都必须由总经理核实。</span>
+            <span>B: 后来者找到了决策者，并且马上签约合同。前者此时一无所知则归后者。以上两点都必须由总经理核实。</span>
         </p>
         <p>
-            <span >C: 否则其它所有的现象都归前者所有</span>
+            <span>C: 否则其它所有的现象都归前者所有</span>
         </p>
         <p>
-            <span >10、如出现前者已跟决策者沟通而恶意抢单者给予警告一次，第二次开除。所以要避免同情况出现的话就要先问对方。我司是否有人与他接触。</span>
+            <span>10、如出现前者已跟决策者沟通而恶意抢单者给予警告一次，第二次开除。所以要避免同情况出现的话就要先问对方。我司是否有人与他接触。</span>
         </p>
         <p>
-            <span >11、外来人员发生撞单，先保护公司内部人员利益，除非在高于我司规定价格之上签进来就归属于外部人员</span>
+            <span>11、外来人员发生撞单，先保护公司内部人员利益，除非在高于我司规定价格之上签进来就归属于外部人员</span>
         </p>
-     
+
     </div>
 </div>
 
@@ -59,6 +59,8 @@
         <li class="tracelog">我的跟单</li>
         <li class="planlog">我的计划</li>
         <li class="birthday">客户生日</li>
+        <li class="process">工作流程</li>
+        <li class="responsibilities">员工职责</li>
     </ul>
 </div>
 
@@ -82,7 +84,9 @@
                 '@Url.Action("my", "customercompany")',
                 '@Url.Action("my", "TraceLog")',
                 '@Url.Action("my", "planlog")',
-                '@Url.Action("CustomerBirth", "message")'
+                '@Url.Action("CustomerBirth", "message")',
+                '@Url.Action("process", "fileshare")',
+                '@Url.Action("responsibilities", "fileshare")'
                 ]
             }).data('kendoTabStrip');
 

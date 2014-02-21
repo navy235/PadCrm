@@ -1,0 +1,160 @@
+
+ ExLogTime :2014-02-11 11:35:46,515 [60] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:35:57,597 [60] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:36:04,692 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:36:12,229 [58] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:36:30,997 [58] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:37:01,230 [58] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加部门成功 
+
+ ExLogTime :2014-02-11 11:37:09,700 [22] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:41:12,961 [15] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑部门成功 
+
+ ExLogTime :2014-02-11 11:41:47,937 [57] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 13:27:52,761 [8] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑城市信息成功 
+
+ ExLogTime :2014-02-11 13:27:58,629 [9] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑城市信息成功 
+
+ ExLogTime :2014-02-11 13:28:07,089 [6] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:28:14,894 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:28:26,419 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:28:38,864 [6] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:28:53,454 [7] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:29:02,756 [7] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:29:20,778 [5] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 13:29:39,907 [6] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-11 14:05:58,738 [40] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+批量导入用户数据成功！ 
+
+ ExLogTime :2014-02-11 14:07:04,245 [40] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 14:07:39,879 [31] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 14:08:14,106 [36] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 14:10:04,454 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+批量导入用户数据成功！ 
+
+ ExLogTime :2014-02-11 14:11:51,313 [36] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加角色成功 
+
+ ExLogTime :2014-02-11 14:12:01,935 [31] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-11 14:12:25,516 [36] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加群组成功 
+
+ ExLogTime :2014-02-11 14:12:42,596 [34] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 14:14:07,022 [36] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 15:27:00,091 [38] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑会员信息成功 
+
+ ExLogTime :2014-02-11 16:40:51,403 [32] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加部门公告成功 
+
+ ExLogTime :2014-02-11 16:53:30,588 [16] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加文件共享告成功 

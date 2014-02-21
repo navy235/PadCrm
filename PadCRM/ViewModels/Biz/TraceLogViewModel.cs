@@ -12,15 +12,19 @@ namespace PadCRM.ViewModels
 {
     public class TraceLogViewModel
     {
+
+        public TraceLogViewModel()
+        {
+            RelationID = 1;
+        }
+
         [HiddenInput(DisplayValue = false)]
         public int ID { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public int CompanyID { get; set; }
 
-        [Required(ErrorMessage = "请选择关系程度")]
-        [Display(Name = "关系程度")]
-        [UIHint("DropDownList")]
+        [HiddenInput(DisplayValue = false)]
         public int RelationID { get; set; }
 
         [Required(ErrorMessage = "请填写内容")]

@@ -52,7 +52,7 @@ namespace PadCRM.Controllers
 
         public ActionResult Index(int ID, int page = 1)
         {
-            const int pageSize = 20;
+            const int pageSize = 10;
             var customers = CustomerService
                 .GetALL()
                 .Include(x => x.JobCate)
@@ -303,6 +303,29 @@ namespace PadCRM.Controllers
             return Json(result);
         }
 
+
+        public ActionResult Show(int ID)
+        {
+            var entity = CustomerService.Find(ID);
+            var model = new CustomerViewModel()
+            {
+                CompanyID = entity.CompanyID,
+                Address = entity.Address,
+                BirthDay = entity.BirthDay,
+                Email = entity.Email,
+                Favorite = entity.Favorite,
+                ID = entity.ID,
+                IsLeap = entity.IsLeap,
+                JobID = entity.JobID,
+                Jobs = entity.Jobs,
+                Mobile = entity.Mobile,
+                Name = entity.Name,
+                Phone = entity.Phone,
+                QQ = entity.QQ,
+                ReMark = entity.ReMark
+            };
+            return PartialView(model);
+        }
     }
 }
 

@@ -18,5 +18,7 @@ namespace PadCRM.Service.Interface
         void Delete(Department model);
 
         Department Find(int ID);
+
+        Department GetRoot(int ID);
     }
 }

@@ -29,11 +29,17 @@ namespace PadCRM.ViewModels
         [Display(Name = "人员姓名")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "请选择职业类型")]
-        [Display(Name = "职业类型")]
+        [Required(ErrorMessage = "请选择职位类型")]
+        [Display(Name = "职位类型")]
         [UIHint("DropDownList")]
         public int JobID { get; set; }
 
+        [Required(ErrorMessage = "请输入职位")]
+        [Display(Name = "职位")]
+        public string Jobs { get; set; }
+
+        [Required(ErrorMessage = "请输入手机号码")]
+        [RegularExpression(@"^(13[0-9]|15[0-9]|18[0-9])\d{8}$", ErrorMessage = "您输入的手机号码格式不正确.")]
         [Display(Name = "手机1")]
         public string Mobile { get; set; }
 
@@ -56,8 +62,7 @@ namespace PadCRM.ViewModels
         [Display(Name = "QQ")]
         public string QQ { get; set; }
 
-        [Display(Name = "职位")]
-        public string Jobs { get; set; }
+
 
         [Display(Name = "邮箱")]
         [RegularExpression(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "输入的电子邮箱格式不正确.")]

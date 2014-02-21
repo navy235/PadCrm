@@ -1,135 +1,112 @@
-﻿@{
+﻿@model List<Member>
+@{
     ViewBag.Title = "员工信息管理";
+
+    var departlist = (List<SelectListItem>)ViewBag.Data_DepartmentID;
+    var grouplist = (List<SelectListItem>)ViewBag.Data_GroupID;
 }
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
     <li class="active"><a href="@Url.Action("index")" >员工列表</a></li>
     <li><a href="@Url.Action("delete")" >已禁用的员工列表</a></li>
+    <li><a href="@Url.Action("import")" >用户数据导入</a></li>
 </ul>
 
-<!-- Tab panes -->
-<div class="tab-content">
+<div class="tool-bar">
+    <a class="btn btn-primary" href="@Url.Action("create")">新开帐号</a>
 
-    @(Html.Kendo().Grid<Member>()
-    .Name("MembersList")
-    .Columns(columns =>
-    {
-
-        columns.ForeignKey(p => p.DepartmentID, new SelectList((List<SelectListItem>)ViewBag.Data_DepartmentID, "value", "text")).Width(80);
-        columns.Template(@<text></text>).ClientTemplate("#=IsLeader ? \"是\" : \"否\"#").Width(60).Title("负责人");
-        columns.Bound(c => c.NickName).Width(80);
-        columns.Bound(c => c.Mobile).Width(110);
-        columns.Bound(c => c.Mobile1).Width(110);
-        columns.Bound(c => c.Email).Width(170);
-        columns.Bound(c => c.QQ);
-        columns.Bound(c => c.Address);
-        columns.ForeignKey(p => p.GroupID, new SelectList((List<SelectListItem>)ViewBag.Data_GroupID, "value", "text")).Width(90);
-
-        columns.Template(@<text></text>)
-            .ClientTemplate(@"<a class='btn btn-primary ' href='"
-            + Url.Action("Edit", "Member") + "/#=MemberID#'>编辑</a>"
-            + "<a class='btn btn-primary ' href='javascript:void(0);' onclick='Grid.shwoTracelog(this,\"#=MemberID#\");' '>跟单情况</a>"
-            + "<a class='btn btn-primary ' href='" + Url.Action("Resume", "Manager") + "/#=MemberID#' target='_blank'>查看简历</a>"
-            + "<a class='btn btn-primary ' href='" + Url.Action("index", "task") + "?ID=#=MemberID#' target='_blank'>任务安排</a>"
-            + "<a class='btn btn-primary  ' href='javascript:void(0);' onclick='Grid.deleteSingle(this,\"#=MemberID#\");' >禁用</a>"
-            ).Title("编辑").Width(400);
-    })
-      .ToolBar(toolbar =>
-    {
-        toolbar.Custom().Text("添加用户").Action("Create", "Member");
-        toolbar.Custom()
-            .Text("导出到Excel")
-            .HtmlAttributes(new { id = "export" })
-            .Url(Url.Action("Export", "Member"));
-
-    })
-    .Pageable()
-    .Sortable()
-    .Groupable()
-    .Scrollable()
-    .Filterable()
-    .HtmlAttributes(new { style = "height:500px;" })
-    .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(120)
-        .Model(model => model.Id(c => c.MemberID))
-        .Sort(sort => sort.Add(x => x.DepartmentID).Ascending())
-        .Read("Editing_Read", "Member")
-    )
-)
+    <a class="btn btn-primary" href="@Url.Action("export")">导出数据</a>
 </div>
+
+<div class="table-responsive " id="tabcontainer">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>部门</th>
+                <th>负责人</th>
+                <th>姓名</th>
+                <th>手机1</th>
+                <th>手机2</th>
+                <th>Email</th>
+                <th>QQ</th>
+                <th>地址</th>
+                <th>群组</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@departlist.Single(x => x.Value == item.DepartmentID.ToString()).Text
+                    </td>
+
+                    <td>@(item.IsLeader ? "是" : "否")</td>
+                    <td>@item.NickName</td>
+                    <td>@item.Mobile</td>
+                    <td>@item.Mobile1</td>
+
+                    <td>@item.Email</td>
+                    <td>@item.QQ</td>
+
+                    <td>@item.Address</td>
+                    <td>@grouplist.Single(x => x.Value == item.GroupID.ToString()).Text
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">操作</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a class=" btn-show-tracelog" data-id="@item.MemberID"  href="javascript:void(0);">跟单情况</a></li>
+                                <li><a class=" btn-show-resume" data-id="@item.MemberID" href="@Url.Action("resume", "manager", new { ID = item.MemberID })" target="_blank">查看简历</a></li>
+                                <li><a class="" href="@Url.Action("index", "task", new { ID = item.MemberID })">任务安排</a></li>
+                                <li class="divider"></li>
+                                <li><a class="" href="@Url.Action("Edit", "Member", new { ID = item.MemberID })">编辑</a></li>
+                                <li><a class=" btn-ban-user" data-id="@item.MemberID"  href="javascript:void(0);">禁用</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "manager")
+</div>
+<!-- Tab panes -->
 
 @section scripts{
     <script type="text/javascript">
-        var Grid = {
-            id: 'MembersList',
-            deleteUrl: '@Url.Action("setdelete", "Member")',
-            addSpinner: function (element) {
-                var $spinner = $('<img class="ajax-working" src="@Url.Content("~/Content/images/min-loading.gif")" title="work...." />').appendTo($(element));
-                $(element).addClass('disabled');
-            },
-            removeSpinner: function (element) {
-                $(element).find('.ajax-working').remove();
-                $(element).removeClass('disabled');
-            },
-            checkAll: function (ele) {
-                var self = Grid;
-                var state = $(ele).is(':checked');
-                $('[name="ID_check"]').attr('checked', state);
-            },
-            getCheckIds: function () {
-                return $.map($('[name="ID_check"]:checked'), function (item) { return $(item).val(); }).join(',');
-            },
-            deleteSingle: function (element, id) {
-                var self = Grid;
-                var Ids = id;
-                self.excute(element, Grid.deleteUrl, Ids, true);
-            },
-            shwoTracelog: function (element, id) {
-                var self = Grid;
-                var Ids = id;
+
+        $(function () {
+
+            $('#tabcontainer').on('click', 'a.btn-show-tracelog', shwoTracelog);
+
+            $('#tabcontainer').on('click', 'a.btn-ban-user', deleteSingle);
+
+            $('#logwindow').on('click', 'a.page-link', showpage);
+
+            function deleteSingle(e) {
+                var id = $(e.currentTarget).data('id');
+                $.post('@Url.Action("setdelete", "Member")', { ids: id }, function (res) {
+                    Maitonn.JHelper.showMessage(res);
+                    window.location.reload();
+                })
+            }
+
+            function shwoTracelog(e) {
+                var id = $(e.currentTarget).data('id');
                 $.get('@Url.Action("viewtrace", "tracelog")', { ID: id }, function (res) {
                     $('#logwindow').data('kendoWindow')
                         .content(res)
                         .center().open();
                 })
-            },
-            excute: function (element, url, Ids, isDelete) {
-                if ($(element).hasClass('disabled'))
-                    return false;
-                var self = Grid;
-                if (Ids) {
-                    if (isDelete) {
-                        if (!confirm("确认禁用该用户?")) {
-                            return false;
-                        }
-                    }
-                    self.addSpinner(element);
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: { ids: Ids },
-                        success: function (res) {
-                            Maitonn.JHelper.showMessage(res);
-                            if (res) {
-                                var grid = $("#" + self.id).data("kendoGrid");
-                                grid.dataSource.read();
-                                grid.refresh();
-                            }
-                        },
-                        complete: function () {
-                            self.removeSpinner(element);
-                        }
-                    })
-                } else {
-                    alert('请选择要处理的信息');
-                    return false;
-                }
             }
-        }
-        $(function () {
-            $('#logwindow').on('click', 'a.page-link', showpage);
-
             function showpage(e) {
                 e.preventDefault();
                 var target = $(e.currentTarget);

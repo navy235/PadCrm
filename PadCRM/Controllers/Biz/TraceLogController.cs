@@ -59,7 +59,7 @@ namespace PadCRM.Controllers
         /// <returns></returns>
         public ActionResult Index(int ID, int page = 1)
         {
-            const int pageSize = 20;
+            const int pageSize = 10;
             var logs = TraceLogService.GetALL()
                 .Include(x => x.RelationCate)
                 .Where(x => x.CompanyID == ID)
@@ -85,7 +85,7 @@ namespace PadCRM.Controllers
         /// <returns></returns>
         public ActionResult My(int page = 1)
         {
-            const int pageSize = 1;
+            const int pageSize = 10;
             var model = CustomerCompanyService.GetALL().Include(x => x.AddMember)
                 .Include(x => x.TraceLog)
                 .Where(x => x.AddUser == CookieHelper.MemberID)
@@ -141,7 +141,7 @@ namespace PadCRM.Controllers
                         ID = o.ID,
                         AddTime = o.AddTime,
                         UserName = o.AddMember.NickName
-                    }).OrderByDescending(o => o.AddTime).ToList();
+                    }).OrderByDescending(o => o.AddTime).Take(10).ToList();
                 item.TraceLogs = traceLogs;
             }
 
@@ -150,7 +150,7 @@ namespace PadCRM.Controllers
 
         public ActionResult ViewTrace(int ID, int page = 1)
         {
-            const int pageSize = 1;
+            const int pageSize = 10;
             var model = CustomerCompanyService.GetALL().Include(x => x.AddMember)
                 .Include(x => x.TraceLog)
                 .Where(x => x.AddUser == ID)
@@ -206,7 +206,7 @@ namespace PadCRM.Controllers
                         AddTime = o.AddTime,
                         UserName = o.AddMember.NickName
 
-                    }).OrderByDescending(o => o.AddTime).ToList();
+                    }).OrderByDescending(o => o.AddTime).Take(10).ToList();
                 item.TraceLogs = traceLogs;
             }
 
@@ -245,7 +245,7 @@ namespace PadCRM.Controllers
                 {
                     TraceLogService.Create(model);
 
-                    CustomerCompanyService.ChangeRelation(model.CompanyID, model.RelationID);
+                    //CustomerCompanyService.ChangeRelation(model.CompanyID, model.RelationID);
                     result.Message = "添加跟单日志成功！";
                     return RedirectToAction("details", "customercompany", new { id = model.CompanyID });
                 }
@@ -347,7 +347,7 @@ namespace PadCRM.Controllers
                 try
                 {
                     TraceLogService.Create(model);
-                    CustomerCompanyService.ChangeRelation(model.CompanyID, model.RelationID);
+                    //CustomerCompanyService.ChangeRelation(model.CompanyID, model.RelationID);
                     result.Message = "添加跟单日志成功！";
                 }
                 catch (Exception ex)
@@ -362,7 +362,7 @@ namespace PadCRM.Controllers
         }
 
 
-        public ActionResult AjaxEdit(int ID)
+        public ActionResult AjaxEdit(int ID, int Status = 0)
         {
             var entity = TraceLogService.Find(ID);
             var model = new TraceLogViewModel()
@@ -374,6 +374,7 @@ namespace PadCRM.Controllers
                 Content = entity.Content
             };
             ViewBag.Data_CompanyID = ID;
+            ViewBag.Data_Status = Status;
             ViewBag.Data_RelationID = Utilities.GetSelectListData(RelationCateService.GetALL(),
                 x => x.ID, x => x.CateName,
                 model.RelationID,

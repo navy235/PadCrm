@@ -48,28 +48,51 @@ namespace PadCRM.Controllers
             this.MediaRequireService = MediaRequireService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            ViewBag.Data_GroupID = Utilities.GetSelectListData(GroupService.GetALL()
-             , x => x.ID, x => x.Name, true);
+            const int pageSize = 20;
             ViewBag.Data_DepartmentID = Utilities.GetSelectListData(DepartmentService.GetALL()
                 , x => x.ID, x => x.Name, true);
-            return View();
-        }
-
-        public ActionResult Editing_Read([DataSourceRequest] DataSourceRequest request)
-        {
             var user = MemberService.Find(CookieHelper.MemberID);
-
             var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
             var members = MemberService.GetKendoALL()
                 .Where(x => x.Status > (int)MemberCurrentStatus.Delete && x.MemberID != CookieHelper.MemberID);
             if (!hasPermission)
             {
                 var memberIds = MemberService.GetMemberIDs(user.DepartmentID);
-                members = members.Where(x => memberIds.Contains(x.MemberID));
+                var models = members.Where(x => memberIds.Contains(x.MemberID))
+                   .OrderBy(x => x.DepartmentID)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize).ToList();
+
+                var totalCount = memberIds.Count;
+    
+                ViewBag.PageInfo = new PagingInfo()
+                {
+                    TotalItems = totalCount,
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize
+                };
+
+                return View(models);
             }
-            return Json(members.ToDataSourceResult(request));
+            else
+            {
+                var totalCount = MemberService.GetKendoALL()
+                .Count(x => x.Status > (int)MemberCurrentStatus.Delete && x.MemberID != CookieHelper.MemberID);
+                ViewBag.PageInfo = new PagingInfo()
+                {
+                    TotalItems = totalCount,
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize
+                };
+                var models = members.OrderBy(x => x.MemberID)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize).ToList();
+                return View(models);
+            }
+
+
         }
 
         public ActionResult Create()

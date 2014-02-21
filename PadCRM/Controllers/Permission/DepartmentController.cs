@@ -23,11 +23,14 @@ namespace PadCRM.Controllers
         //
         // GET: /Area/
         private IDepartmentService DepartmentService;
+        private IMemberService MemberService;
         public DepartmentController(
-             IDepartmentService _DepartmentService
+             IDepartmentService _DepartmentService,
+            IMemberService MemberService
           )
         {
             DepartmentService = _DepartmentService;
+            this.MemberService = MemberService;
         }
 
 
@@ -101,6 +104,10 @@ namespace PadCRM.Controllers
             model.Level = entity.Level;
             model.Code = entity.Code;
             model.PID = entity.PID;
+            if (MemberService.GetALL().Any(x => x.MemberID == entity.LeaderID))
+            {
+                model.Leader = MemberService.Find(entity.LeaderID).NickName;
+            }
             ViewBag.Data_PID = GetSelectList(model.PID.HasValue ? model.PID.Value : 0);
             return View(model);
         }
@@ -120,7 +127,7 @@ namespace PadCRM.Controllers
                     entity.ID = model.ID;
                     entity.Name = model.Name;
                     entity.Description = model.Description;
-                
+
                     entity.Level = model.Level;
                     entity.PID = model.PID;
                     entity.Code = model.Code;

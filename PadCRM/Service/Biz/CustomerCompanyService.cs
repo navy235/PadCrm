@@ -106,8 +106,8 @@ namespace PadCRM.Service
             entity.LastUser = CookieHelper.MemberID;
             entity.Phone = model.Phone;
 
-            entity.Finance = model.Finance;
-            entity.FinancePhone = model.FinancePhone;
+            //entity.Finance = model.Finance;
+            //entity.FinancePhone = model.FinancePhone;
             entity.ProxyName = model.ProxyName;
             entity.ProxyPhone = model.ProxyPhone;
             entity.ProxyAddress = model.ProxyAddress;
@@ -156,8 +156,7 @@ namespace PadCRM.Service
             entity.Phone = model.Phone;
             entity.RelationID = model.RelationID;
             entity.IsCommon = false;
-            entity.Finance = model.Finance;
-            entity.FinancePhone = model.FinancePhone;
+
             entity.ProxyName = model.ProxyName;
             entity.ProxyPhone = model.ProxyPhone;
             entity.ProxyAddress = model.ProxyAddress;
@@ -200,6 +199,18 @@ namespace PadCRM.Service
             list.Distinct();
 
             return list;
+        }
+
+
+        public void Replace(int CompanyID, int MemberID)
+        {
+            var target = Find(CompanyID);
+            db.Attach<CustomerCompany>(target);
+            target.AddUser = MemberID;
+            target.AddTime = DateTime.Now;
+            target.LastUser = MemberID;
+            target.LastTime = DateTime.Now;
+            db.Commit();
         }
     }
 }

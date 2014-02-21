@@ -15,13 +15,15 @@
                     <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i)">
                         @item.Name
                     </a>
-                    <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })" class="pull-right">详情</a>
+                    <span class="pull-right">当前只显示最近10条 <a  href="@Url.Action("details", "customercompany", new { ID = item.ID })">查看更多</a></span>
                 </h4>
             </div>
             <div id="sec_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
                 <div class="panel-body">
                     <div class="tool-bar">
                         <a class="btn btn-primary btn-add-planlog" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">添加计划日志</a>
+
+
                     </div>
                     <div class="table table-responsive">
                         <table class="table table-hover">

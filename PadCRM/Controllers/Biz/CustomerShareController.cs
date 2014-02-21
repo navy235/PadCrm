@@ -81,14 +81,17 @@ namespace PadCRM.Controllers
                 var idlist = Utilities.GetIdList(ids);
                 foreach (var id in idlist)
                 {
-                    var shareitem = new CustomerShare()
+                    if (!CustomerShareService.GetALL().Any(x => x.MemberID == id && x.CompanyID == companyId))
                     {
-                        MemberID = id,
-                        AddTime = DateTime.Now,
-                        AddUser = CookieHelper.MemberID,
-                        CompanyID = companyId
-                    };
-                    CustomerShareService.Create(shareitem);
+                        var shareitem = new CustomerShare()
+                        {
+                            MemberID = id,
+                            AddTime = DateTime.Now,
+                            AddUser = CookieHelper.MemberID,
+                            CompanyID = companyId
+                        };
+                        CustomerShareService.Create(shareitem);
+                    }
                 }
                 result.Message = "设置共享人员成功！";
             }

@@ -1,0 +1,33 @@
+﻿@model List<TraceLog>
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>公司名称</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>内容</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="customercolor">
+                    <td>
+                        <a href="@Url.Action("details", new { id = item.CompanyID })">@item.CustomerCompany.Name</a></td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Content</td>
+                    <td>
+                        <a class="btn btn-primary btn-delete-single" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">删除</a>
+                        <a class="btn btn-primary btn-edit-single" data-id="@item.ID" data-cssclass="planlog" href="javascript:void(0);">编辑</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "search")
+</div>
