@@ -30,6 +30,7 @@ namespace PadCRM.Controllers.Ajax
         private IPermissionsService PermissionsService;
         private IJobTitleCateService JobTitleCateService;
         private IJobCateService JobCateService;
+        private IContractCateService ContractCateService;
         public AjaxServiceController(
             IIndustryCateService IndustryCateService
             , ICityCateService CityCateService
@@ -41,6 +42,7 @@ namespace PadCRM.Controllers.Ajax
             , IPermissionsService PermissionsService
             , IJobTitleCateService JobTitleCateService
             , IJobCateService JobCateService
+            , IContractCateService ContractCateService
             )
         {
             this.IndustryCateService = IndustryCateService;
@@ -53,6 +55,7 @@ namespace PadCRM.Controllers.Ajax
             this.PermissionsService = PermissionsService;
             this.JobTitleCateService = JobTitleCateService;
             this.JobCateService = JobCateService;
+            this.ContractCateService = ContractCateService;
         }
 
 
@@ -60,6 +63,7 @@ namespace PadCRM.Controllers.Ajax
         {
             ViewBag.managerPermission = CookieHelper.CheckPermission("manager");
             ViewBag.punishPermission = CookieHelper.CheckPermission("punish");
+            ViewBag.caiwuPermission = CookieHelper.CheckPermission("caiwu");
             ViewBag.bossPermission = CookieHelper.CheckPermission("boss");
             return PartialView();
         }
@@ -134,6 +138,7 @@ namespace PadCRM.Controllers.Ajax
             var industryName = string.Join("-", industrys);
             return Content(industryName);
         }
+
         public ActionResult RelationIDName(int key)
         {
             return Content(RelationCateService.Find(key).CateName);
@@ -149,6 +154,10 @@ namespace PadCRM.Controllers.Ajax
             return Content(CustomerCateService.Find(key).CateName);
         }
 
+        public ActionResult ContractCateIDName(int key)
+        {
+            return Content(ContractCateService.Find(key).CateName);
+        }
 
         public ActionResult CustomerName(string text, int ID = 0)
         {
@@ -171,6 +180,35 @@ namespace PadCRM.Controllers.Ajax
             if (!string.IsNullOrEmpty(text))
             {
                 customers = customers.Where(p => p.Name.Contains(text));
+            }
+            if (ID != 0)
+            {
+                customers = customers.Where(p => p.ID != ID);
+            }
+            return Json(customers, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult BrandName(string text, int ID = 0)
+        {
+            var customers = CustomerCompanyService.GetALL().Select(x =>
+                new CustomerCompanyViewModel()
+                {
+                    ID = x.ID,
+                    Address = x.Address,
+                    BrandName = x.BrandName,
+                    CityCode = x.CityValue,
+                    Description = x.Description,
+                    Fax = x.Fax,
+                    IndustryCode = x.IndustryValue,
+                    CustomerCateID = x.CustomerCateID,
+                    RelationID = x.RelationID,
+                    Name = x.Name,
+                    Phone = x.Phone
+                }
+                );
+            if (!string.IsNullOrEmpty(text))
+            {
+                customers = customers.Where(p => p.BrandName.Contains(text));
             }
             if (ID != 0)
             {
@@ -269,13 +307,13 @@ namespace PadCRM.Controllers.Ajax
         }
 
 
-
-
         public ActionResult CheckReplaceable(int ID)
         {
             var editable = CustomerCompanyService.IsReplaceable(ID);
             return Json(editable, JsonRequestBehavior.AllowGet);
         }
+
+       
 
         public void GetValidateCode()
         {
@@ -290,6 +328,16 @@ namespace PadCRM.Controllers.Ajax
                 status = Session["VCode"].ToString().Equals(vcode, StringComparison.OrdinalIgnoreCase);
             }
             return Json(status, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetForm(int ID)
+        {
+            FileStream fs = new FileStream(Server.MapPath("~/App_Data/templates/huwai.html"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamReader sr = new StreamReader(fs);
+            var html = sr.ReadToEnd();
+            sr.Close();
+            return Content(html);
         }
 
 

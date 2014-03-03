@@ -21,6 +21,8 @@ namespace PadCRM.Models
 
         public IDbSet<SolarData> SolarData { get; set; }
 
+        public IDbSet<TcNotice> TcNotice { get; set; }
+
         public IDbSet<LunarCalenderContrastTable> LunarCalenderContrastTable { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -52,6 +54,13 @@ namespace PadCRM.Models
             .WithMany(pc => pc.ChildCates)
             .HasForeignKey(c => c.PID)
             .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ContractCate>()
+            .HasOptional(c => c.PCate)
+            .WithMany(pc => pc.ChildCates)
+            .HasForeignKey(c => c.PID)
+            .WillCascadeOnDelete(false);
+
 
             #endregion
 
@@ -148,6 +157,32 @@ namespace PadCRM.Models
                  .HasForeignKey(o => o.CompanyID)
                  .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<ContractInfo>()
+                 .HasRequired(m => m.ContractCate)
+                 .WithMany(c => c.ContractInfo)
+                 .HasForeignKey(o => o.ContractCateID)
+                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ContractInfo>()
+                .HasRequired(m => m.Signer)
+                .WithMany(c => c.ContractInfo)
+                .HasForeignKey(o => o.SignerID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Department>()
+             .HasMany(b => b.TcNotice)
+             .WithMany(c => c.Department)
+             .Map
+             (
+                 m =>
+                 {
+                     m.MapLeftKey("DepartmentID");
+                     m.MapRightKey("TcNoticeID");
+                     m.ToTable("Department_TcNotice");
+                 }
+             );
+
+
             #endregion
 
             #region permission
@@ -156,9 +191,6 @@ namespace PadCRM.Models
               .WithMany(pc => pc.Member)
               .HasForeignKey(c => c.DepartmentID)
               .WillCascadeOnDelete(false);
-
-
-
 
             modelBuilder.Entity<Member>()
              .HasRequired(c => c.JobTitleCate)

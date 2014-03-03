@@ -11,6 +11,7 @@
         <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
     }
     <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+    <li><a href="@Url.Action("Invalid")" >无效的客户信息</a></li>
     <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
     <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
 </ul>
@@ -45,6 +46,12 @@
             function getSearch() {
                 $('.btn-submit').click();
             }
+
+            $('#IsInTime').on('click', function () {
+                var enable = $('#IsInTime').prop('checked');
+                $('#StartTime').data('kendoDatePicker').enable(enable);
+                $('#EndTime').data('kendoDatePicker').enable(enable);
+            })
 
             //getSearch();
 

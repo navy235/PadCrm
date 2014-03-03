@@ -20,8 +20,9 @@
       var that = this;
       var id = that.attr('id');
       var isInited = false;
+      $('#' + id).data('selectUser', that);
       var wd = $("#" + id + ps.windowid).data("kendoWindow");
-      $('#' + id + ps.selectid).on('click', ps.onSelected)
+      $('#' + id + ps.selectid).on('click', $.proxy(ps.onSelected, that))
       var treeview = null;
       var singValue = null;
       function binding() {

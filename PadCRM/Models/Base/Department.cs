@@ -23,6 +23,7 @@ namespace PadCRM.Models
             this.Permissions = new HashSet<Permissions>();
             this.Member = new HashSet<Member>();
             this.Notice = new HashSet<Notice>();
+            this.TcNotice = new HashSet<TcNotice>();
             this.MediaRequire = new HashSet<MediaRequire>();
             this.ContactRequire = new HashSet<ContactRequire>();
         }
@@ -60,6 +61,8 @@ namespace PadCRM.Models
         public virtual ICollection<Member> Member { get; set; }
 
         public virtual ICollection<Notice> Notice { get; set; }
+
+        public virtual ICollection<TcNotice> TcNotice { get; set; }
 
         public virtual ICollection<MediaRequire> MediaRequire { get; set; }
 

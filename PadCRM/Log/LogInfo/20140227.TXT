@@ -1,0 +1,15 @@
+
+ ExLogTime :2014-02-27 14:02:13,773 [8] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加客户类别信息成功 
+
+ ExLogTime :2014-02-27 16:46:45,217 [40] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑提成公告成功 
+
+ ExLogTime :2014-02-27 16:47:11,498 [40] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加提成公告成功 

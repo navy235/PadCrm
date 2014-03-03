@@ -8,14 +8,14 @@
             <li><a href="@Url.Action("create", "manager")">新开帐号</a></li>
             <li><a href="@Url.Action("index", "notice")">部门公告</a></li>
             <li><a href="@Url.Action("index", "fileshare")">文件共享</a></li>
-            <li><a href="@Url.Action("resolve", "manager")">财务合同处理</a></li>
+            <li><a href="@Url.Action("index", "contractinfo")">合同查询</a></li>
             <li><a href="@Url.Action("Mediarequire", "manager")">策略单处理</a></li>
         </ul>
     </li>
     <!--营销部经理级别end-->
 }
 
-<!--人事部经理级别start-->
+
 @if (ViewBag.punishPermission)
 {
     <li class="dropdown ">
@@ -24,7 +24,17 @@
             <li><a href="@Url.Action("index", "punish")">行政功能</a></li>
         </ul>
     </li>
-    <!--人事部经理级别end-->
+}
+
+@if (ViewBag.caiwuPermission)
+{
+    <li class="dropdown ">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">财务管理 <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="@Url.Action("wait", "contractinfo")">财务合同处理</a></li>
+            <li><a href="@Url.Action("index", "tcnotice")">提成公告管理</a></li>
+        </ul>
+    </li>
 }
 
 @if (ViewBag.bossPermission)
@@ -63,6 +73,7 @@
             <li><a href="@Url.Action("index", "relationcate")">客户关系类型管理</a></li>
             <li><a href="@Url.Action("index", "rulecate")">行政奖惩类型管理</a></li>
             <li><a href="@Url.Action("index", "filecate")">文件共享类型管理</a></li>
+            <li><a href="@Url.Action("index", "contractcate")">合同类型管理</a></li>
         </ul>
     </li>
 }

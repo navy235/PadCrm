@@ -71,11 +71,12 @@ namespace PadCRM.Service
             {
                 Task entity = new Task();
                 entity.Start = model.Start;
-                entity.End = model.End;
-                entity.EndTimeZone = model.End.ToString("yyyy-MM-dd");
+
+                entity.End = model.Start.AddHours(8);
+                entity.EndTimeZone = entity.End.ToString("yyyy-MM-dd");
                 entity.StartTimeZone = model.Start.ToString("yyyy-MM-dd");
 
-                entity.Title = model.Title;
+                //entity.Title = model.Title;
                 entity.Description = model.Description;
                 entity.MemberID = model.MemberID;
                 entity.AddUser = CookieHelper.MemberID;
@@ -99,10 +100,10 @@ namespace PadCRM.Service
             Task entity = Find(model.TaskID);
             db.Attach<Task>(entity);
             entity.Start = model.Start;
-            entity.End = model.End;
-            entity.EndTimeZone = model.End.ToString("yyyy-MM-dd");
+            entity.End = model.Start.AddHours(8);
+            entity.EndTimeZone = entity.End.ToString("yyyy-MM-dd");
             entity.StartTimeZone = model.Start.ToString("yyyy-MM-dd");
-            entity.Title = model.Title;
+            //entity.Title = model.Title;
             entity.Description = model.Description;
             if (model.MemberID != CookieHelper.MemberID)
             {

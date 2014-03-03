@@ -1,0 +1,59 @@
+﻿@model List<CustomerCompany>
+@{
+    ViewBag.Title = "无效的客户信息";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li><a href="@Url.Action("index")" >我的客户信息</a></li>
+    <li><a href="@Url.Action("share")" >共享的客户信息</a></li>
+    <li><a href="@Url.Action("delete")" >已删除的客户信息</a></li>
+    <li><a href="@Url.Action("common")" >公有的客户信息</a></li>
+    <li class="active"><a href="@Url.Action("Invalid")" >无效的客户信息</a></li>
+    <li><a href="@Url.Action("tracesearch")" >跟单日志查询</a></li>
+    <li><a href="@Url.Action("plansearch")" >计划日志查询</a></li>
+</ul>
+<div class="tool-bar"></div>
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>客户ID</th>
+                <th>公司名称</th>
+                <th>品牌名称</th>
+                <th>城市</th>
+                <th>客户分类</th>
+                <th>传真</th>
+                <th>电话</th>
+                <th>地址</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="customercolor@(item.CustomerCateID)" id="tr@(item.ID)">
+                    <td>
+                        @item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.BrandName</td>
+                    <td>
+                        <div data-showcontent="@Url.Action("CityName", "ajaxService", new { value = item.CityValue })"></div>
+                    </td>
+                    <td>@item.CustomerCate.CateName</td>
+                    <td>@item.Fax</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.AddMember.NickName</td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "invalid")
+</div>

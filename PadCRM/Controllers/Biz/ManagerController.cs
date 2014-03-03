@@ -54,7 +54,7 @@ namespace PadCRM.Controllers
             ViewBag.Data_DepartmentID = Utilities.GetSelectListData(DepartmentService.GetALL()
                 , x => x.ID, x => x.Name, true);
             var user = MemberService.Find(CookieHelper.MemberID);
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             var members = MemberService.GetKendoALL()
                 .Where(x => x.Status > (int)MemberCurrentStatus.Delete && x.MemberID != CookieHelper.MemberID);
             if (!hasPermission)

@@ -12,18 +12,22 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i)">
+                    <a data-toggle="collapse"  data-parent="#accordion1" href="#sec_collapse@(i + cssClass)">
                         @item.Name
                     </a>
+                    @if (cssClass == "category1" && item.ContractInfoID != 0)
+                    {
+                        <a class="pull-right" href="@Url.Action("Details", new { ID = item.ContractInfoID })">查看合同详情</a>
+                    }
                 </h4>
             </div>
-            <div id="sec_collapse@(i)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
+            <div id="sec_collapse@(i + cssClass)" class="panel-collapse collapse  @(i == 0 ? "in" : "")">
                 <div class="panel-body">
                     <div class="tool-bar">
                         @if (cssClass != "category1")
                         {
-                            <a class="btn btn-primary btn-add-contactrequire" data-id="@item.ID" data-cssclass="category0" href="javascript:void(0);">追加回复</a>
-                            <a class="btn btn-primary btn-change-status" data-id="@item.ID" data-cssclass="category0" href="javascript:void(0);">更改为已处理</a>
+                            <a class="btn btn-primary btn-add-contactrequire" data-id="@item.ID" data-cssclass="category0" href="javascript:void(0);">回复</a>@*
+                            <a class="btn btn-primary btn-change-status" data-id="@item.ID" data-cssclass="category0" href="javascript:void(0);">更改为已处理</a>*@
                         }
                     </div>
                     <div class="table table-responsive">
@@ -33,7 +37,7 @@
                                     <th>录入者</th>
                                     <th>录入时间</th>
                                     <th>内容</th>
-                                    <th>合同附件</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,14 +49,7 @@
                                         </td>
                                         <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
                                         <td>@log.Description</td>
-                                        <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
-                                            { 
-                                            <div>暂无</div>
-                                            }
-                                            else
-                                            {
-                                            <a href="@log.AttachmentPath">下载合同附件</a>
-                                            }</th>
+
                                     </tr>
                                 }
                             </tbody>

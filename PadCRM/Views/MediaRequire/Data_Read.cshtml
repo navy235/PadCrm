@@ -49,7 +49,7 @@
                                             <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = log.ResolveID })"></div>
                                         </td>
 
-                                        <td>@log.Description</td>
+                                        <td>@Html.Raw(log.Description)</td>
                                         <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
                                             { 
                                             <div>暂无</div>

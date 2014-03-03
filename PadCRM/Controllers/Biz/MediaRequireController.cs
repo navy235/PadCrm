@@ -163,7 +163,7 @@ namespace PadCRM.Controllers
             {
                 CompanyID = ID,
                 SenderID = CookieHelper.MemberID,
-                Name = "媒介策略请求:" + entity.Name,
+                Name = "策略单请求:" + entity.Name,
                 IsRoot = 1
 
             };
@@ -172,6 +172,7 @@ namespace PadCRM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult AjaxCreate(MediaRequireViewModel model)
         {
             ServiceResult result = new ServiceResult();
@@ -218,6 +219,7 @@ namespace PadCRM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult AjaxAppend(MediaRequireAppendViewModel model)
         {
             ServiceResult result = new ServiceResult();

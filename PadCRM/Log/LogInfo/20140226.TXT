@@ -1,0 +1,30 @@
+
+ ExLogTime :2014-02-26 11:32:50,090 [27] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-26 11:33:06,922 [25] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-26 11:33:23,647 [27] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑群组成功 
+
+ ExLogTime :2014-02-26 11:34:53,039 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加提成公告成功 
+
+ ExLogTime :2014-02-26 11:42:28,356 [8] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑提成公告成功 
+
+ ExLogTime :2014-02-26 13:44:13,893 [11] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑提成公告成功 

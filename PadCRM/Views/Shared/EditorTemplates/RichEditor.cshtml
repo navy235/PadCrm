@@ -1,6 +1,15 @@
 @model  string
 @{
     var name = ViewData.TemplateInfo.GetFullHtmlFieldName("");
+    var width = 600;
+    var height = 400;
+    if (ViewData.ModelMetadata.AdditionalValues.ContainsKey("Param"))
+    {
+        var param = ViewData.ModelMetadata.AdditionalValues["Param"].ToString().Split(',');
+        width = Convert.ToInt32(param[0]);
+        height = Convert.ToInt32(param[1]);
+    }
+  
 }
 @Html.TextAreaFor(m => m)
 <link type="text/css" href="~/Scripts/ueditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
@@ -9,8 +18,10 @@
 <script type="text/javascript">
     $(function () {
         var ue = UM.getEditor('@name', {
-            initialFrameWidth: 600,
-            initialFrameHeight: 400
+            initialFrameWidth: @width,
+            initialFrameHeight: @height,
+            autoHeightEnabled: false
         })
+        $('#@(name)').data('editor',ue);
     })
 </script>

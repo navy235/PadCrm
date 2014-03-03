@@ -1,0 +1,97 @@
+﻿@model List<ContactRequire>
+@{
+    ViewBag.Title = "待处理";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li><a href="@Url.Action("index")" >合同查询</a></li>
+    <li><a href="@Url.Action("Receivables")" >收款查询</a></li>
+    @if (CookieHelper.CheckPermission("caiwu"))
+    {
+        <li class="active"><a href="@Url.Action("wait")" >待处理</a></li>
+    }
+</ul>
+
+<div class="tool-bar"></div>
+<div class="table-responsive">
+    <table class="table  table-hover">
+        <thead>
+            <tr>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>内容</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="tr@(item.ID)">
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>@item.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <a class="btn btn-primary btn-add-contract" href="javascript:void(0);" data-id="@item.ID" data-companyid="@item.CompanyID" data-senderid="@item.SenderID">处理</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "search")
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            $('.btn-add-contract').on('click', function (e) {
+                var target = $(e.currentTarget);
+                var data = {
+                    RequireID: target.data('id'),
+                    CompanyID: target.data('companyid'),
+                    SenderID: target.data('senderid')
+                }
+                var url = "@Url.Action("ajaxCreate")";
+
+                if ($('#SignerID_window')[0]) {
+                    $('#SignerID_window').remove();
+                }
+
+                getForm(url, data);
+            })
+
+            Maitonn.JHelper.onDataBoundShowContent();
+        })
+
+        function getForm(url, data) {
+            var kw = $('#kwindow').data('kendoWindow');
+            $.get(url, data, function (html) {
+                kw.content(html);
+                kw.title($('form').attr('formtitle'));
+                kw.currentID = data.RequireID;
+                $.validator.unobtrusive.parse(document);
+                setTimeout(function () {
+                    kw.center().open();
+                }, 500)
+            })
+        }
+
+
+        function ajaxFormSuccess(res) {
+            Maitonn.JHelper.showMessage(res);
+            if (res.Success) {
+                var kw = $('#kwindow').data('kendoWindow');
+                kw.close();
+                $('#tr' + kw.currentID).remove();
+            }
+        }
+    </script>
+}
+@(Html.Kendo().Window().Name("kwindow").Title("表单").Modal(true).Visible(false).Width(650))
+

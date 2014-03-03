@@ -1,0 +1,27 @@
+﻿@model TcNotice
+
+<div class="notice-container">
+    <h4 style="text-align: center">@Model.Name</h4>
+    <div class="notice-content">
+        @Html.Raw(Model.Content)
+
+        @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+        {
+            <div class="attachment">
+
+                <a href="@Model.AttachmentPath">相关附件</a>
+            </div>
+        }
+    </div>
+    <div class="notice-footer">
+        <div class="notice-department">
+            <ul>
+                @foreach (var depart in Model.Department)
+                { 
+                    <li>@depart.Name</li>
+                }
+            </ul>
+        </div>
+        <div class="notice-addtime">@Model.AddTime.ToString("yyyy-MM-dd")</div>
+    </div>
+</div>

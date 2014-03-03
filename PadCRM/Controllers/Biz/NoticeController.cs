@@ -49,7 +49,7 @@ namespace PadCRM.Controllers
         public ActionResult Data_Read([DataSourceRequest] DataSourceRequest request)
         {
             var model = NoticeService.GetKendoALL();
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);
@@ -61,7 +61,7 @@ namespace PadCRM.Controllers
         public ActionResult Create()
         {
             var list = DepartmentService.GetALL();
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);
@@ -103,7 +103,7 @@ namespace PadCRM.Controllers
 
             }
             var list = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);
@@ -119,7 +119,7 @@ namespace PadCRM.Controllers
         public ActionResult Edit(int ID)
         {
             var list = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);
@@ -170,7 +170,7 @@ namespace PadCRM.Controllers
 
             }
             var list = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);

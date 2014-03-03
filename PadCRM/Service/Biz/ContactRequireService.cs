@@ -65,14 +65,14 @@ namespace PadCRM.Service
             ContactRequire entity = new ContactRequire();
             entity.AddTime = DateTime.Now;
             entity.AddUser = CookieHelper.MemberID;
-            entity.AttachmentPath = model.AttachmentPath;
+            //entity.AttachmentPath = model.AttachmentPath;
             entity.CompanyID = model.CompanyID;
             entity.Name = model.Name;
             entity.Description = model.Description;
             entity.DepartmentID = model.DepartmentID;
             entity.ResolveID = model.ResolveID;
             entity.SenderID = model.SenderID;
-            entity.AttachmentPath = model.AttachmentPath;
+           
             entity.IsRoot = model.IsRoot;
             entity.PID = model.PID;
             entity.Status = model.Status;
@@ -85,7 +85,7 @@ namespace PadCRM.Service
         {
             ContactRequire entity = Find(model.ID);
             db.Attach<ContactRequire>(entity);
-            entity.AttachmentPath = model.AttachmentPath;
+        
             entity.CompanyID = model.CompanyID;
             entity.Name = model.Name;
             entity.Description = model.Description;
@@ -95,7 +95,7 @@ namespace PadCRM.Service
             entity.IsRoot = model.IsRoot;
             entity.Status = model.Status;
             entity.PID = model.PID;
-            entity.AttachmentPath = model.AttachmentPath;
+          
             db.Commit();
             return entity;
         }

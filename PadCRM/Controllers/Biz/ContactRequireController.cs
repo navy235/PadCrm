@@ -29,12 +29,14 @@ namespace PadCRM.Controllers
         private IDepartmentService DepartmentService;
         private IContactRequireService ContactRequireService;
         private IPermissionsService PermissionsService;
+        private IContractInfoService ContractInfoService;
         public ContactRequireController(
           IMemberService MemberService
             , IGroupService GroupService
             , IDepartmentService DepartmentService
             , IPermissionsService PermissionsService
             , IContactRequireService ContactRequireService
+            , IContractInfoService ContractInfoService
             )
         {
             this.MemberService = MemberService;
@@ -42,12 +44,47 @@ namespace PadCRM.Controllers
             this.DepartmentService = DepartmentService;
             this.PermissionsService = PermissionsService;
             this.ContactRequireService = ContactRequireService;
+            this.ContractInfoService = ContractInfoService;
         }
         public ActionResult Index()
         {
 
             return View();
         }
+
+        public ActionResult Details(int ID)
+        {
+            var entity = ContractInfoService.GetALL()
+                .Include(x => x.Signer)
+                .Include(x => x.ContractCate)
+                .Single(x => x.ID == ID);
+
+
+            return View(entity);
+        }
+
+        public ActionResult Log(int CompanyID, int page = 1)
+        {
+            const int pageSize = 20;
+            var logs = ContactRequireService.GetALL()
+                .Where(x => x.CompanyID == CompanyID)
+                .OrderByDescending(x => x.AddTime)
+                 .Skip((page - 1) * pageSize)
+                .Take(pageSize).ToList();
+
+            var totalCount = ContactRequireService.GetALL()
+           .Count(x => x.CompanyID == CompanyID);
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+
+            return PartialView(logs);
+        }
+
 
         public ActionResult Data_Read(int Status = 0, int page = 1)
         {
@@ -90,6 +127,17 @@ namespace PadCRM.Controllers
 
             foreach (var item in contacts)
             {
+                var ContractInfoID = 0;
+                if (Status == 1)
+                {
+                    if (ContractInfoService.GetALL()
+                       .Any(x => x.CompanyID == item.CompanyID))
+                    {
+                        ContractInfoID = ContractInfoService.GetALL()
+                       .Single(x => x.CompanyID == item.CompanyID).ID;
+                    }
+                }
+                item.ContractInfoID = ContractInfoID;
                 var selfItem = new ContactRequireItemViewModel()
                 {
                     AddTime = item.AddTime,
@@ -100,10 +148,11 @@ namespace PadCRM.Controllers
                     Name = item.Name,
                     SenderID = item.SenderID,
                     AddUser = item.AddUser
+
                 };
                 item.ContactRequires.Add(selfItem);
-                var ContactRequires = ContactRequireService.GetALL()
 
+                var ContactRequires = ContactRequireService.GetALL()
                     .Where(x => x.PID == item.ID)
                     .Select(o => new ContactRequireItemViewModel()
                     {

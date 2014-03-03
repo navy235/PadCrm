@@ -79,7 +79,7 @@ namespace PadCRM.Controllers
 
             var departlist = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
 
-            var hasPermission = PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            var hasPermission = CookieHelper.CheckPermission("boss");
             if (!hasPermission)
             {
                 var member = MemberService.Find(CookieHelper.MemberID);
@@ -96,7 +96,7 @@ namespace PadCRM.Controllers
             }
             ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
              departlist
-           , x => x.ID, x => x.Name, true);
+           , x => x.ID, x => x.Name, true, true);
             return View(new FileShareViewModel());
         }
 
@@ -129,9 +129,30 @@ namespace PadCRM.Controllers
 
             }
 
-            ViewBag.Data_RuleID = Utilities.GetSelectListData(
-                RuleCateService.GetALL().Where(x => x.PID.Equals(null))
-                , x => x.ID, x => x.CateName, true);
+            ViewBag.Data_FileCateID = Utilities.GetSelectListData(
+              FileCateService.GetALL().Where(x => x.PID.Equals(null))
+              , x => x.ID, x => x.CateName, true);
+
+            var departlist = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
+
+            var hasPermission = CookieHelper.CheckPermission("boss");
+            if (!hasPermission)
+            {
+                var member = MemberService.Find(CookieHelper.MemberID);
+                var depart = DepartmentService.Find(member.DepartmentID);
+                if (depart.Level == 0)
+                {
+                    departlist = departlist.Where(x => x.ID == depart.ID);
+                }
+                else
+                {
+                    var rootCode = Utilities.GetRootCode(depart.Code, depart.Level);
+                    departlist = departlist.Where(x => x.Code == rootCode);
+                }
+            }
+            ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
+             departlist
+           , x => x.ID, x => x.Name, true, true);
 
             return View(model);
         }
@@ -146,11 +167,34 @@ namespace PadCRM.Controllers
                 Description = entity.Description,
                 Name = entity.Name,
                 FileCateID = entity.FileCateID,
-                FilePath = entity.FilePath
+                FilePath = entity.FilePath,
+                DepartmentID = entity.DepartmentID
             };
             ViewBag.Data_FileCateID = Utilities.GetSelectListData(
               FileCateService.GetALL().Where(x => x.PID.Equals(null))
-              , x => x.ID, x => x.CateName, model.FileCateID, true);
+              , x => x.ID, x => x.CateName, model.FileCateID, true, true);
+
+            var departlist = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
+
+            var hasPermission = CookieHelper.CheckPermission("boss");
+            if (!hasPermission)
+            {
+                var member = MemberService.Find(CookieHelper.MemberID);
+                var depart = DepartmentService.Find(member.DepartmentID);
+                if (depart.Level == 0)
+                {
+                    departlist = departlist.Where(x => x.ID == depart.ID);
+                }
+                else
+                {
+                    var rootCode = Utilities.GetRootCode(depart.Code, depart.Level);
+                    departlist = departlist.Where(x => x.Code == rootCode);
+                }
+            }
+            ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
+             departlist
+           , x => x.ID, x => x.Name, model.DepartmentID, true, true);
+
             return View(model);
         }
 
@@ -184,8 +228,29 @@ namespace PadCRM.Controllers
 
             }
             ViewBag.Data_FileCateID = Utilities.GetSelectListData(
-                FileCateService.GetALL().Where(x => x.PID.Equals(null))
-                , x => x.ID, x => x.CateName, model.FileCateID, true);
+               FileCateService.GetALL().Where(x => x.PID.Equals(null))
+               , x => x.ID, x => x.CateName, model.FileCateID, true, true);
+
+            var departlist = DepartmentService.GetALL().Where(x => x.PID.Equals(null));
+
+            var hasPermission = CookieHelper.CheckPermission("boss");
+            if (!hasPermission)
+            {
+                var member = MemberService.Find(CookieHelper.MemberID);
+                var depart = DepartmentService.Find(member.DepartmentID);
+                if (depart.Level == 0)
+                {
+                    departlist = departlist.Where(x => x.ID == depart.ID);
+                }
+                else
+                {
+                    var rootCode = Utilities.GetRootCode(depart.Code, depart.Level);
+                    departlist = departlist.Where(x => x.Code == rootCode);
+                }
+            }
+            ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
+             departlist
+           , x => x.ID, x => x.Name, model.DepartmentID, true, true);
             return View(model);
         }
 
@@ -213,10 +278,26 @@ namespace PadCRM.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult My()
+        public ActionResult My(string Name = null, int DepartmentID = 0)
         {
             var fileCate = FileCateService.GetALL().ToList();
-            return View(fileCate);
+            var model = new FireShareSearchViewModel()
+            {
+                DepartmentID = DepartmentID,
+                Name = Name
+            };
+            ViewBag.Data_DepartmentID = Utilities.GetSelectListData(
+               DepartmentService.GetALL().Where(x => x.PID.Equals(null))
+               , x => x.ID, x => x.Name, true, true);
+            ViewBag.fileCate = fileCate;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult My(FireShareSearchViewModel model)
+        {
+            return RedirectToAction("my",
+                new { DepartmentID = model.DepartmentID, Name = model.Name });
         }
 
 
@@ -265,17 +346,24 @@ namespace PadCRM.Controllers
             return View(list);
         }
 
-        public ActionResult List(int ID, int page = 1)
+        public ActionResult List(int ID, string Name = null, int DepartmentID = 0, int page = 1)
         {
             const int pageSize = 20;
-            var logs = FileShareService.GetALL()
+
+            var query = FileShareService.GetALL()
                 .Include(x => x.FileCate)
-                .Where(x => x.FileCateID == ID)
+                .Where(x => x.FileCateID == ID);
+            if (!string.IsNullOrEmpty(Name)) {
+                query = query.Where(x => x.Name.Contains(Name));
+            }
+            if (DepartmentID != 0) {
+                query = query.Where(x => x.DepartmentID==DepartmentID);
+            }
+            var logs = query
                 .OrderByDescending(x => x.AddTime)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToList();
-            var totalCount = FileShareService.GetALL()
-                .Where(x => x.FileCateID == ID).Count();
+            var totalCount = query.Count();
             ViewBag.PageInfo = new PagingInfo()
             {
                 TotalItems = totalCount,

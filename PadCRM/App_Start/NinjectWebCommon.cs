@@ -100,6 +100,7 @@ namespace PadCRM.App_Start
             kernel.Bind<IFileCateService>().To<FileCateService>().InRequestScope();
             kernel.Bind<IRuleCateService>().To<RuleCateService>().InRequestScope();
             kernel.Bind<IJobCateService>().To<JobCateService>().InRequestScope();
+            kernel.Bind<IContractCateService>().To<ContractCateService>().InRequestScope();
             kernel.Bind<IJobTitleCateService>().To<JobTitleCateService>().InRequestScope();
             kernel.Bind<IRelationCateService>().To<RelationCateService>().InRequestScope();
             kernel.Bind<IIndustryCateService>().To<IndustryCateService>().InRequestScope();
@@ -118,6 +119,8 @@ namespace PadCRM.App_Start
             kernel.Bind<IFileShareService>().To<FileShareService>().InRequestScope();
             kernel.Bind<IContactRequireService>().To<ContactRequireService>().InRequestScope();
             kernel.Bind<IMediaRequireService>().To<MediaRequireService>().InRequestScope();
+            kernel.Bind<IContractInfoService>().To<ContractInfoService>().InRequestScope();
+            kernel.Bind<ITcNoticeService>().To<TcNoticeService>().InRequestScope();
             #endregion
         }
     }

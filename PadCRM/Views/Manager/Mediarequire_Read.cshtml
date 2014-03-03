@@ -33,7 +33,7 @@
                                     <th>录入时间</th>
                                     <th>媒介人员</th>
                                     <th>内容</th>
-                                    <th>合同附件</th>
+                                    <th>相关附件</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,7 +48,7 @@
                                             <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = log.ResolveID })"></div>
                                         </td>
 
-                                        <td>@log.Description</td>
+                                        <td>@Html.Raw(log.Description)</td>
                                         <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
                                             { 
                                             <div>暂无</div>

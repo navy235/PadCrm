@@ -41,9 +41,9 @@ namespace PadCRM.ViewModels
         [HiddenInput(DisplayValue = false)]
         public int DepartmentID { get; set; }
 
-        [Display(Name = "上传文件")]
-        [UIHint("UploadFile")]
-        public string AttachmentPath { get; set; }
+        //[Display(Name = "上传文件")]
+        //[UIHint("UploadFile")]
+        //public string AttachmentPath { get; set; }
 
         [Display(Name = "内容描述")]
         [DataType(DataType.MultilineText)]

@@ -29,7 +29,7 @@
                                     <th>录入者</th>
                                     <th>录入时间</th>
                                     <th>内容</th>
-                                    <th>合同附件</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,14 +41,7 @@
                                         </td>
                                         <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
                                         <td>@log.Description</td>
-                                        <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
-                                            { 
-                                            <div>暂无</div>
-                                            }
-                                            else
-                                            {
-                                            <a href="@log.AttachmentPath">下载合同附件</a>
-                                            }</th>
+
                                     </tr>
                                 }
                             </tbody>

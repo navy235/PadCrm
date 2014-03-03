@@ -177,6 +177,9 @@
                 var data = {
                     ID: target.data('id')
                 };
+                if ($('#ResolveID_window')[0]) {
+                    $('#ResolveID_window').remove();
+                }
                 getForm(url, data, cssClass);
             }
 
@@ -397,7 +400,15 @@
             } 
         }
 
-        
+        function afterSelectUser(id){
+            var url="@Url.Action("getForm", "ajaxservice")";
+            var data={
+                ID:id
+            };
+            $.get(url,data,function(res){
+                $('#Description').data().editor.setContent(res);
+            })
+        }
 
     </script>
 }

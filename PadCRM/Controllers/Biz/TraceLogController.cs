@@ -420,7 +420,9 @@ namespace PadCRM.Controllers
         public ActionResult isEditable(int ID)
         {
             var entity = TraceLogService.Find(ID);
-            return Json(entity.AddUser == CookieHelper.MemberID, JsonRequestBehavior.AllowGet);
+            return Json(entity.AddUser == CookieHelper.MemberID
+                  && (DateTime.Now - entity.AddTime).Days < 2
+                , JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

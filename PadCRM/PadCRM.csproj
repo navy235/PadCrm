@@ -172,6 +172,7 @@
     <Compile Include="Controllers\Admin\Category\JobTitleCateController.cs" />
     <Compile Include="Controllers\Admin\Category\RuleCateController.cs" />
     <Compile Include="Controllers\Admin\Category\FileCateController.cs" />
+    <Compile Include="Controllers\Admin\Category\ContractCateController.cs" />
     <Compile Include="Controllers\Admin\DashboardController.cs" />
     <Compile Include="Controllers\Admin\ImageBrowserController.cs" />
     <Compile Include="Controllers\Admin\Member\MemberController.cs" />
@@ -181,12 +182,14 @@
     <Compile Include="Controllers\Biz\AnalysisController.cs" />
     <Compile Include="Controllers\Biz\ChangePwdController.cs" />
     <Compile Include="Controllers\Biz\ContactRequireController.cs" />
+    <Compile Include="Controllers\Biz\ContractInfoController.cs" />
     <Compile Include="Controllers\Biz\CustomerCompanyController.cs" />
     <Compile Include="Controllers\Biz\CustomerController.cs" />
     <Compile Include="Controllers\Biz\CustomerShareController.cs" />
     <Compile Include="Controllers\Biz\ManagerController.cs" />
     <Compile Include="Controllers\Biz\MessageController.cs" />
     <Compile Include="Controllers\Biz\NoticeController.cs" />
+    <Compile Include="Controllers\Biz\PerformanceController.cs" />
     <Compile Include="Controllers\Biz\PlanLogController.cs" />
     <Compile Include="Controllers\Biz\PunishController.cs" />
     <Compile Include="Controllers\Biz\BossController.cs" />
@@ -195,6 +198,7 @@
     <Compile Include="Controllers\Biz\WelcomeController.cs" />
     <Compile Include="Controllers\Biz\FileShareController.cs" />
     <Compile Include="Controllers\Biz\MediaRequireController.cs" />
+    <Compile Include="Controllers\Biz\TcNoticeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -211,9 +215,29 @@
     </Compile>
     <Compile Include="Jobs\CustomerCompanySetCommonJob.cs" />
     <Compile Include="Jobs\WorkItemCleanJob.cs" />
-    <Compile Include="Migrations\201402110845379_addfileshare.cs" />
-    <Compile Include="Migrations\201402110845379_addfileshare.Designer.cs">
-      <DependentUpon>201402110845379_addfileshare.cs</DependentUpon>
+    <Compile Include="Migrations\201402240836282_contractinfo.cs" />
+    <Compile Include="Migrations\201402240836282_contractinfo.Designer.cs">
+      <DependentUpon>201402240836282_contractinfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402240857212_contractinfo1.cs" />
+    <Compile Include="Migrations\201402240857212_contractinfo1.Designer.cs">
+      <DependentUpon>201402240857212_contractinfo1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402250248018_update1345.cs" />
+    <Compile Include="Migrations\201402250248018_update1345.Designer.cs">
+      <DependentUpon>201402250248018_update1345.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402250249146_update134545.cs" />
+    <Compile Include="Migrations\201402250249146_update134545.Designer.cs">
+      <DependentUpon>201402250249146_update134545.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402260320209_sadfa.cs" />
+    <Compile Include="Migrations\201402260320209_sadfa.Designer.cs">
+      <DependentUpon>201402260320209_sadfa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402270815194_sdfasjh.cs" />
+    <Compile Include="Migrations\201402270815194_sdfasjh.Designer.cs">
+      <DependentUpon>201402270815194_sdfasjh.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Base\Department.cs" />
@@ -225,6 +249,7 @@
     <Compile Include="Models\Base\Roles.cs" />
     <Compile Include="Models\Base\SolarData.cs" />
     <Compile Include="Models\Biz\ContactRequire.cs" />
+    <Compile Include="Models\Biz\ContractInfo.cs" />
     <Compile Include="Models\Biz\Customer.cs" />
     <Compile Include="Models\Biz\CustomerCompany.cs" />
     <Compile Include="Models\Biz\CustomerShare.cs" />
@@ -235,6 +260,7 @@
     <Compile Include="Models\Biz\Punish.cs" />
     <Compile Include="Models\Biz\Task.cs" />
     <Compile Include="Models\Biz\TraceLog.cs" />
+    <Compile Include="Models\Biz\TcNotice.cs" />
     <Compile Include="Models\Category\CityCate.cs" />
     <Compile Include="Models\Category\CustomerCate.cs" />
     <Compile Include="Models\Category\FileCate.cs" />
@@ -243,6 +269,7 @@
     <Compile Include="Models\Category\RelationCate.cs" />
     <Compile Include="Models\Category\JobCate.cs" />
     <Compile Include="Models\Category\RuleCate.cs" />
+    <Compile Include="Models\Category\ContractCate.cs" />
     <Compile Include="Models\Context\EntitiesContext.cs" />
     <Compile Include="Models\Message\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -257,6 +284,8 @@
     <Compile Include="Service\Biz\FileShareService.cs" />
     <Compile Include="Service\Biz\ContactRequireService.cs" />
     <Compile Include="Service\Biz\MediaRequireService.cs" />
+    <Compile Include="Service\Biz\ContactInfoService.cs" />
+    <Compile Include="Service\Biz\TcNoticeService.cs" />
     <Compile Include="Service\Category\CityCateService.cs" />
     <Compile Include="Service\Category\CustomerCateService.cs" />
     <Compile Include="Service\Category\IndustryCateService.cs" />
@@ -265,6 +294,7 @@
     <Compile Include="Service\Category\JobTitleCateService.cs" />
     <Compile Include="Service\Category\RuleCateService.cs" />
     <Compile Include="Service\Category\FileCateService.cs" />
+    <Compile Include="Service\Category\ContractCateService.cs" />
     <Compile Include="Service\Interface\Biz\ICustomerCompanyService.cs" />
     <Compile Include="Service\Interface\Biz\ICustomerService.cs" />
     <Compile Include="Service\Interface\Biz\ICustomerShareService.cs" />
@@ -276,6 +306,8 @@
     <Compile Include="Service\Interface\Biz\IFileShareService.cs" />
     <Compile Include="Service\Interface\Biz\IContactRequireService.cs" />
     <Compile Include="Service\Interface\Biz\IMediaRequireService.cs" />
+    <Compile Include="Service\Interface\Biz\IContactInfoService.cs" />
+    <Compile Include="Service\Interface\Biz\ITcNoticeService.cs" />
     <Compile Include="Service\Interface\Category\ICityCateService.cs" />
     <Compile Include="Service\Interface\Category\IIndustryCateService.cs" />
     <Compile Include="Service\Interface\Category\IRelationCateService.cs" />
@@ -283,6 +315,7 @@
     <Compile Include="Service\Interface\Category\IJobTitleCateService.cs" />
     <Compile Include="Service\Interface\Category\IRuleCateService.cs" />
     <Compile Include="Service\Interface\Category\IFileCateService.cs" />
+    <Compile Include="Service\Interface\Category\IContractCateService.cs" />
     <Compile Include="Service\Interface\Member\IMemberService.cs" />
     <Compile Include="Service\Interface\Member\IMember_ActionService.cs" />
     <Compile Include="Service\Interface\Message\IMessageService.cs" />
@@ -306,6 +339,9 @@
     <Compile Include="ViewModels\Base\BackupItem.cs" />
     <Compile Include="ViewModels\Biz\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\Biz\ContactRequireGroupViewModel.cs" />
+    <Compile Include="ViewModels\Biz\ContractInfoSearchViewModel.cs" />
+    <Compile Include="ViewModels\Biz\ContractInfoViewModel.cs" />
+    <Compile Include="ViewModels\Biz\FireShareSearchViewModel.cs" />
     <Compile Include="ViewModels\Biz\MonthTableViewModel.cs" />
     <Compile Include="ViewModels\Biz\PunishSearchViewModel.cs" />
     <Compile Include="ViewModels\Biz\SearchCompanyViewModel.cs" />
@@ -316,9 +352,11 @@
     <Compile Include="ViewModels\Biz\ContactRequireViewModel.cs" />
     <Compile Include="ViewModels\Biz\MediaRequireViewModel.cs" />
     <Compile Include="ViewModels\Biz\MediaRequireGroupViewModel.cs" />
+    <Compile Include="ViewModels\Biz\TcNoticeViewModel.cs" />
     <Compile Include="ViewModels\Category\JobTitleCateViewModel.cs" />
     <Compile Include="ViewModels\Category\RuleCateViewModel.cs" />
     <Compile Include="ViewModels\Category\FileCateViewModel.cs" />
+    <Compile Include="ViewModels\Category\ContractCateViewModel.cs" />
     <Compile Include="ViewModels\Member\ImportViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Utils\Utilities.cs" />
@@ -345,6 +383,7 @@
     <Compile Include="ViewModels\Permission\RolesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\templates\huwai.html" />
     <Content Include="Binaries\Kendo.Mvc.resources.dll" />
     <Content Include="Content\admin.css" />
     <Content Include="Content\avtar\avtar_default.jpg" />
@@ -979,9 +1018,29 @@
     <Content Include="Views\CustomerCompany\TraceSearch.cshtml" />
     <Content Include="Views\CustomerCompany\PlanSearching.cshtml" />
     <Content Include="Views\CustomerCompany\TraceSearching.cshtml" />
+    <Content Include="Views\ContractCate\Create.cshtml" />
+    <Content Include="Views\ContractCate\Edit.cshtml" />
+    <Content Include="Views\ContractCate\Index.cshtml" />
+    <Content Include="Views\ContractInfo\Index.cshtml" />
+    <Content Include="Views\ContractInfo\Search.cshtml" />
+    <Content Include="Views\ContractInfo\Wait.cshtml" />
+    <Content Include="Views\ContractInfo\Receivables.cshtml" />
+    <Content Include="Views\ContractInfo\ReceivablesSearch.cshtml" />
+    <Content Include="Views\ContractInfo\AjaxCreate.cshtml" />
+    <Content Include="Views\ContractInfo\Details.cshtml" />
+    <Content Include="Views\ContractInfo\Log.cshtml" />
+    <Content Include="Views\ContactRequire\Details.cshtml" />
+    <Content Include="Views\ContactRequire\Log.cshtml" />
+    <Content Include="Views\TcNotice\Index.cshtml" />
+    <Content Include="Views\TcNotice\Create.cshtml" />
+    <Content Include="Views\Message\TcNotice.cshtml" />
+    <Content Include="Views\TcNotice\Edit.cshtml" />
+    <Content Include="Views\Home\Designer.cshtml" />
+    <Content Include="Views\CustomerCompany\Invalid.cshtml" />
+    <Content Include="Views\ContactRequire\AjaxCreate1.cshtml" />
+    <Content Include="Views\Message\TcNoticeDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Controllers\Admin\Article\" />
     <Folder Include="Upload\Normal\2014\1\" />
   </ItemGroup>
@@ -995,8 +1054,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201402110845379_addfileshare.resx">
-      <DependentUpon>201402110845379_addfileshare.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201402240836282_contractinfo.resx">
+      <DependentUpon>201402240836282_contractinfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402240857212_contractinfo1.resx">
+      <DependentUpon>201402240857212_contractinfo1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402250248018_update1345.resx">
+      <DependentUpon>201402250248018_update1345.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402250249146_update134545.resx">
+      <DependentUpon>201402250249146_update134545.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402260320209_sadfa.resx">
+      <DependentUpon>201402260320209_sadfa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402270815194_sdfasjh.resx">
+      <DependentUpon>201402270815194_sdfasjh.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

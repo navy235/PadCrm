@@ -1,0 +1,70 @@
+
+ ExLogTime :2014-02-25 13:48:01,704 [25] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-25 14:05:41,102 [26] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-25 14:06:57,812 [29] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 14:07:16,522 [31] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-25 14:07:29,803 [31] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加城市信息成功 
+
+ ExLogTime :2014-02-25 15:24:41,635 [21] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+添加权限成功 
+
+ ExLogTime :2014-02-25 15:25:58,075 [35] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-25 15:27:29,487 [21] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑权限成功 
+
+ ExLogTime :2014-02-25 15:27:53,892 [45] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 15:28:21,978 [47] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 15:28:31,689 [47] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 15:30:50,869 [21] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 15:30:59,764 [37] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 
+
+ ExLogTime :2014-02-25 15:35:36,240 [38] 
+ ExLogLevel :INFO  
+ ExLogClass :loginfo [(null)] 
+编辑角色成功 

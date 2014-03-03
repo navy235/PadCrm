@@ -51,9 +51,10 @@
                         <li><a href="@Url.Action("index", "customercompany")">客户信息</a></li>
                         <li><a href="@Url.Action("index", "task")">任务安排</a></li>
                         <li><a href="@Url.Action("index", "contactrequire")">我的合同</a></li>
-                        <li><a href="@Url.Action("my", "mediarequire")">媒介策略请求</a></li>
+                        <li><a href="@Url.Action("my", "mediarequire")">策略单请求</a></li>
                         <li><a href="@Url.Action("my", "fileshare")">文件共享</a></li>
                         <li><a href="@Url.Action("birthday", "message")">生日提醒</a></li>
+                        <li><a href="@Url.Action("tcnotice", "message")">提成公告</a></li>
                         <li><a href="@Url.Action("mypunish", "message")">绩效分数</a></li>
                     </ul>
                 </li>
@@ -62,7 +63,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-cog"></i></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@CookieHelper.NickName,你好！<i class="glyphicon glyphicon-cog"></i></a>
                     <ul class="dropdown-menu">
                         <li><a href="@Url.Action("index", "changepwd")">修改密码</a></li>
                         <li><a href="@Url.Action("logout", "login")">退出登录</a></li>

@@ -70,6 +70,7 @@ namespace PadCRM.Service
             var listCheckstr = new string[]{
             "manager",
             "punish",
+            "caiwu",
             "boss"
             };
             foreach (var s in listCheckstr)

@@ -42,7 +42,7 @@ namespace PadCRM.Controllers
         public bool CheckPermission(int ID)
         {
             var hasPermission = ID == CookieHelper.MemberID
-            || PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+            || CookieHelper.CheckPermission("boss");
             return hasPermission;
         }
 
@@ -88,7 +88,7 @@ namespace PadCRM.Controllers
             var model = new TaskViewModel()
             {
                 Start = time.AddHours(8),
-                End = time.AddHours(18),
+                //End = time.AddHours(18),
                 MemberID = ID
             };
             return PartialView(model);
@@ -140,8 +140,8 @@ namespace PadCRM.Controllers
             var model = new TaskViewModel()
             {
                 Start = entity.Start,
-                End = entity.End,
-                Title = entity.Title,
+                //End = entity.End,
+                //Title = entity.Title,
                 Description = entity.Description,
                 TaskID = entity.ID,
                 MemberID = entity.MemberID

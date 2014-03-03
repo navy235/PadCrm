@@ -94,3 +94,15 @@ input.k-input {
 .table tbody tr.customercolor5 > td {
     background-color: rgb(182,127,0);
 }
+
+.td-required {
+    color: #f00;
+}
+
+.th-title {
+    text-align: center;
+}
+
+.td-title {
+    width: 100px;
+}

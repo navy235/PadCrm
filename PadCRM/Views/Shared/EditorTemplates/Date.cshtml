@@ -1,3 +1,11 @@
 @model  DateTime?
+@{
+    bool enable = true;
+    if (ViewData.ModelMetadata.AdditionalValues.ContainsKey("DateEnable"))
+    {
+        enable = Convert.ToBoolean(ViewData.ModelMetadata.AdditionalValues["DateEnable"]);
+    }
+    
+}
 
-@(Html.Kendo().DatePickerFor(m => m))
+@(Html.Kendo().DatePickerFor(m => m).Enable(enable))

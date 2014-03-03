@@ -34,6 +34,8 @@ namespace PadCRM.Controllers
         private INoticeService NoticeService;
         private IRuleCateService RuleCateService;
         private IPunishService PunishService;
+        private ITcNoticeService TcNoticeService;
+        private IDepartmentService DepartmentService;
         public MessageController(
             ICustomerCompanyService CustomerCompanyService
             , IRelationCateService RelationCateService
@@ -50,6 +52,8 @@ namespace PadCRM.Controllers
             , INoticeService NoticeService
             , IRuleCateService RuleCateService
             , IPunishService PunishService
+            , ITcNoticeService TcNoticeService
+            , IDepartmentService DepartmentService
             )
         {
             this.CustomerCompanyService = CustomerCompanyService;
@@ -67,6 +71,8 @@ namespace PadCRM.Controllers
             this.NoticeService = NoticeService;
             this.RuleCateService = RuleCateService;
             this.PunishService = PunishService;
+            this.TcNoticeService = TcNoticeService;
+            this.DepartmentService = DepartmentService;
         }
 
         public ActionResult Index(int page = 1)
@@ -187,5 +193,41 @@ namespace PadCRM.Controllers
             return PartialView(data);
         }
 
+
+        public ActionResult TcNotice(int page = 1)
+        {
+
+            const int pageSize = 20;
+
+            var departid = DepartmentService.GetRoot(CookieHelper.GetDepartmentID()).ID;
+
+            var query = TcNoticeService.GetALL().Include(x => x.Department);
+
+            if (!CookieHelper.CheckPermission("boss"))
+            {
+                query = query.Where(x => (x.Department.Any(d => d.ID == departid)));
+            }
+
+            var totalCount = query.Count();
+
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+
+            return View(data);
+        }
+
+        public ActionResult TcNoticeDetails(int ID)
+        {
+            var model = TcNoticeService.GetALL()
+                .Include(x => x.Department)
+                .Single(x => x.ID == ID);
+            return PartialView(model);
+        }
     }
 }

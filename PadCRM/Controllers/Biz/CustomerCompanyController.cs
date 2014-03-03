@@ -68,7 +68,9 @@ namespace PadCRM.Controllers
         public ActionResult Index()
         {
             SearchCompanyViewModel model = new SearchCompanyViewModel();
-            ViewBag.Data_CustomerCateID = Utilities.GetSelectListData(CustomerCateService.GetALL(),
+            ViewBag.Data_CustomerCateID = Utilities.GetSelectListData(
+                CustomerCateService.GetALL()
+                .Where(x => x.ID != 6),
                 x => x.ID,
                 x => x.CateName,
                 true, true);
@@ -96,6 +98,27 @@ namespace PadCRM.Controllers
             };
             return View(data);
         }
+
+
+        public ActionResult Invalid(int page = 1)
+        {
+            const int pageSize = 20;
+            var query = CustomerCompanyService.GetALL()
+                .Where(x => x.CustomerCateID == 6
+                && x.Status > (int)CustomerCompanyStatus.Delete);
+
+            var totalCount = query.Count();
+            var data = query.OrderByDescending(x => x.AddTime).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.PageInfo = new PagingInfo()
+            {
+                TotalItems = totalCount,
+                CurrentPage = page,
+                ItemsPerPage = pageSize
+            };
+            return View(data);
+
+        }
+
 
         public ActionResult Share()
         {
@@ -531,7 +554,8 @@ namespace PadCRM.Controllers
         {
             var entity = CustomerCompanyService.Find(ID);
             var hasPermission = entity.AddUser == CookieHelper.MemberID
-                || PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+                || CookieHelper.CheckPermission("boss");
+
             ViewBag.hasPermission = hasPermission;
             var model = new CustomerCompanyViewModel()
             {
@@ -763,9 +787,14 @@ namespace PadCRM.Controllers
             {
                 query = query.Where(x => x.AddUser == CookieHelper.MemberID);
             }
-            query = query.Where(x => x.AddTime < model.EndTime
-                && x.AddTime > model.StartTime
-                && x.Status > (int)CustomerCompanyStatus.Delete).OrderByDescending(x => x.AddTime);
+            if (model.IsInTime)
+            {
+                query = query.Where(x => x.AddTime < model.EndTime
+                 && x.AddTime > model.StartTime);
+            }
+            query = query.Where(x => x.Status > (int)CustomerCompanyStatus.Delete
+                && x.CustomerCateID != 6
+                ).OrderByDescending(x => x.AddTime);
             return query;
         }
 

@@ -44,9 +44,9 @@ namespace PadCRM.Utils
             return list;
         }
 
-        public static IList<SelectListItem> GetSelectListData<T>(IEnumerable<T> entities, Func<T, object> funcToGetValue, Func<T, object> funcToGetText, int value, bool addDefaultSelectItem = true)
+        public static IList<SelectListItem> GetSelectListData<T>(IEnumerable<T> entities, Func<T, object> funcToGetValue, Func<T, object> funcToGetText, int value, bool addDefaultSelectItem = true, bool defaultValueisZero = false)
         {
-            var list = GetSelectListData(entities, funcToGetValue, funcToGetText, addDefaultSelectItem);
+            var list = GetSelectListData(entities, funcToGetValue, funcToGetText, addDefaultSelectItem, defaultValueisZero);
 
             foreach (var item in list)
             {
@@ -303,6 +303,6 @@ namespace PadCRM.Utils
             return day;
         }
 
-      
+
     }
 }

@@ -1,0 +1,59 @@
+﻿@model List<TcNotice>
+@{
+    ViewBag.Title = "提成公告";
+}
+<div class="tool-bar">
+    <a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
+</div>
+<div class="table table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>部门</th>
+                <th>标题</th>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            { 
+                <tr>
+                    <td>
+                        <ul>
+                            @foreach (var depart in item.Department)
+                            {
+                                <li>@depart.Name</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "AjaxService", new { ID = item.AddUser })"></div>
+                    </td>
+                    <td>
+                        @item.AddTime.ToString("yyyy-MM-dd")
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="@Url.Action("Edit", new { ID = item.ID })">编辑</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "123")
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            Maitonn.JHelper.onDataBoundShowContent();
+        })
+    </script>
+}

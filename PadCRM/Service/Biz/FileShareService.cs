@@ -42,6 +42,7 @@ namespace PadCRM.Service
             target.Description = model.Description;
             target.FilePath = model.FilePath;
             target.FileCateID = model.FileCateID;
+            target.DepartmentID = model.DepartmentID;
             target.Name = model.Name;
             db.Commit();
         }
@@ -68,6 +69,7 @@ namespace PadCRM.Service
             entity.FileCateID = model.FileCateID;
             entity.Name = model.Name;
             entity.Description = model.Description;
+            entity.DepartmentID = model.DepartmentID;
             db.Add<FileShare>(entity);
             db.Commit();
             return entity;
@@ -82,6 +84,7 @@ namespace PadCRM.Service
             entity.FileCateID = model.FileCateID;
             entity.Name = model.Name;
             entity.Description = model.Description;
+            entity.DepartmentID = model.DepartmentID;
             db.Commit();
             return entity;
         }

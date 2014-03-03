@@ -62,6 +62,41 @@
                 }
 
 
+
+            $("#BrandName").kendoAutoComplete({
+                dataTextField: "BrandName",
+                filter: "contains",
+                minLength: 2,
+                dataSource: {
+                    transport: {
+                        read: "@Url.Action("BrandName", "ajaxservice")"
+                    }
+                },
+                select: onBrandSelectName
+            });
+            $("#BrandName").on('keydown', function (e) {
+                if (e.ctrlKey && e.keyCode == 86) {
+                    return false;
+                }
+            })
+            function onBrandSelectName(e) {
+                var dataItem = this.dataItem(e.item.index());
+                console.log(dataItem);
+
+                $.get("@Url.Action("CheckReplaceable", "AjaxService")",
+                    { ID: dataItem.ID }
+                    , function (res) {
+                        if (res) {
+                            window.location.href = "@Url.Action("Edit")/" + dataItem.ID;
+                        } else {
+                            alert("当前信息不能替换")
+                            setTimeout(function () {
+                                $("#BrandName").val('');
+                            }, 200)
+                        }
+                    });
+                }
+
         })
     </script>
 

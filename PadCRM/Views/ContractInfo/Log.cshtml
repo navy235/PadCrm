@@ -1,0 +1,42 @@
+﻿@model List<ContactRequire>
+
+<div class="tool-bar">
+    <a class="btn btn-primary btn-add-contactrequire" data-id="@Model[0].ID" data-cssclass="contractlog" href="javascript:void(0);">回复</a>
+</div>
+<div class="table table-responsive">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>录入者</th>
+                <th>录入时间</th>
+                <th>内容</th>
+                <th>相关附件</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>
+                        <div data-showcontent="@Url.Action("MemberName", "ajaxservice", new { ID = log.AddUser })"></div>
+                    </td>
+                    <td>@log.AddTime.ToString("yyyy-MM-dd")</td>
+                    <td>@log.Description</td>
+                    <th>@if (string.IsNullOrEmpty(log.AttachmentPath))
+                        { 
+                        <div>暂无</div>
+                        }
+                        else
+                        {
+                        <a href="@log.AttachmentPath">相关附件</a>
+                        }</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="page-info">
+    @Html.MaitonnPage((PagingInfo)ViewBag.PageInfo, "contractlog")
+</div>

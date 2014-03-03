@@ -56,12 +56,17 @@ namespace PadCRM.ViewModels
         [Display(Name = "地址")]
         public string Address { get; set; }
 
+        [Display(Name = "按时间查询")]
+        public bool IsInTime { get; set; }
+
         [Display(Name = "之后录入")]
         [UIHint("Date")]
+        [AdditionalMetadata("DateEnable", "False")]
         public DateTime StartTime { get; set; }
 
         [Display(Name = "之前录入")]
         [UIHint("Date")]
+        [AdditionalMetadata("DateEnable", "False")]
         public DateTime EndTime { get; set; }
 
     }

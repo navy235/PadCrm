@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "合同查询";
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="@Url.Action("index")" >合同查询</a></li>
+    <li><a href="@Url.Action("Receivables")" >收款查询</a></li>
+    @if (CookieHelper.CheckPermission("caiwu"))
+    {
+        <li><a href="@Url.Action("wait")" >待处理</a></li>
+    }
+</ul>
+
+<div class="search-form">
+    @using (Ajax.BeginForm(actionName: "search", controllerName: "ContractInfo", routeValues: new { }, ajaxOptions: new AjaxOptions()
+{
+    OnSuccess = "ajaxFormSuccess",
+    OnFailure = "ajaxFormFailure",
+    HttpMethod = "Get"
+
+}, htmlAttributes: new { formtitle = "客户信息查询" }))
+    {
+        <div class="search-area">
+            @Html.EditorForModel()
+            <div class="form-field form-field-submit">
+                <button type="submit" class="btn btn-primary btn-submit ">
+                    <i class="icon-maitonn icon-search"></i>
+                    &nbsp;&nbsp;查&nbsp;&nbsp;询&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    }
+</div>
+<div class="search-result">
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+
+
+
+            $('.search-result').on('click', 'a.page-link', ajaxPage)
+
+            function ajaxPage(e) {
+                e.preventDefault();
+                var target = $(e.currentTarget);
+                var parent = target.parent();
+                if (parent.hasClass('disabled') || parent.hasClass('active')) {
+                    return false;
+                } else {
+                    var url = target.attr('href');
+                    var cssClass = target.data('cssclass');
+                    $.get(url, {}, function (res) {
+                        $('.search-result').html(res);
+                        Maitonn.JHelper.onDataBoundShowContent();
+                    })
+                }
+            }
+        })
+
+        function ajaxFormSuccess(res) {
+            $('.search-result').html(res);
+            Maitonn.JHelper.onDataBoundShowContent();
+        }
+    </script>
+}

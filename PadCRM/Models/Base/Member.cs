@@ -17,6 +17,7 @@
             this.Punish = new HashSet<Punish>();
             this.Task = new HashSet<Task>();
             this.FileShare = new HashSet<FileShare>();
+            this.ContractInfo = new HashSet<ContractInfo>();
             this.MemberID = 100000;
         }
         [Key]
@@ -147,6 +148,8 @@
         public virtual ICollection<Task> Task { get; set; }
 
         public virtual ICollection<FileShare> FileShare { get; set; }
+
+        public virtual ICollection<ContractInfo> ContractInfo { get; set; }
 
         public virtual Department Department { get; set; }
 

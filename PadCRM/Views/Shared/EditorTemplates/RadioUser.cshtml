@@ -29,6 +29,7 @@
             url: '@Url.Action("getUsers", "ajaxService")',
             memberid:@CookieHelper.MemberID,
             onSelected:function(e){
+                var self=this;
                 var target=$(e.target);
                 var value=selectUser.getValue();
                 if(value==null){
@@ -38,6 +39,9 @@
                     $('#@(name)_text').val(value.text);
                     $('#@name').parents('form:first').validate().element('#@name');
                     selectUser.hide();
+                    if(window.afterSelectUser!=undefined){
+                        window.afterSelectUser(value.id);
+                    }
                 }
             }
         })

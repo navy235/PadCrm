@@ -30,6 +30,8 @@ namespace PadCRM.ViewModels
 
         public DateTime AddTime { get; set; }
 
+        public int ContractInfoID { get; set; }
+
         public List<ContactRequireItemViewModel> ContactRequires { get; set; }
     }
 
@@ -38,6 +40,8 @@ namespace PadCRM.ViewModels
         public int ID { get; set; }
 
         public string Name { get; set; }
+
+
 
         public string Description { get; set; }
 

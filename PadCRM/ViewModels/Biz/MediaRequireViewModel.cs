@@ -43,13 +43,14 @@ namespace PadCRM.ViewModels
         [HiddenInput(DisplayValue = false)]
         public int DepartmentID { get; set; }
 
-        [Display(Name = "上传文件")]
+        [Display(Name = "策略单详细")]
+        [UIHint("RichEditor")]
+        [AdditionalMetadata("Param", "500,300")]
+        public string Description { get; set; }
+
+        [Display(Name = "其他附件")]
         [UIHint("UploadFile")]
         public string AttachmentPath { get; set; }
-
-        [Display(Name = "内容描述")]
-        [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
     }
 
 
@@ -82,12 +83,13 @@ namespace PadCRM.ViewModels
         [HiddenInput(DisplayValue = false)]
         public int DepartmentID { get; set; }
 
-        [Display(Name = "上传文件")]
+        [Display(Name = "策略单详细")]
+        [UIHint("RichEditor")]
+        [AdditionalMetadata("Param", "500,300")]
+        public string Description { get; set; }
+
+        [Display(Name = "其他附件")]
         [UIHint("UploadFile")]
         public string AttachmentPath { get; set; }
-
-        [Display(Name = "内容描述")]
-        [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
     }
 }

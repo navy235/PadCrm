@@ -20,9 +20,9 @@
         [HiddenInput(DisplayValue = false)]
         public int MemberID { get; set; }
 
-        [Required(ErrorMessage = "请输入任务名称")]
-        [Display(Name = "任务名称")]
-        public string Title { get; set; }
+        //[Required(ErrorMessage = "请输入任务名称")]
+        //[Display(Name = "任务名称")]
+        //public string Title { get; set; }
 
         [Required(ErrorMessage = "请输入任务详情")]
         [Display(Name = "任务详情")]
@@ -30,7 +30,7 @@
         public string Description { get; set; }
 
 
-        [Display(Name = "开始时间")]
+        [Display(Name = "提醒时间")]
         [UIHint("DateTime")]
         public DateTime Start
         {
@@ -38,12 +38,12 @@
             set;
         }
 
-        [Display(Name = "结束时间")]
-        [UIHint("DateTime")]
-        public DateTime End
-        {
-            get;
-            set;
-        }
+        //[Display(Name = "结束时间")]
+        //[UIHint("DateTime")]
+        //public DateTime End
+        //{
+        //    get;
+        //    set;
+        //}
     }
 }

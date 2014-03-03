@@ -280,7 +280,7 @@ namespace PadCRM.Controllers
         {
             var entity = CustomerService.Find(ID);
             var hasPermission = (entity.AddUser == CookieHelper.MemberID && (DateTime.Now - entity.AddTime).Days < 15)
-               || PermissionsService.CheckPermission("boss", "controller", CookieHelper.MemberID);
+               || CookieHelper.CheckPermission("boss");
             return Json(hasPermission, JsonRequestBehavior.AllowGet);
         }
 
